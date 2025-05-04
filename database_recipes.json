@@ -1,0 +1,263 @@
+[
+  {
+    "id": 1,
+    "name": "Wegetarianska salatka z quinoa",
+    "description": "Pyszna salatka z quinoa, warzywami i sosem cytrynowym.",
+    "diet_type": [
+      "vegetarian",
+      "gluten-free"
+    ],
+    "ingredients": [
+      {
+        "id": 1,
+        "name": "Quinoa",
+        "unit": "g",
+        "calories_per_100": 120,
+        "protein_per_100": 4.4,
+        "fat_per_100": 1.9,
+        "carbs_per_100": 21.3,
+        "sugar_per_100": 0.9,
+        "salt_per_100": 0.01,
+        "vitamins": [
+          {
+            "id": 1,
+            "name": "Witamina B6"
+          },
+          {
+            "id": 2,
+            "name": "Magnez"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Ogorek",
+        "unit": "szt.",
+        "calories_per_100": 16,
+        "protein_per_100": 0.7,
+        "fat_per_100": 0.1,
+        "carbs_per_100": 3.6,
+        "sugar_per_100": 1.7,
+        "salt_per_100": 0.01,
+        "vitamins": [
+          {
+            "id": 3,
+            "name": "Witamina K"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Kurczak teriyaki z ryzem",
+    "description": "Klasyczne danie kuchni japonskiej.",
+    "diet_type": [],
+    "ingredients": [
+      {
+        "id": 3,
+        "name": "Filet z kurczaka",
+        "unit": "g",
+        "calories_per_100": 165,
+        "protein_per_100": 31,
+        "fat_per_100": 3.6,
+        "carbs_per_100": 0,
+        "sugar_per_100": 0,
+        "salt_per_100": 0.1,
+        "vitamins": [
+          {
+            "id": 4,
+            "name": "Witamina B12"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "Ryz bialy",
+        "unit": "g",
+        "calories_per_100": 130,
+        "protein_per_100": 2.7,
+        "fat_per_100": 0.3,
+        "carbs_per_100": 28.2,
+        "sugar_per_100": 0.1,
+        "salt_per_100": 0.01
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Smoothie bananowo-jagodowe",
+    "description": "Szybki koktajl na sniadanie.",
+    "diet_type": [
+      "vegan",
+      "gluten-free"
+    ],
+    "ingredients": [
+      {
+        "id": 5,
+        "name": "Banan",
+        "unit": "szt.",
+        "calories_per_100": 89,
+        "protein_per_100": 1.1,
+        "fat_per_100": 0.3,
+        "carbs_per_100": 22.8,
+        "sugar_per_100": 12.2,
+        "salt_per_100": 0.01,
+        "vitamins": [
+          {
+            "id": 5,
+            "name": "Witamina C"
+          },
+          {
+            "id": 6,
+            "name": "Potas"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "name": "Jagody",
+        "unit": "g",
+        "calories_per_100": 57,
+        "protein_per_100": 0.7,
+        "fat_per_100": 0.3,
+        "carbs_per_100": 14.5,
+        "sugar_per_100": 10,
+        "salt_per_100": 0.01
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Pasta z pesto i pomidorami",
+    "description": "Prosty wloski makaron z domowym pesto i suszonymi pomidorami.",
+    "diet_type": [
+      "vegetarian"
+    ],
+    "ingredients": [
+      {
+        "id": 7,
+        "name": "Makaron penne",
+        "unit": "g",
+        "calories_per_100": 131.0,
+        "protein_per_100": 5.3,
+        "fat_per_100": 1.1,
+        "carbs_per_100": 25.0,
+        "sugar_per_100": 1.2,
+        "salt_per_100": 0.05,
+        "vitamins": [
+          {
+            "id": 7,
+            "name": "Witamina B1"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "name": "Pesto bazyliowe",
+        "unit": "g",
+        "calories_per_100": 450.0,
+        "protein_per_100": 3.6,
+        "fat_per_100": 45.0,
+        "carbs_per_100": 5.1,
+        "sugar_per_100": 1.5,
+        "salt_per_100": 1.2,
+        "vitamins": null
+      },
+      {
+        "id": 9,
+        "name": "Suszony pomidor",
+        "unit": "szt.",
+        "calories_per_100": 258.0,
+        "protein_per_100": 14.0,
+        "fat_per_100": 3.0,
+        "carbs_per_100": 55.0,
+        "sugar_per_100": 37.0,
+        "salt_per_100": 0.8,
+        "vitamins": [
+          {
+            "id": 8,
+            "name": "Witamina A"
+          },
+          {
+            "id": 9,
+            "name": "Witamina C"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Weganska zupa krem z dyni",
+    "description": "Aromatyczna zupa z pieczonej dyni z dodatkiem mleka kokosowego.",
+    "diet_type": [
+      "vegan",
+      "gluten-free"
+    ],
+    "ingredients": [
+      {
+        "id": 10,
+        "name": "Dynia Hokkaido",
+        "unit": "g",
+        "calories_per_100": 26.0,
+        "protein_per_100": 1.0,
+        "fat_per_100": 0.1,
+        "carbs_per_100": 6.5,
+        "sugar_per_100": 2.8,
+        "salt_per_100": 0.01,
+        "vitamins": [
+          {
+            "id": 10,
+            "name": "Witamina A"
+          },
+          {
+            "id": 11,
+            "name": "Witamina C"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "name": "Mleko kokosowe",
+        "unit": "ml",
+        "calories_per_100": 230.0,
+        "protein_per_100": 2.3,
+        "fat_per_100": 24.0,
+        "carbs_per_100": 3.3,
+        "sugar_per_100": 1.1,
+        "salt_per_100": 0.04,
+        "vitamins": null
+      },
+      {
+        "id": 12,
+        "name": "Imbir",
+        "unit": "g",
+        "calories_per_100": 80.0,
+        "protein_per_100": 1.8,
+        "fat_per_100": 0.8,
+        "carbs_per_100": 18.0,
+        "sugar_per_100": 1.7,
+        "salt_per_100": 0.03,
+        "vitamins": [
+          {
+            "id": 12,
+            "name": "Witamina B6"
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "name": "Oliwa z oliwek",
+        "unit": "ml",
+        "calories_per_100": 884.0,
+        "protein_per_100": 0.0,
+        "fat_per_100": 100.0,
+        "carbs_per_100": 0.0,
+        "sugar_per_100": 0.0,
+        "salt_per_100": 0.0,
+        "vitamins": null
+      }
+    ]
+  }
+]
