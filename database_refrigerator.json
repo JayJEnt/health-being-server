@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1,
+    "name": "Jajka",
+    "unit": "szt.",
+    "amount": 10,
+    "calories_per_100": 143,
+    "protein_per_100": 12.6,
+    "fat_per_100": 9.5,
+    "carbs_per_100": 0.7,
+    "sugar_per_100": 0.4,
+    "salt_per_100": 0.13,
+    "vitamins": [
+      {"id": 1, "name": "Witamina B12"},
+      {"id": 2, "name": "Witamina D"}
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Mleko",
+    "unit": "ml",
+    "amount": 1000,
+    "calories_per_100": 42,
+    "protein_per_100": 3.4,
+    "fat_per_100": 1.0,
+    "carbs_per_100": 4.8,
+    "sugar_per_100": 4.8,
+    "salt_per_100": 0.1,
+    "vitamins": [
+      {"id": 3, "name": "Wapn"},
+      {"id": 4, "name": "Witamina B2"}
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Pierś z kurczaka",
+    "unit": "g",
+    "amount": 500,
+    "calories_per_100": 165,
+    "protein_per_100": 31.0,
+    "fat_per_100": 3.6,
+    "carbs_per_100": 0.0,
+    "sugar_per_100": 0.0,
+    "salt_per_100": 0.1,
+    "vitamins": [
+      {"id": 5, "name": "Niacyna"},
+      {"id": 6, "name": "Witamina B6"}
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Pomidor",
+    "unit": "szt.",
+    "amount": 5,
+    "calories_per_100": 18,
+    "protein_per_100": 0.9,
+    "fat_per_100": 0.2,
+    "carbs_per_100": 3.9,
+    "sugar_per_100": 2.6,
+    "salt_per_100": 0.01,
+    "vitamins": [
+      {"id": 7, "name": "Witamina C"},
+      {"id": 8, "name": "Witamina K"}
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Maslo",
+    "unit": "g",
+    "amount": 200,
+    "calories_per_100": 717,
+    "protein_per_100": 0.9,
+    "fat_per_100": 81.1,
+    "carbs_per_100": 0.1,
+    "sugar_per_100": 0.1,
+    "salt_per_100": 0.01,
+    "vitamins": [
+      {"id": 9, "name": "Witamina A"},
+      {"id": 10, "name": "Witamina E"}
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Ryz",
+    "unit": "g",
+    "amount": 1000,
+    "calories_per_100": 130.0,
+    "protein_per_100": 2.7,
+    "fat_per_100": 0.3,
+    "carbs_per_100": 28.2,
+    "sugar_per_100": 0.1,
+    "salt_per_100": 0.01,
+    "vitamins": [
+      {"id": 11, "name": "Tiamina"},
+      {"id": 12, "name": "Foliany"}
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Cebula",
+    "unit": "szt.",
+    "amount": 3,
+    "calories_per_100": 40,
+    "protein_per_100": 1.1,
+    "fat_per_100": 0.1,
+    "carbs_per_100": 9.3,
+    "sugar_per_100": 4.2,
+    "salt_per_100": 0.01,
+    "vitamins": [
+      {"id": 13, "name": "Witamina C"},
+      {"id": 14, "name": "Witamina B6"}
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Marchewka",
+    "unit": "szt.",
+    "amount": 6,
+    "calories_per_100": 41,
+    "protein_per_100": 0.9,
+    "fat_per_100": 0.2,
+    "carbs_per_100": 9.6,
+    "sugar_per_100": 4.7,
+    "salt_per_100": 0.07,
+    "vitamins": [
+      {"id": 15, "name": "Witamina A"},
+      {"id": 16, "name": "Witamina K"}
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Ser zolty",
+    "unit": "g",
+    "amount": 250,
+    "calories_per_100": 350,
+    "protein_per_100": 25.0,
+    "fat_per_100": 28.0,
+    "carbs_per_100": 1.3,
+    "sugar_per_100": 0.5,
+    "salt_per_100": 1.8,
+    "vitamins": [
+      {"id": 17, "name": "Wapn"},
+      {"id": 18, "name": "Witamina B12"}
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Szynka",
+    "unit": "g",
+    "amount": 200,
+    "calories_per_100": 145,
+    "protein_per_100": 22.0,
+    "fat_per_100": 6.0,
+    "carbs_per_100": 1.0,
+    "sugar_per_100": 0.8,
+    "salt_per_100": 2.5,
+    "vitamins": [
+      {"id": 19, "name": "Tiamina"},
+      {"id": 20, "name": "Niacyna"}
+    ]
+  }
+]

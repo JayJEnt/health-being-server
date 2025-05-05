@@ -3,7 +3,7 @@ from typing import List, Optional
 from api.schemas.vitamin import Vitamin
 
 
-class Ingredient(BaseModel):
+class IngredientBase(BaseModel):
     id: int
     name: str
     unit: str  # ex. "g", "ml", "szt."
@@ -14,3 +14,6 @@ class Ingredient(BaseModel):
     sugar_per_100: float
     salt_per_100: float
     vitamins: Optional[List[Vitamin]] = None
+    
+class Ingredient(IngredientBase):
+    amount: float  # ex. 100g, 1l, 2szt.
