@@ -60,6 +60,7 @@ Edit .env with your settings
 uvicorn api.routers.[router_name]:router --reload
 # Will be changed soon
 ```
+Use this for testing api (http://127.0.0.1:8000/docs)
 
 ### Production
 ```bash
