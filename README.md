@@ -10,10 +10,7 @@ One day there will be app description if i add it xD
 - [Setup](#-setup)
 - [Configuration](#-configuration)
 - [Running the Project](#-running-the-project)
-- [Development](#-development)
 - [Testing](#-testing)
-- [Project Structure](#-project-structure)
-- [FAQ](#-faq)
 
 ## 🛠 Prerequisites
 - [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install#quickstart-install-instructions)
