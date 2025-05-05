@@ -1,10 +1,10 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 from api.schemas.ingredient import Ingredient
 import json
 from pathlib import Path
 
 
-router = FastAPI()
+router = APIRouter()
 REGRIGERATOR_FILE = Path("database_refrigerator.json")
 
 def get_refrigerator_content_from_file():
@@ -17,7 +17,7 @@ def save_refrigerator_content_to_file(recipes):
 
 
 @router.get("/refrigerator/", response_model=list[Ingredient])
-def get_ingredients():
+async def get_ingredients():
     try:
         ingredients = get_refrigerator_content_from_file()
         return ingredients
@@ -29,7 +29,7 @@ def get_ingredients():
         raise HTTPException(status_code=500, detail=str(e))
     
 @router.post("/refrigerator/", response_model=Ingredient)
-def add_ingredient(ingredient: Ingredient):
+async def add_ingredient(ingredient: Ingredient):
     try:
         new_ingredient = ingredient.dict()
         ingredients = get_refrigerator_content_from_file()
@@ -45,7 +45,7 @@ def add_ingredient(ingredient: Ingredient):
         raise HTTPException(status_code=500, detail=str(e))
     
 @router.delete("/refrigerator/{ingredient_id}", response_model=Ingredient)
-def delete_ingredient(ingredient_id: int):
+async def delete_ingredient(ingredient_id: int):
     try:
         ingredients = get_refrigerator_content_from_file()
         index = next((i for i, r in enumerate(ingredients) if r["id"] == ingredient_id), None)

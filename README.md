@@ -53,9 +53,10 @@ Edit .env with your settings
 
 ### Development (with hot reload)
 ```bash
-# Search for router_name in routers dic
+# General case
+python main.py
+# Turn on just one router
 uvicorn api.routers.[router_name]:router --reload
-# Will be changed soon
 ```
 Use this for testing api (http://127.0.0.1:8000/docs)
 

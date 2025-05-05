@@ -1,11 +1,11 @@
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query
 from api.schemas.recipe import Recipe
 import json
 from pathlib import Path
 from typing import Optional, List
 
 
-router = FastAPI()
+router = APIRouter()
 RECIPES_FILE = Path("database_recipes.json")
 
 def get_recipes_from_file():
@@ -17,12 +17,12 @@ def save_recipes_to_file(recipes):
         json.dump(recipes, file, indent=2)
 
 @router.get("/recipes/", response_model=List[Recipe])
-def get_recipes():
+async def get_recipes():
     recipes = get_recipes_from_file()
     return recipes
 
 @router.get("/recipes/{recipe_id}", response_model=Recipe)
-def get_recipe(recipe_id: int):
+async def get_recipe(recipe_id: int):
     try:
         recipes = get_recipes_from_file()
         recipe = next((r for r in recipes if r["id"] == recipe_id), None)
@@ -33,7 +33,7 @@ def get_recipe(recipe_id: int):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/recipes/", response_model=Recipe)
-def create_recipe(recipe: Recipe):
+async def create_recipe(recipe: Recipe):
     try:
         new_recipe = recipe.dict()
         recipes = get_recipes_from_file()
@@ -45,7 +45,7 @@ def create_recipe(recipe: Recipe):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.put("/recipes/{recipe_id}", response_model=Recipe)
-def update_recipe(recipe_id: int, recipe: Recipe):
+async def update_recipe(recipe_id: int, recipe: Recipe):
     try:
         recipes = get_recipes_from_file()
         
@@ -64,7 +64,7 @@ def update_recipe(recipe_id: int, recipe: Recipe):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/recipes/{recipe_id}")
-def delete_recipe(recipe_id: int):
+async def delete_recipe(recipe_id: int):
     try:
         recipes = get_recipes_from_file()
         
@@ -80,7 +80,7 @@ def delete_recipe(recipe_id: int):
         raise HTTPException(status_code=500, detail=str(e))
     
 @router.get("/recipes/filter/", response_model=List[Recipe])
-def filter_recipes(
+async def filter_recipes(
     name: Optional[str] = Query(None, description="Fragment nazwy przepisu"),
     diet_type: Optional[List[str]] = Query(None, description="Lista typów diet"),
     ingredient: Optional[List[str]] = Query(None, description="Lista wymaganych składników")
