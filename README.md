@@ -1,22 +1,77 @@
-## Initial setup
+# Health-being Web App
 
-### Instal miniconda from web
+[![Python Version](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-### Set new enviorment
-bash'''
-conda init
-conda create --name [enviorment_name] python=[python_version]
-'''
+One day there will be app description if i add it xD
 
-### Activate this enviorment
-bash'''
-conda activate [enviorment_name]
-'''
+## 📌 Table of Contents
+- [Prerequisites](#-prerequisites)
+- [Setup](#-setup)
+- [Configuration](#-configuration)
+- [Running the Project](#-running-the-project)
+- [Development](#-development)
+- [Testing](#-testing)
+- [Project Structure](#-project-structure)
+- [FAQ](#-faq)
 
-### Install all dependencies from config.txt
-not yet implemented!
+## 🛠 Prerequisites
+- [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install#quickstart-install-instructions)
+- Python 3.13+
 
-## To Run any router
-bash'''
-uvicorn api.routers.[router_name]:router
-'''
+
+## 🚀 Setup
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/yourusername/projectname.git
+cd projectname
+```
+
+### 2. Create Conda Environment
+```bash
+conda create --name health-being-server python=3.13
+conda activate health-being-server
+```
+
+### 3. Install Dependencies
+```bash
+python -m pip install -r requirements.txt
+```
+
+
+## ⚙ Configuration
+Rename .env.example to .env:
+
+```bash
+# No need for now
+# Not implemented
+cp .env.example .env
+```
+
+Edit .env with your settings
+
+
+## ▶ Running the Project
+
+### Development (with hot reload)
+```bash
+# Search for router_name in routers dic
+uvicorn api.routers.[router_name]:router --reload
+# Will be changed soon
+```
+
+### Production
+```bash
+# Not implemented
+```
+
+
+## 🧪 Testing
+```bash
+pytest tests/
+```
+
+
+## 📜 License
+MIT © JayJEnt
