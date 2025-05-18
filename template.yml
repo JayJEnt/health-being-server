@@ -1,0 +1,164 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Deploy FastAPI - AWS Lambda with API Gateway
+
+
+
+Parameters:
+###################################################################################################
+#                                     Parameters Configuration                                    #
+###################################################################################################
+  
+  # S3 Bucket Name for test datasets
+  BucketName:
+    Type: String
+    Default: health-being-server-api
+    Description: Name of the S3 bucket for test datasets
+
+  # Docker image URI for the Lambda function
+  ECRUri:
+    Type: String
+    Default: 199215058137.dkr.ecr.eu-north-1.amazonaws.com/my-fastapi-lambda:latest
+    Description: ECR image URI for the Lambda function
+  
+  # API Gateway Stage Name
+  StageName:
+    Type: String
+    Default: prod
+    Description: The name of the API Gateway stage
+
+  # APP Name
+  AppName:
+    Type: String
+    Default: health-being-app
+    Description: Name of application.
+
+
+
+Resources:
+###################################################################################################
+#                                     Lambda Configuration                                        #
+###################################################################################################
+
+# Lambda Function
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Ref AppName
+      Role: !GetAtt LambdaRole.Arn
+      PackageType: Image
+      Code:
+        ImageUri: !Ref ECRUri
+      ImageConfig:
+        Command:
+          - main.handler
+        EntryPoint: []
+        WorkingDirectory: /var/task
+      MemorySize: 1024
+      Timeout: 30
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref BucketName
+
+# Lambda Permission
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+      # S3 Access Policy
+        - PolicyName: S3AccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub arn:aws:s3:::${BucketName}
+                  - !Sub arn:aws:s3:::${BucketName}/*
+      # ECR Access Policy
+        - PolicyName: LambdaECRImagePullPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ecr:BatchGetImage
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:DescribeImages
+                Resource: !Sub arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/my-fastapi-lambda
+              - Effect: Allow
+                Action: ecr:GetAuthorizationToken
+                Resource: '*'
+
+                
+###################################################################################################
+#                                     API Gateway Configuration                                   #
+###################################################################################################
+
+  # API Gateway
+  Api:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: !Ref AppName
+      ApiKeySourceType: HEADER
+  
+#############################################################################
+#                            API Gateway Resources                          #
+#############################################################################
+
+ # Root Resource (health check)
+  RootResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref Api
+      ParentId: !GetAtt Api.RootResourceId
+      PathPart: /
+
+  # Root Method (health check)
+  RootMethod:
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      RestApiId: !Ref Api
+      ResourceId: !Ref RootResource
+      HttpMethod: ANY
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+
+
+#################################################
+#                     Recipes                   #
+#################################################
+ 
+ # Recipes resource
+  RecipesResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref Api
+      ParentId: !GetAtt Api.RootResourceId
+      PathPart: /recipes
+
+#################################################
+#                  Refrigerator                 #
+#################################################
+
+# Refrigerator resource
+  RefrigeratorResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref Api
+      ParentId: !GetAtt Api.RootResourceId
+      PathPart: /refrigerator
+
+  

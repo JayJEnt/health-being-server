@@ -11,8 +11,11 @@ class IngredientBase(BaseModel):
     protein_per_100: float
     fat_per_100: float
     carbs_per_100: float
-    sugar_per_100: float
-    salt_per_100: float
+    
+    # Optional fields
+    fiber_per_100: Optional[float]
+    sugar_per_100: Optional[float]
+    salt_per_100: Optional[float]
     vitamins: Optional[List[Vitamin]] = None
     
 class Ingredient(IngredientBase):

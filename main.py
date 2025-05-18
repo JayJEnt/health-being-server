@@ -21,14 +21,18 @@ async def lifespan(app: FastAPI):
     logger.info(f"Server uptime: {shutdown_start - startup_start}")
     
     
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan,
+    title="Health Being API",
+    description="API do zarządzania przepisami kulinarnymi",
+    version="0.1.0",
+    docs_url="/docs",
+)
 
 app.include_router(recipe.router, tags=["recipes"])
 app.include_router(refrigerator.router, tags=["refrigerator"])
 
-# Mangum not implemented yet
 handler = Mangum(app, lifespan="off")
-
 
 if __name__ == "__main__":
     import uvicorn

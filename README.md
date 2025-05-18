@@ -66,6 +66,19 @@ Use this for testing api (http://127.0.0.1:8000/docs)
 ```
 
 
+## Docker
+```bash
+docker build -f Dockerfile --platform linux/amd64 --provenance=false -t 199215058137.dkr.ecr.eu-north-1.amazonaws.com/my-fastapi-lambda:latest .
+docker push 199215058137.dkr.ecr.eu-north-1.amazonaws.com/my-fastapi-lambda:latest
+```
+
+
+## Deployment
+```bash
+aws cloudformation deploy --template-file template.yml --stack-name MyFastAPIStack --capabilities CAPABILITY_IAM
+```
+
+
 ## 🧪 Testing
 ```bash
 pytest tests/
