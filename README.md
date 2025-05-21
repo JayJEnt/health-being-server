@@ -68,7 +68,11 @@ Use this for testing api (http://127.0.0.1:8000/docs)
 
 ## Docker
 ```bash
+# Create new docker image
 docker build -f Dockerfile --platform linux/amd64 --provenance=false -t 199215058137.dkr.ecr.eu-north-1.amazonaws.com/my-fastapi-lambda:latest .
+# Connect to AWS if you haven't done it already
+aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 199215058137.dkr.ecr.eu-north-1.amazonaws.com
+# Push it on AWC ECR/my-fastapi-lambda
 docker push 199215058137.dkr.ecr.eu-north-1.amazonaws.com/my-fastapi-lambda:latest
 ```
 

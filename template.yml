@@ -2,35 +2,83 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Deploy FastAPI - AWS Lambda with API Gateway
 
 
+Metadata:
+###################################################################################################
+#                                            METADATA                                             #
+###################################################################################################
+
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Project based parameters"
+        Parameters:
+          - AppName
+      - Label:
+          default: "Lambda Function Parameters"
+        Parameters:
+          - ECRUri
+          - Environment
+          - BucketName
+      - Label:
+          default: "API Gateway parameters"
+        Parameters:
+          - StageName
+
+
 
 Parameters:
 ###################################################################################################
-#                                     Parameters Configuration                                    #
+#                                             PARAMETERS                                          #
 ###################################################################################################
   
-  # S3 Bucket Name for test datasets
+
+#############################################################################
+#                          Project based parameters                         #
+#############################################################################
+ 
+  AppName:
+    Type: String
+    Default: health-being-app
+    Description: Name of application.
+
+
+#############################################################################
+#                         Lambda Function Parameters                        #
+#############################################################################
+
   BucketName:
     Type: String
     Default: health-being-server-api
     Description: Name of the S3 bucket for test datasets
 
-  # Docker image URI for the Lambda function
+  RecipesFile:
+    Type: String
+    Default: database_recipes.json
+    Description: Name of the recipes file in the S3 bucket
+
   ECRUri:
     Type: String
     Default: 199215058137.dkr.ecr.eu-north-1.amazonaws.com/my-fastapi-lambda:latest
     Description: ECR image URI for the Lambda function
+
+  Environment:
+    Type: String
+    Default: remote
+    Description: Environment for the Lambda function
+
   
-  # API Gateway Stage Name
+
+#############################################################################
+#                           API Gateway parameters                          #
+#############################################################################
+
   StageName:
     Type: String
-    Default: prod
+    AllowedValues:
+      - dev
+      - prod
+    Default: dev
     Description: The name of the API Gateway stage
-
-  # APP Name
-  AppName:
-    Type: String
-    Default: health-being-app
-    Description: Name of application.
 
 
 
@@ -39,27 +87,33 @@ Resources:
 #                                     Lambda Configuration                                        #
 ###################################################################################################
 
-# Lambda Function
+
+#############################################################################
+#                              Lambda base config                           #
+#############################################################################
+
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Ref AppName
+      FunctionName: !Sub "${AppName}-lambda"
       Role: !GetAtt LambdaRole.Arn
       PackageType: Image
       Code:
-        ImageUri: !Ref ECRUri
-      ImageConfig:
-        Command:
-          - main.handler
-        EntryPoint: []
-        WorkingDirectory: /var/task
-      MemorySize: 1024
-      Timeout: 30
+        ImageUri: !Ref 'ECRUri'
+      Architectures:
+        - x86_64
+      MemorySize: 3008
+      Timeout: 300
       Environment:
         Variables:
           BUCKET_NAME: !Ref BucketName
+          environment: !Ref Environment
 
-# Lambda Permission
+
+#############################################################################
+#                              Lambda permissions                           #
+#############################################################################
+
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -70,6 +124,7 @@ Resources:
             Principal:
               Service: lambda.amazonaws.com
             Action: sts:AssumeRole
+      Path: "/"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Policies:
@@ -106,59 +161,90 @@ Resources:
 #                                     API Gateway Configuration                                   #
 ###################################################################################################
 
-  # API Gateway
-  Api:
-    Type: AWS::ApiGateway::RestApi
+
+#############################################################################
+#                           API Gateway base config                         #
+#############################################################################
+ 
+  ApiGateway:
+    Type: AWS::ApiGatewayV2::Api
     Properties:
-      Name: !Ref AppName
-      ApiKeySourceType: HEADER
+      Name: !Sub "${AppName}-api"
+      ProtocolType: HTTP
+      CorsConfiguration:
+        AllowOrigins: ["*"]
+        AllowMethods: ["*"]
+        AllowHeaders: ["*"]
   
 #############################################################################
 #                            API Gateway Resources                          #
 #############################################################################
 
- # Root Resource (health check)
-  RootResource:
-    Type: 'AWS::ApiGateway::Resource'
+  ApiGatewayMethod:
+    Type: AWS::ApiGatewayV2::Integration
     Properties:
-      RestApiId: !Ref Api
-      ParentId: !GetAtt Api.RootResourceId
-      PathPart: /
+      ApiId: !Ref ApiGateway
+      IntegrationMethod: POST
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt LambdaFunction.Arn
+      PayloadFormatVersion: "2.0"
 
-  # Root Method (health check)
-  RootMethod:
-    Type: 'AWS::ApiGateway::Method'
+  ApiGatewayResourceRoot:
+    Type: AWS::ApiGatewayV2::Route
     Properties:
-      RestApiId: !Ref Api
-      ResourceId: !Ref RootResource
-      HttpMethod: ANY
-      AuthorizationType: NONE
-      Integration:
-        IntegrationHttpMethod: POST
+      ApiId: !Ref ApiGateway
+      RouteKey: "ANY /{proxy+}"
+      Target: !Join
+        - /
+        - - integrations
+          - !Ref ApiGatewayMethod
 
 
-#################################################
-#                     Recipes                   #
-#################################################
- 
- # Recipes resource
-  RecipesResource:
-    Type: 'AWS::ApiGateway::Resource'
+
+#############################################################################
+#                          API Gateway Permission                           #
+#############################################################################
+
+  LambdaPermission:
+    Type: AWS::Lambda::Permission
     Properties:
-      RestApiId: !Ref Api
-      ParentId: !GetAtt Api.RootResourceId
-      PathPart: /recipes
+      Action: "lambda:InvokeFunction"
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Principal: "apigateway.amazonaws.com"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*/*"
 
-#################################################
-#                  Refrigerator                 #
-#################################################
 
-# Refrigerator resource
-  RefrigeratorResource:
-    Type: 'AWS::ApiGateway::Resource'
+
+#############################################################################
+#                            API Gateway Stage                              #
+#############################################################################
+
+  ApiGatewayStage:
+    Type: AWS::ApiGatewayV2::Stage
     Properties:
-      RestApiId: !Ref Api
-      ParentId: !GetAtt Api.RootResourceId
-      PathPart: /refrigerator
+      ApiId: !Ref ApiGateway
+      DeploymentId: !Ref ApiGatewayDeployment
+      StageName: !Ref StageName
+      AutoDeploy: true
 
-  
+  ApiGatewayDeployment:
+    Type: AWS::ApiGatewayV2::Deployment
+    DependsOn:
+      - ApiGatewayMethod
+      - ApiGatewayResourceRoot
+    Properties:
+      Description: Lambda API Deployment
+      ApiId: !Ref ApiGateway
+
+
+
+###################################################################################################
+#                                             OUTPUTS                                             #
+###################################################################################################
+
+Outputs:
+  ApiEndpoint:
+    Description: API Gateway endpoint URL
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/${StageName}"
+    Export:
+      Name: !Sub "${AppName}-ApiEndpoint"

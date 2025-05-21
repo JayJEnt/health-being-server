@@ -1,9 +1,11 @@
 from contextlib import asynccontextmanager
 from datetime import datetime as dt
-from api.routers import recipe
-from api.routers import refrigerator
 from fastapi import FastAPI
 from mangum import Mangum
+
+from api.routers import recipe
+from api.routers import refrigerator
+from api.routers import test
 from logger import configure_logger
 
 logger = configure_logger()
@@ -21,18 +23,24 @@ async def lifespan(app: FastAPI):
     logger.info(f"Server uptime: {shutdown_start - startup_start}")
     
     
-app = FastAPI(
-    lifespan=lifespan,
-    title="Health Being API",
-    description="API do zarządzania przepisami kulinarnymi",
-    version="0.1.0",
-    docs_url="/docs",
-)
+app = FastAPI(lifespan=None)
 
-app.include_router(recipe.router, tags=["recipes"])
-app.include_router(refrigerator.router, tags=["refrigerator"])
+@app.get("/")
+def root_handler():
+    return {"message": "Hello!"}
 
-handler = Mangum(app, lifespan="off")
+app.include_router(test.router)
+app.include_router(recipe.router)
+app.include_router(refrigerator.router)
+
+def handler(event, context):
+    logger.debug(f"Event: {event}")
+
+    
+    asgi_handler = Mangum(app, lifespan="on", api_gateway_base_path='/dev')
+    response = asgi_handler(event, context)
+    
+    return response
 
 if __name__ == "__main__":
     import uvicorn

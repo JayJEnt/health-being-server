@@ -1,11 +1,12 @@
 from fastapi import APIRouter, HTTPException
-from api.schemas.ingredient import Ingredient
 import json
 from pathlib import Path
 
+from api.schemas.ingredient import Ingredient
+
 
 router = APIRouter()
-REGRIGERATOR_FILE = Path("database_refrigerator.json")
+REGRIGERATOR_FILE = Path("tests/database_refrigerator.json")
 
 def get_refrigerator_content_from_file():
     with open(REGRIGERATOR_FILE, "r") as file:

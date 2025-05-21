@@ -222,7 +222,7 @@
         "carbs_per_100": 0.0,
         "sugar_per_100": 0.0,
         "salt_per_100": 0.0,
-        "vitamins": null
+        "vitamins": []
       }
     ]
   }
