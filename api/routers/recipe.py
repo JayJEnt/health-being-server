@@ -2,7 +2,7 @@ from fastapi import APIRouter, Query
 from typing import Optional, List
 
 from api.schemas.recipe import Recipe
-from api.router_methods.recipes import (
+from api.routers.router_methods.recipes import (
     get_recipes_method,
     get_recipe_method,
     create_recipe_method,
