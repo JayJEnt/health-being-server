@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from api.schemas.ingredient import Ingredient
-from api.router_methods.refrigerator import (
+from api.routers.router_methods.refrigerator import (
     get_ingredients_method,
     add_ingredient_method,
     delete_ingredient_method,

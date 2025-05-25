@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 from typing import Optional, List
 
-from api.schemas.recipe import Recipe
+from api.schemas.recipe import RecipeDetailed as Recipe #TODO: change to recipe when database is updated
 from config import settings
 
 
