@@ -16,7 +16,7 @@ One day there will be app description if i add it xD
 - [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install#quickstart-install-instructions)
 - Python 3.13+
 
-## Endpoints
+## 🔚 Endpoints
 
 ### Test
 - GET /test (test message)
