@@ -1,0 +1,10 @@
+.git
+__pycache__
+*.pyc
+.env
+*.md
+*.yaml
+*.yml
+*.json
+*.log
+tests/

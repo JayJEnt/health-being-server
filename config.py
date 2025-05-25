@@ -16,7 +16,5 @@ class Settings(BaseSettings):
     # AWS
     aws_region: str = "eu-north-1"
 
-if os.environ.get("environment", "") == "remote":
-    settings = Settings()
-else:
-    settings = LocalSettings()
+
+settings = Settings() if os.getenv("environment", "").lower() == "remote" else LocalSettings()

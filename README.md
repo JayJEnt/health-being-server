@@ -16,6 +16,19 @@ One day there will be app description if i add it xD
 - [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install#quickstart-install-instructions)
 - Python 3.13+
 
+## Endpoints
+
+### Test
+- GET /test (test message)
+
+### Recipes
+- GET/POST /recipes/ (get all recipes from data base or add new one)
+- GET/PUT/DELETE /recipes/{index_id} (get single recipe with that index_id, modify it or delete it from fridge)
+- GET /recipes/filter/ (get filtered list of recipes that mach current filter)
+
+### Refrigerator
+- GET/POST /refrigerator/ (get list of all products that are in user's refrigerator or add one to it)
+- DELETE /refrigerator/{index_id} (remove single ingredient from refrigerator)
 
 ## 🚀 Setup
 
@@ -63,6 +76,23 @@ Use this for testing api (http://127.0.0.1:8000/docs)
 ### Production
 ```bash
 # Not implemented
+```
+
+
+## Docker
+```bash
+# Create new docker image
+docker build -f Dockerfile --platform linux/amd64 --provenance=false -t 199215058137.dkr.ecr.eu-north-1.amazonaws.com/my-fastapi-lambda:latest .
+# Connect to AWS if you haven't done it already
+aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 199215058137.dkr.ecr.eu-north-1.amazonaws.com
+# Push it on AWC ECR/my-fastapi-lambda
+docker push 199215058137.dkr.ecr.eu-north-1.amazonaws.com/my-fastapi-lambda:latest
+```
+
+
+## Deployment
+```bash
+aws cloudformation deploy --template-file template.yml --stack-name MyFastAPIStack --capabilities CAPABILITY_IAM
 ```
 
 
