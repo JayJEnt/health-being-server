@@ -19,6 +19,8 @@ Metadata:
           - ECRUri
           - Environment
           - BucketName
+          - RecipesFile
+          - RefrigeratorFile
       - Label:
           default: "API Gateway parameters"
         Parameters:
@@ -55,6 +57,11 @@ Parameters:
     Type: String
     Default: database_recipes.json
     Description: Name of the recipes file in the S3 bucket
+
+  RefrigeratorFile:
+    Type: String
+    Default: database_refrigerator.json
+    Description: Name of the refrigerator file in the S3 bucket
 
   ECRUri:
     Type: String
@@ -107,7 +114,9 @@ Resources:
       Environment:
         Variables:
           BUCKET_NAME: !Ref BucketName
-          environment: !Ref Environment
+          RECIPES_FILE: !Ref RecipesFile
+          ENVIRONMENT: !Ref Environment
+          REFRIGERATOR_FILE: !Ref RefrigeratorFile
 
 
 #############################################################################

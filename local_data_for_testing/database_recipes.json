@@ -3,7 +3,10 @@
     "id": 1,
     "name": "Wegetarianska salatka z quinoa",
     "description": "Pyszna salatka z quinoa, warzywami i sosem cytrynowym.",
-    "diet_type": ["vegetarian", "gluten-free"],
+    "diet_type": [
+      "vegetarian",
+      "gluten-free"
+    ],
     "ingredients": [
       {
         "id": 1,
@@ -17,8 +20,14 @@
         "sugar_per_100": 0.9,
         "salt_per_100": 0.01,
         "vitamins": [
-          {"id": 1, "name": "Witamina B6"},
-          {"id": 2, "name": "Magnez"}
+          {
+            "id": 1,
+            "name": "Witamina B6"
+          },
+          {
+            "id": 2,
+            "name": "Magnez"
+          }
         ]
       },
       {
@@ -33,7 +42,10 @@
         "sugar_per_100": 1.7,
         "salt_per_100": 0.01,
         "vitamins": [
-          {"id": 3, "name": "Witamina K"}
+          {
+            "id": 3,
+            "name": "Witamina K"
+          }
         ]
       }
     ]
@@ -56,7 +68,10 @@
         "sugar_per_100": 0,
         "salt_per_100": 0.1,
         "vitamins": [
-          {"id": 4, "name": "Witamina B12"}
+          {
+            "id": 4,
+            "name": "Witamina B12"
+          }
         ]
       },
       {
@@ -77,7 +92,10 @@
     "id": 3,
     "name": "Smoothie bananowo-jagodowe",
     "description": "Szybki koktajl na sniadanie.",
-    "diet_type": ["vegan", "gluten-free"],
+    "diet_type": [
+      "vegan",
+      "gluten-free"
+    ],
     "ingredients": [
       {
         "id": 5,
@@ -91,8 +109,14 @@
         "sugar_per_100": 12.2,
         "salt_per_100": 0.01,
         "vitamins": [
-          {"id": 5, "name": "Witamina C"},
-          {"id": 6, "name": "Potas"}
+          {
+            "id": 5,
+            "name": "Witamina C"
+          },
+          {
+            "id": 6,
+            "name": "Potas"
+          }
         ]
       },
       {
@@ -113,7 +137,9 @@
     "id": 4,
     "name": "Pasta z pesto i pomidorami",
     "description": "Prosty wloski makaron z domowym pesto i suszonymi pomidorami.",
-    "diet_type": ["vegetarian"],
+    "diet_type": [
+      "vegetarian"
+    ],
     "ingredients": [
       {
         "id": 7,
@@ -127,7 +153,10 @@
         "sugar_per_100": 1.2,
         "salt_per_100": 0.05,
         "vitamins": [
-          {"id": 7, "name": "Witamina B1"}
+          {
+            "id": 7,
+            "name": "Witamina B1"
+          }
         ]
       },
       {
@@ -155,8 +184,14 @@
         "sugar_per_100": 37.0,
         "salt_per_100": 0.8,
         "vitamins": [
-          {"id": 8, "name": "Witamina A"},
-          {"id": 9, "name": "Witamina C"}
+          {
+            "id": 8,
+            "name": "Witamina A"
+          },
+          {
+            "id": 9,
+            "name": "Witamina C"
+          }
         ]
       }
     ]
@@ -165,7 +200,10 @@
     "id": 5,
     "name": "Weganska zupa krem z dyni",
     "description": "Aromatyczna zupa z pieczonej dyni z dodatkiem mleka kokosowego.",
-    "diet_type": ["vegan", "gluten-free"],
+    "diet_type": [
+      "vegan",
+      "gluten-free"
+    ],
     "ingredients": [
       {
         "id": 10,
@@ -179,8 +217,14 @@
         "sugar_per_100": 2.8,
         "salt_per_100": 0.01,
         "vitamins": [
-          {"id": 10, "name": "Witamina A"},
-          {"id": 11, "name": "Witamina C"}
+          {
+            "id": 10,
+            "name": "Witamina A"
+          },
+          {
+            "id": 11,
+            "name": "Witamina C"
+          }
         ]
       },
       {
@@ -208,7 +252,10 @@
         "sugar_per_100": 1.7,
         "salt_per_100": 0.03,
         "vitamins": [
-          {"id": 12, "name": "Witamina B6"}
+          {
+            "id": 12,
+            "name": "Witamina B6"
+          }
         ]
       },
       {
@@ -223,6 +270,118 @@
         "sugar_per_100": 0.0,
         "salt_per_100": 0.0,
         "vitamins": []
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "\u015ar\u00f3dziemnomorska sa\u0142atka z tu\u0144czykiem",
+    "description": "Lekka sa\u0142atka z grillowanym tu\u0144czykiem, warzywami i oliwkami.",
+    "diet_type": [
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "id": 14,
+        "name": "Tu\u0144czyk \u015bwie\u017cy",
+        "unit": "g",
+        "calories_per_100": 144.0,
+        "protein_per_100": 23.4,
+        "fat_per_100": 4.9,
+        "carbs_per_100": 0.0,
+        "fiber_per_100": 0.0,
+        "sugar_per_100": 0.0,
+        "salt_per_100": 0.05,
+        "vitamins": [
+          {
+            "id": 13,
+            "name": "Witamina D"
+          },
+          {
+            "id": 14,
+            "name": "Witamina B12"
+          }
+        ],
+        "amount": 150.0
+      },
+      {
+        "id": 15,
+        "name": "Mieszanka sa\u0142at",
+        "unit": "g",
+        "calories_per_100": 15.0,
+        "protein_per_100": 1.4,
+        "fat_per_100": 0.2,
+        "carbs_per_100": 2.9,
+        "fiber_per_100": 0.0,
+        "sugar_per_100": 0.8,
+        "salt_per_100": 0.02,
+        "vitamins": [
+          {
+            "id": 15,
+            "name": "Witamina K"
+          },
+          {
+            "id": 16,
+            "name": "Kwas foliowy"
+          }
+        ],
+        "amount": 100.0
+      },
+      {
+        "id": 16,
+        "name": "Pomidory koktajlowe",
+        "unit": "szt.",
+        "calories_per_100": 18.0,
+        "protein_per_100": 0.9,
+        "fat_per_100": 0.2,
+        "carbs_per_100": 3.9,
+        "fiber_per_100": 0.0,
+        "sugar_per_100": 2.6,
+        "salt_per_100": 0.01,
+        "vitamins": [
+          {
+            "id": 17,
+            "name": "Witamina C"
+          },
+          {
+            "id": 18,
+            "name": "Likopen"
+          }
+        ],
+        "amount": 10.0
+      },
+      {
+        "id": 17,
+        "name": "Oliwki czarne",
+        "unit": "g",
+        "calories_per_100": 115.0,
+        "protein_per_100": 0.8,
+        "fat_per_100": 11.0,
+        "carbs_per_100": 6.3,
+        "fiber_per_100": 0.0,
+        "sugar_per_100": 0.0,
+        "salt_per_100": 0.9,
+        "vitamins": [
+          {
+            "id": 19,
+            "name": "Witamina E"
+          }
+        ],
+        "amount": 50.0
+      },
+      {
+        "id": 18,
+        "name": "Sos winegret",
+        "unit": "ml",
+        "calories_per_100": 320.0,
+        "protein_per_100": 0.3,
+        "fat_per_100": 34.0,
+        "carbs_per_100": 3.8,
+        "fiber_per_100": 0.0,
+        "sugar_per_100": 2.1,
+        "salt_per_100": 0.4,
+        "vitamins": [],
+        "amount": 30.0
       }
     ]
   }

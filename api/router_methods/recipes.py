@@ -9,7 +9,8 @@ from typing import Optional, List
 from api.schemas.recipe import Recipe
 from config import settings
 
-def get_recipes():
+
+def get_recipes_method():
     if settings.environment == "remote":
         s3 = boto3.client("s3")
         bucket_name = os.environ["BUCKET_NAME"]
@@ -23,14 +24,14 @@ def get_recipes():
                 raise HTTPException(status_code=404, detail=f"File {file_name} not found in bucket.")
             raise HTTPException(status_code=500, detail=str(e))
     else:
-        recipes_file = Path("tests/database_recipes.json")
+        recipes_file = Path("local_data_for_testing/database_recipes.json")
         try:
             with open(recipes_file, "r") as file:
                 return json.load(file)
         except FileNotFoundError:
             raise HTTPException(status_code=500, detail="File not found")
 
-def save_recipes(recipes):
+def save_recipes_method(recipes):
     if settings.environment == "remote":
         s3 = boto3.client("s3")
         bucket_name = os.environ["BUCKET_NAME"]
@@ -47,16 +48,16 @@ def save_recipes(recipes):
                 raise HTTPException(status_code=404, detail=f"File {file_name} not found in bucket.")
             raise HTTPException(status_code=500, detail=str(e))
     else:
-        recipes_file = Path("tests/database_recipes.json")
+        recipes_file = Path("local_data_for_testing/database_recipes.json")
         try:
             with open(recipes_file, "w") as file:
                 json.dump(recipes, file, indent=2)
         except FileNotFoundError:
             raise HTTPException(status_code=500, detail="File not found")
 
-def get_recipe(recipe_id: int):
+def get_recipe_method(recipe_id: int):
     try:
-        recipes = get_recipes()
+        recipes = get_recipes_method()
         recipe = next((r for r in recipes if r["id"] == recipe_id), None)
         if not recipe:
             raise HTTPException(status_code=404, detail="Recipe not found")
@@ -64,21 +65,21 @@ def get_recipe(recipe_id: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-def create_recipe(recipe: Recipe):
+def create_recipe_method(recipe: Recipe):
     try:
         new_recipe = recipe.dict()
-        recipes = get_recipes()
+        recipes = get_recipes_method()
         new_recipe["id"] = len(recipes) + 1
         recipes.append(new_recipe)
-        save_recipes(recipes)
+        save_recipes_method(recipes)
         return new_recipe
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-def update_recipe(recipe_id: int, recipe: Recipe):
+def update_recipe_method(recipe_id: int, recipe: Recipe):
     try:
-        recipes = get_recipes()
+        recipes = get_recipes_method()
         
         index = next((i for i, r in enumerate(recipes) if r["id"] == recipe_id), None)
         if index is None:
@@ -88,36 +89,36 @@ def update_recipe(recipe_id: int, recipe: Recipe):
         updated_recipe["id"] = recipe_id
         recipes[index] = updated_recipe
         
-        save_recipes(recipes)
+        save_recipes_method(recipes)
         
         return updated_recipe
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-def delete_recipe(recipe_id: int):
+def delete_recipe_method(recipe_id: int):
     try:
-        recipes = get_recipes()
+        recipes = get_recipes_method()
         
         index = next((i for i, r in enumerate(recipes) if r["id"] == recipe_id), None)
         if index is None:
             raise HTTPException(status_code=404, detail="Recipe not found")
             
         deleted = recipes.pop(index)
-        save_recipes(recipes)
+        save_recipes_method(recipes)
         
         return {"message": "Recipe deleted", "recipe": deleted}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
 
-def filter_recipes(
+def filter_recipes_method(
     name: Optional[str],
     diet_type: Optional[List[str]],
     ingredient: Optional[List[str]],
     ):
     try:
-        recipes = get_recipes()
+        recipes = get_recipes_method()
         
         filtered = recipes
         

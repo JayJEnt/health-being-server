@@ -1,65 +1,24 @@
-from fastapi import APIRouter, HTTPException
-import json
-from pathlib import Path
+from fastapi import APIRouter
 
 from api.schemas.ingredient import Ingredient
+from api.router_methods.refrigerator import (
+    get_ingredients_method,
+    add_ingredient_method,
+    delete_ingredient_method,
+)
 
 
 router = APIRouter()
-REGRIGERATOR_FILE = Path("tests/database_refrigerator.json")
-
-def get_refrigerator_content_from_file():
-    with open(REGRIGERATOR_FILE, "r") as file:
-        return json.load(file)
-
-def save_refrigerator_content_to_file(recipes):
-    with open(REGRIGERATOR_FILE, "w") as file:
-        json.dump(recipes, file, indent=2)
 
 
 @router.get("/refrigerator/", response_model=list[Ingredient])
 async def get_ingredients():
-    try:
-        ingredients = get_refrigerator_content_from_file()
-        return ingredients
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Ingredients file not found")
-    except json.JSONDecodeError:
-        raise HTTPException(status_code=500, detail="Error decoding JSON file")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return get_ingredients_method()
     
 @router.post("/refrigerator/", response_model=Ingredient)
 async def add_ingredient(ingredient: Ingredient):
-    try:
-        new_ingredient = ingredient.dict()
-        ingredients = get_refrigerator_content_from_file()
-        new_ingredient["id"] = len(ingredients) + 1
-        ingredients.append(new_ingredient)
-        save_refrigerator_content_to_file(ingredients)
-        return new_ingredient
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Ingredients file not found")
-    except json.JSONDecodeError:
-        raise HTTPException(status_code=500, detail="Error decoding JSON file")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return add_ingredient_method(ingredient)
     
 @router.delete("/refrigerator/{ingredient_id}", response_model=Ingredient)
 async def delete_ingredient(ingredient_id: int):
-    try:
-        ingredients = get_refrigerator_content_from_file()
-        index = next((i for i, r in enumerate(ingredients) if r["id"] == ingredient_id), None)
-        if index is None:
-            raise HTTPException(status_code=404, detail="Ingredient not found")
-            
-        deleted_ingredient = ingredients.pop(index)
-        save_refrigerator_content_to_file(ingredients)
-        
-        return deleted_ingredient
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Ingredients file not found")
-    except json.JSONDecodeError:
-        raise HTTPException(status_code=500, detail="Error decoding JSON file")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return delete_ingredient_method(ingredient_id)
