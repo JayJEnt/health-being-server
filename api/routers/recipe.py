@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Query
 from typing import Optional, List
 
-from api.schemas.recipe import Recipe
+from api.schemas.recipe import RecipeDetailed as Recipe #TODO: change to recipe when database is updated
 from api.routers.router_methods.recipes import (
     get_recipes_method,
     get_recipe_method,
