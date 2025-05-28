@@ -1,9 +1,9 @@
 """ TEST SCRIPT """
-from langchain_ollama import OllamaLLM as Ollama
+from langchain_community.llms import Ollama
 from api.services.automoderator.automoderator import AutoModeratorService
 
 
-llm = Ollama(model="llama3")
+llm = Ollama(model="bakllava")
 
 automoderator = AutoModeratorService(llm=llm)
 
@@ -21,7 +21,8 @@ test_steps = "\n".join([
     "7. Dopraw solą i pieprzem do smaku.",
     "8. Podawaj z ryżem lub chlebem naan.",
 ])
+image_path = r"test_images\\test_image.jpg"
 
-response = automoderator.validate_text(test_title, test_description, test_steps)
+response = automoderator.validate_image(image_path, test_title, test_description, test_steps)
 print("Validation Response:")
 print(response)

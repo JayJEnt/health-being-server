@@ -15,3 +15,6 @@ class BaseAutomoderator:
 
     def invoke(self, title: str, description: str, steps: list) -> str:
         return self._chain.invoke({"title": title, "description": description, "steps": steps})
+    
+    def invoke_img(self, title: str, description: str, steps: list, image_description: str) -> str:
+        return self._chain.invoke({"title": title, "description": description, "steps": steps, "image_description": image_description})
