@@ -49,46 +49,50 @@
         ]
       }
     ],
-    "instructions": "1. Ugotuj quinoa według instrukcji na opakowaniu. 2. Pokrój ogórki w kostkę. 3. Wymieszaj quinoa z ogórkami. 4. Przygotuj sos z oliwy, soku z cytryny, soli i pieprzu. 5. Polej sosem sałatkę i wymieszaj."
+    "instructions": "1. Ugotuj quinoa wed\u0142ug instrukcji na opakowaniu. 2. Pokr\u00f3j og\u00f3rki w kostk\u0119. 3. Wymieszaj quinoa z og\u00f3rkami. 4. Przygotuj sos z oliwy, soku z cytryny, soli i pieprzu. 5. Polej sosem sa\u0142atk\u0119 i wymieszaj."
   },
   {
     "id": 2,
     "name": "Kurczak teriyaki z ryzem",
+    "image_url": null,
     "description": "Klasyczne danie kuchni japonskiej.",
+    "instructions": "1. Pokr\u00f3j kurczaka w kostk\u0119. 2. Usma\u017c na patelni na z\u0142oty kolor. 3. Dodaj sos teriyaki i du\u015b 5 minut. 4. Ugotuj ry\u017c. 5. Podawaj kurczaka z ry\u017cem, posypany sezamem.",
     "diet_type": [],
     "ingredients": [
       {
         "id": 3,
         "name": "Filet z kurczaka",
         "unit": "g",
-        "amount": 300,
-        "calories_per_100": 165,
-        "protein_per_100": 31,
+        "calories_per_100": 165.0,
+        "protein_per_100": 31.0,
         "fat_per_100": 3.6,
-        "carbs_per_100": 0,
-        "sugar_per_100": 0,
+        "carbs_per_100": 0.0,
+        "fiber_per_100": 0.0,
+        "sugar_per_100": 0.0,
         "salt_per_100": 0.1,
         "vitamins": [
           {
             "id": 4,
             "name": "Witamina B12"
           }
-        ]
+        ],
+        "amount": 300.0
       },
       {
         "id": 4,
         "name": "Ryz bialy",
         "unit": "g",
-        "amount": 150,
-        "calories_per_100": 130,
+        "calories_per_100": 130.0,
         "protein_per_100": 2.7,
         "fat_per_100": 0.3,
         "carbs_per_100": 28.2,
+        "fiber_per_100": 0.0,
         "sugar_per_100": 0.1,
-        "salt_per_100": 0.01
+        "salt_per_100": 0.01,
+        "vitamins": null,
+        "amount": 150.0
       }
-    ],
-    "instructions": "1. Pokrój kurczaka w kostkę. 2. Usmaż na patelni na złoty kolor. 3. Dodaj sos teriyaki i duś 5 minut. 4. Ugotuj ryż. 5. Podawaj kurczaka z ryżem, posypany sezamem."
+    ]
   },
   {
     "id": 3,
@@ -134,7 +138,7 @@
         "salt_per_100": 0.01
       }
     ],
-    "instructions": "1. Obierz banana i pokrój na kawałki. 2. Wrzuć do blendera banana i jagody. 3. Dodaj szklankę wody lub mleka roślinnego. 4. Zmiksuj na gładki koktajl. 5. Podawaj schłodzone."
+    "instructions": "1. Obierz banana i pokr\u00f3j na kawa\u0142ki. 2. Wrzu\u0107 do blendera banana i jagody. 3. Dodaj szklank\u0119 wody lub mleka ro\u015blinnego. 4. Zmiksuj na g\u0142adki koktajl. 5. Podawaj sch\u0142odzone."
   },
   {
     "id": 4,
@@ -198,7 +202,7 @@
         ]
       }
     ],
-    "instructions": "1. Ugotuj makaron al dente. 2. W dużej misce wymieszaj makaron z pesto. 3. Dodaj pokrojone suszone pomidory. 4. Dopraw solą i pieprzem do smaku. 5. Można posypać parmezanem."
+    "instructions": "1. Ugotuj makaron al dente. 2. W du\u017cej misce wymieszaj makaron z pesto. 3. Dodaj pokrojone suszone pomidory. 4. Dopraw sol\u0105 i pieprzem do smaku. 5. Mo\u017cna posypa\u0107 parmezanem."
   },
   {
     "id": 5,
@@ -276,19 +280,19 @@
         "vitamins": []
       }
     ],
-    "instructions": "1. Dynię pokrój w kostkę i upiecz w piekarniku. 2. Na patelni podsmaż imbir. 3. W garnku zblenduj dynię z mlekiem kokosowym i imbirem. 4. Dopraw solą i pieprzem. 5. Podawaj z oliwą i pestkami dyni."
+    "instructions": "1. Dyni\u0119 pokr\u00f3j w kostk\u0119 i upiecz w piekarniku. 2. Na patelni podsma\u017c imbir. 3. W garnku zblenduj dyni\u0119 z mlekiem kokosowym i imbirem. 4. Dopraw sol\u0105 i pieprzem. 5. Podawaj z oliw\u0105 i pestkami dyni."
   },
   {
     "id": 6,
-    "name": "Śródziemnomorska sałatka z tuńczykiem",
-    "description": "Lekka sałatka z grillowanym tuńczykiem, warzywami i oliwkami.",
+    "name": "\u015ar\u00f3dziemnomorska sa\u0142atka z tu\u0144czykiem",
+    "description": "Lekka sa\u0142atka z grillowanym tu\u0144czykiem, warzywami i oliwkami.",
     "diet_type": [
       "high-protein"
     ],
     "ingredients": [
       {
         "id": 14,
-        "name": "Tuńczyk świeży",
+        "name": "Tu\u0144czyk \u015bwie\u017cy",
         "unit": "g",
         "calories_per_100": 144.0,
         "protein_per_100": 23.4,
@@ -311,7 +315,7 @@
       },
       {
         "id": 15,
-        "name": "Mieszanka sałat",
+        "name": "Mieszanka sa\u0142at",
         "unit": "g",
         "calories_per_100": 15.0,
         "protein_per_100": 1.4,
@@ -389,6 +393,6 @@
         "amount": 30.0
       }
     ],
-    "instructions": "1. Tuńczyka przypraw i grilluj 2-3 minuty z każdej strony. 2. Na talerzu ułóż mieszankę sałat. 3. Dodaj pokrojone pomidory i oliwki. 4. Na wierzchu ułóż pokrojonego tuńczyka. 5. Polej winegretem."
+    "instructions": "1. Tu\u0144czyka przypraw i grilluj 2-3 minuty z ka\u017cdej strony. 2. Na talerzu u\u0142\u00f3\u017c mieszank\u0119 sa\u0142at. 3. Dodaj pokrojone pomidory i oliwki. 4. Na wierzchu u\u0142\u00f3\u017c pokrojonego tu\u0144czyka. 5. Polej winegretem."
   }
 ]
