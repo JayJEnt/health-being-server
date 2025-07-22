@@ -1,5 +1,6 @@
-import sys
 from loguru import logger
+
+import sys
 
 from config import settings
 
