@@ -48,7 +48,8 @@
           }
         ]
       }
-    ]
+    ],
+    "instructions": "1. Ugotuj quinoa według instrukcji na opakowaniu. 2. Pokrój ogórki w kostkę. 3. Wymieszaj quinoa z ogórkami. 4. Przygotuj sos z oliwy, soku z cytryny, soli i pieprzu. 5. Polej sosem sałatkę i wymieszaj."
   },
   {
     "id": 2,
@@ -86,7 +87,8 @@
         "sugar_per_100": 0.1,
         "salt_per_100": 0.01
       }
-    ]
+    ],
+    "instructions": "1. Pokrój kurczaka w kostkę. 2. Usmaż na patelni na złoty kolor. 3. Dodaj sos teriyaki i duś 5 minut. 4. Ugotuj ryż. 5. Podawaj kurczaka z ryżem, posypany sezamem."
   },
   {
     "id": 3,
@@ -131,7 +133,8 @@
         "sugar_per_100": 10,
         "salt_per_100": 0.01
       }
-    ]
+    ],
+    "instructions": "1. Obierz banana i pokrój na kawałki. 2. Wrzuć do blendera banana i jagody. 3. Dodaj szklankę wody lub mleka roślinnego. 4. Zmiksuj na gładki koktajl. 5. Podawaj schłodzone."
   },
   {
     "id": 4,
@@ -194,7 +197,8 @@
           }
         ]
       }
-    ]
+    ],
+    "instructions": "1. Ugotuj makaron al dente. 2. W dużej misce wymieszaj makaron z pesto. 3. Dodaj pokrojone suszone pomidory. 4. Dopraw solą i pieprzem do smaku. 5. Można posypać parmezanem."
   },
   {
     "id": 5,
@@ -271,19 +275,20 @@
         "salt_per_100": 0.0,
         "vitamins": []
       }
-    ]
+    ],
+    "instructions": "1. Dynię pokrój w kostkę i upiecz w piekarniku. 2. Na patelni podsmaż imbir. 3. W garnku zblenduj dynię z mlekiem kokosowym i imbirem. 4. Dopraw solą i pieprzem. 5. Podawaj z oliwą i pestkami dyni."
   },
   {
     "id": 6,
-    "name": "\u015ar\u00f3dziemnomorska sa\u0142atka z tu\u0144czykiem",
-    "description": "Lekka sa\u0142atka z grillowanym tu\u0144czykiem, warzywami i oliwkami.",
+    "name": "Śródziemnomorska sałatka z tuńczykiem",
+    "description": "Lekka sałatka z grillowanym tuńczykiem, warzywami i oliwkami.",
     "diet_type": [
       "high-protein"
     ],
     "ingredients": [
       {
         "id": 14,
-        "name": "Tu\u0144czyk \u015bwie\u017cy",
+        "name": "Tuńczyk świeży",
         "unit": "g",
         "calories_per_100": 144.0,
         "protein_per_100": 23.4,
@@ -306,7 +311,7 @@
       },
       {
         "id": 15,
-        "name": "Mieszanka sa\u0142at",
+        "name": "Mieszanka sałat",
         "unit": "g",
         "calories_per_100": 15.0,
         "protein_per_100": 1.4,
@@ -383,6 +388,7 @@
         "vitamins": [],
         "amount": 30.0
       }
-    ]
+    ],
+    "instructions": "1. Tuńczyka przypraw i grilluj 2-3 minuty z każdej strony. 2. Na talerzu ułóż mieszankę sałat. 3. Dodaj pokrojone pomidory i oliwki. 4. Na wierzchu ułóż pokrojonego tuńczyka. 5. Polej winegretem."
   }
 ]
