@@ -1,5 +1,6 @@
 import os
 from pydantic_settings import BaseSettings
+from dotenv import load_dotenv
 
 
 class LocalSettings(BaseSettings):
@@ -8,6 +9,10 @@ class LocalSettings(BaseSettings):
     
     # AWS
     aws_region: str = "eu-north-1"
+
+    # SUPABASE
+    supabase_url: str = ""
+    supabase_key: str = ""
     
 class Settings(BaseSettings):
     environment: str = os.getenv("environment", "remote")
@@ -16,5 +21,10 @@ class Settings(BaseSettings):
     # AWS
     aws_region: str = "eu-north-1"
 
+    # SUPABASE
+    supabase_url: str = ""
+    supabase_key: str = ""
+
+load_dotenv()
 
 settings = Settings() if os.getenv("environment", "").lower() == "remote" else LocalSettings()

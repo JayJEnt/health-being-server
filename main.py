@@ -3,9 +3,9 @@ from datetime import datetime as dt
 from fastapi import FastAPI
 from mangum import Mangum
 
-from api.routers import recipe
-from api.routers import refrigerator
-from api.routers import test
+from api.routers import recipes
+from api.routers import recipes_recipe_id
+# from api.routers import refrigerator
 from logger import configure_logger
 
 logger = configure_logger()
@@ -29,9 +29,9 @@ app = FastAPI(lifespan=None)
 def root_handler():
     return {"message": "Hello!"}
 
-app.include_router(test.router)
-app.include_router(recipe.router)
-app.include_router(refrigerator.router)
+app.include_router(recipes.router)
+app.include_router(recipes_recipe_id.router)
+# app.include_router(refrigerator.router)
 
 def handler(event, context):
     logger.debug(f"Event: {event}")

@@ -1,12 +1,11 @@
 from fastapi import HTTPException
 from botocore.exceptions import ClientError
 import boto3
-import json
-import os
-from pathlib import Path
-from typing import Optional, List
 
-from api.schemas.recipe import RecipeDetailed as Recipe #TODO: change to recipe when database is updated
+import os
+import json
+from pathlib import Path
+
 from config import settings
 
 
@@ -54,90 +53,3 @@ def save_recipes_method(recipes):
                 json.dump(recipes, file, indent=2)
         except FileNotFoundError:
             raise HTTPException(status_code=500, detail="File not found")
-
-def get_recipe_method(recipe_id: int):
-    try:
-        recipes = get_recipes_method()
-        recipe = next((r for r in recipes if r["id"] == recipe_id), None)
-        if not recipe:
-            raise HTTPException(status_code=404, detail="Recipe not found")
-        return recipe
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-def create_recipe_method(recipe: Recipe):
-    try:
-        new_recipe = recipe.dict()
-        recipes = get_recipes_method()
-        new_recipe["id"] = len(recipes) + 1
-        recipes.append(new_recipe)
-        save_recipes_method(recipes)
-        return new_recipe
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-def update_recipe_method(recipe_id: int, recipe: Recipe):
-    try:
-        recipes = get_recipes_method()
-        
-        index = next((i for i, r in enumerate(recipes) if r["id"] == recipe_id), None)
-        if index is None:
-            raise HTTPException(status_code=404, detail="Recipe not found")
-            
-        updated_recipe = recipe.dict()
-        updated_recipe["id"] = recipe_id
-        recipes[index] = updated_recipe
-        
-        save_recipes_method(recipes)
-        
-        return updated_recipe
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-def delete_recipe_method(recipe_id: int):
-    try:
-        recipes = get_recipes_method()
-        
-        index = next((i for i, r in enumerate(recipes) if r["id"] == recipe_id), None)
-        if index is None:
-            raise HTTPException(status_code=404, detail="Recipe not found")
-            
-        deleted = recipes.pop(index)
-        save_recipes_method(recipes)
-        
-        return {"message": "Recipe deleted", "recipe": deleted}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    
-
-def filter_recipes_method(
-    name: Optional[str],
-    diet_type: Optional[List[str]],
-    ingredient: Optional[List[str]],
-    ):
-    try:
-        recipes = get_recipes_method()
-        
-        filtered = recipes
-        
-        if name:
-            filtered = [r for r in filtered if name.lower() in r["name"].lower()]
-            
-        if diet_type:
-            filtered = [
-                r for r in filtered 
-                if any(dt in r.get("diet_type", []) for dt in diet_type)
-            ]
-        if ingredient:
-            filtered = [
-                r for r in filtered 
-                if any(ing["name"].lower() in [i.lower() for i in ingredient] 
-                      for ing in r["ingredients"])
-            ]
-            
-        return filtered
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
