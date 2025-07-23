@@ -1,6 +1,6 @@
 from supabase import create_client, Client
 
-from typing import Any
+from typing import Any, Dict
 from functools import wraps
 
 from config import settings
@@ -8,26 +8,29 @@ from logger import configure_logger
 
 
 class SupabaseConnection:
+    logger = configure_logger()
+
     def __init__(self):
         self._url = settings.supabase_url
         self._key = settings.supabase_key
-        self._client: Client = create_client(self._url, self._key)
+        try:
+            self._client: Client = create_client(self._url, self._key)
+        except Exception as ex:
+            SupabaseConnection.logger.error(f"Supabase connection error: {ex}")
 
     @staticmethod
     def error_handler(func):
-        logger = configure_logger()
-
         @wraps(func)
         def wrapper(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
             except Exception as ex:
-                logger.error(f"Supabase error: {ex}")
-                return None
+                SupabaseConnection.logger.error(f"Supabase error: {ex}")
+                return []
         return wrapper
 
     @error_handler
-    def fetch_all(self, table: str) -> list[dict[str, Any]]:
+    def fetch_all(self, table: str) -> list[Dict[str, Any]]:
         response = (
             self._client.table(table)
             .select("*")
@@ -36,7 +39,7 @@ class SupabaseConnection:
         return response.data
 
     @error_handler
-    def insert(self, table: str, data: dict) -> list[dict[str, Any]]:
+    def insert(self, table: str, data: dict) -> list[Dict[str, Any]]:
         response = (
             self._client.table(table)
             .insert(data)
@@ -45,7 +48,7 @@ class SupabaseConnection:
         return response.data
 
     @error_handler
-    def find_by(self, table: str, column: str, value: Any) -> list[dict[str, Any]]:
+    def find_by(self, table: str, column: str, value: Any) -> list[Dict[str, Any]]:
         response = (
             self._client.table(table)
             .select("*")
@@ -55,7 +58,7 @@ class SupabaseConnection:
         return response.data
 
     @error_handler
-    def delete_by(self, table: str, column: str, value: Any) -> list[dict[str, Any]]:
+    def delete_by(self, table: str, column: str, value: Any) -> list[Dict[str, Any]]:
         response = (
             self._client.table(table)
             .delete()
@@ -65,7 +68,7 @@ class SupabaseConnection:
         return response.data
 
     @error_handler
-    def update_by(self, table: str, column: str, value: Any, updates: dict) -> list[dict[str, Any]]:
+    def update_by(self, table: str, column: str, value: Any, updates: dict) -> list[Dict[str, Any]]:
         response = (
             self._client.table(table)
             .update(updates)
@@ -73,3 +76,5 @@ class SupabaseConnection:
             .execute()
         )
         return response.data
+
+supabase_connection = SupabaseConnection()

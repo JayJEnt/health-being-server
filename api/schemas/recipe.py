@@ -1,16 +1,17 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
-from api.schemas.ingredient import Ingredient
+from api.schemas.not_used.ingredient import Ingredient
 
 
 class Recipe(BaseModel):
     id: int
-    name: str
-    image_url: Optional[str] = None
-    
-class RecipeDetailed(Recipe):
+    title: str
     description: str
-    instructions: str
-    diet_type: Optional[List[str]]
-    ingredients: List[Ingredient]
+    type: Optional[str]
+    
+# class RecipeDetailed(Recipe):
+#     image_url: Optional[str] = None
+#     instructions: str
+#     diet_type: Optional[List[str]]
+#     ingredients: List[Ingredient]

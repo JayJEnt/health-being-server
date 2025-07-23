@@ -11,9 +11,15 @@ class LocalSettings(BaseSettings):
     # AWS
     aws_region: str = "eu-north-1"
 
-    # SUPABASE
+    # SUPABASE SECRETS
     supabase_url: str = ""
     supabase_key: str = ""
+
+    # TABLES
+    recipe_table: str = ""
+    user_table: str = ""
+
+    load_dotenv()
     
 class Settings(BaseSettings):
     environment: str = os.getenv("environment", "remote")
@@ -22,10 +28,14 @@ class Settings(BaseSettings):
     # AWS
     aws_region: str = "eu-north-1"
 
-    # SUPABASE
+    # SUPABASE SECRETS
     supabase_url: str = ""
     supabase_key: str = ""
 
-load_dotenv()
+    # TABLES
+    recipe_table: str = ""
+    user_table: str = ""
+
+    load_dotenv()
 
 settings = Settings() if os.getenv("environment", "").lower() == "remote" else LocalSettings()

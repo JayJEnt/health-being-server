@@ -4,9 +4,12 @@ from mangum import Mangum
 from contextlib import asynccontextmanager
 from datetime import datetime as dt
 
-from api.routers import recipes
-from api.routers import recipes_recipe_id
-# from api.routers import refrigerator
+from api.routers import (
+    recipes,
+    recipes_recipe_id,
+    users,
+    users_user_id
+)
 from logger import configure_logger
 
 logger = configure_logger()
@@ -32,7 +35,8 @@ def root_handler():
 
 app.include_router(recipes.router)
 app.include_router(recipes_recipe_id.router)
-# app.include_router(refrigerator.router)
+app.include_router(users.router)
+app.include_router(users_user_id.router)
 
 def handler(event, context):
     logger.debug(f"Event: {event}")

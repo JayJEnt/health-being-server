@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import List
 
-from api.schemas.ingredient import Ingredient
+from api.schemas.not_used.ingredient import Ingredient
 
 
 class Refrigerator(BaseModel):

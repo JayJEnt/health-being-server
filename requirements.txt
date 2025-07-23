@@ -1,11 +1,17 @@
-# Core
+# api
 fastapi>=0.109.1
 mangum>=0.17.0
-uvicorn>=0.35.0
-loguru>=0.7.2
 pydantic-settings>=2.2.1
 pydantic>=2.6.4
-boto3>=1.39.3
+
+# local running
+uvicorn>=0.35.0
+
+# logger
+loguru>=0.7.2
+
+# config
+pydantic-settings>=2.2.1
 dotenv>=0.9.9
 
 # Database
