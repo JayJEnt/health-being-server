@@ -3,7 +3,7 @@ from fastapi import APIRouter
 
 from typing import List
 
-from api.schemas.recipe import Recipe
+from api.schemas.recipe import CreateRecipe, Recipe
 from db_conn import supabase_connection
 from config import settings
 
@@ -21,7 +21,7 @@ async def get_recipe(recipe_id: int):
     return recipe
 
 @router.put("/recipes/{recipe_id}", response_model=List[Recipe])
-async def update_recipe(recipe_id: int, recipe: Recipe):
+async def update_recipe(recipe_id: int, recipe: CreateRecipe):
     recipe = supabase_connection.update_by(
         settings.recipe_table,
         "id",

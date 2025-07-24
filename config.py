@@ -18,6 +18,7 @@ class LocalSettings(BaseSettings):
     # TABLES
     recipe_table: str = ""
     user_table: str = ""
+    ingredient_table: str = ""
 
     load_dotenv()
     
@@ -35,6 +36,7 @@ class Settings(BaseSettings):
     # TABLES
     recipe_table: str = ""
     user_table: str = ""
+    ingredient_table: str = ""
 
     load_dotenv()
 

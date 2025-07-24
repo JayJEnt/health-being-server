@@ -5,10 +5,13 @@ from contextlib import asynccontextmanager
 from datetime import datetime as dt
 
 from api.routers import (
-    recipes,
+    ingredients_ingredient_id,
+    ingredients_ingredient_name,
+    ingredients,
     recipes_recipe_id,
+    recipes,
+    users_user_id,
     users,
-    users_user_id
 )
 from logger import configure_logger
 
@@ -33,10 +36,13 @@ app = FastAPI(lifespan=None)
 def root_handler():
     return {"message": "Hello!"}
 
-app.include_router(recipes.router)
+app.include_router(ingredients_ingredient_id.router)
+app.include_router(ingredients_ingredient_name.router)
+app.include_router(ingredients.router)
 app.include_router(recipes_recipe_id.router)
-app.include_router(users.router)
+app.include_router(recipes.router)
 app.include_router(users_user_id.router)
+app.include_router(users.router)
 
 def handler(event, context):
     logger.debug(f"Event: {event}")
