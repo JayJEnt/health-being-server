@@ -1,7 +1,6 @@
 # api
 fastapi>=0.109.1
 mangum>=0.17.0
-pydantic-settings>=2.2.1
 pydantic>=2.6.4
 
 # local running
