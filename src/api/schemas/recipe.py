@@ -1,16 +1,19 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
-from api.schemas.ingredient import Ingredient
+from api.schemas.ingredient import IngredientQuantity
+from api.schemas.diet_type import CreateDietType, DietType
 
 
 class CreateRecipe(BaseModel):
     title: str
     image_url: Optional[str] = None
     description: str
-    instructions: List[str]
-    diet_type: Optional[List[str]]
-    ingredients: List[Ingredient]
+    instructions: str
+
+class CreateDetailedRecipe(CreateRecipe):
+    diet_type: Optional[List[CreateDietType]] = None
+    # ingredients: List[IngredientQuantity]
 
 class RecipeOverview(BaseModel):
     id: int
@@ -19,6 +22,8 @@ class RecipeOverview(BaseModel):
 
 class Recipe(RecipeOverview):
     description: str
-    instructions: List[str]
-    diet_type: Optional[List[str]]
-    ingredients: List[Ingredient]
+    instructions: str
+
+class DetailedRecipe(Recipe):
+    diet_type: Optional[List[DietType]] = None
+    # ingredients: List[IngredientQuantity]

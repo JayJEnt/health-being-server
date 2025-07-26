@@ -1,8 +1,6 @@
 """/recipes/{recipe_id} endpoint"""
 from fastapi import APIRouter
 
-from typing import List
-
 from api.schemas.recipe import CreateRecipe, Recipe
 from database.supabase_connection import supabase_connection
 from config import settings
@@ -11,16 +9,16 @@ from config import settings
 router = APIRouter()
 
 
-@router.get("/recipes/{recipe_id}", response_model=List[Recipe])
+@router.get("/recipes/{recipe_id}", response_model=Recipe)
 async def get_recipe(recipe_id: int):
     recipe = supabase_connection.find_by(
         settings.recipe_table,
         "id",
         recipe_id,
     )
-    return recipe
+    return recipe[0]
 
-@router.put("/recipes/{recipe_id}", response_model=List[Recipe])
+@router.put("/recipes/{recipe_id}", response_model=Recipe)
 async def update_recipe(recipe_id: int, recipe: CreateRecipe):
     recipe = supabase_connection.update_by(
         settings.recipe_table,
@@ -28,7 +26,7 @@ async def update_recipe(recipe_id: int, recipe: CreateRecipe):
         recipe_id, 
         recipe.model_dump(),
     )
-    return recipe
+    return recipe[0]
 
 @router.delete("/recipes/{recipe_id}")
 async def delete_recipe(recipe_id: int):
@@ -37,4 +35,4 @@ async def delete_recipe(recipe_id: int):
         "id",
         recipe_id,
     )
-    return recipe
+    return recipe[0]

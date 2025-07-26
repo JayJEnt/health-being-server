@@ -19,6 +19,8 @@ class LocalSettings(BaseSettings):
     recipe_table: str = ""
     user_table: str = ""
     ingredient_table: str = ""
+    diet_type_table: str = ""
+    diet_type_included_table: str =""
 
     load_dotenv()
     
@@ -37,6 +39,8 @@ class Settings(BaseSettings):
     recipe_table: str = ""
     user_table: str = ""
     ingredient_table: str = ""
+    diet_type_table: str = ""
+    diet_type_included_table: str =""
 
     load_dotenv()
 
