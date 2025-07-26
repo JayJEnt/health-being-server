@@ -3,7 +3,9 @@ from fastapi import APIRouter
 
 from typing import List
 
-from api.schemas.ingredient import CreateIngredient, Ingredient
+from api.schemas.ingredient import CreateDetailedIngredient, Ingredient
+from api.routers.vitamins_name_vitamin_name import get_vitamin_by_name
+from api.utils.operation_on_attributes import pop_attributes
 from database.supabase_connection import supabase_connection
 from config import settings
 from logger import logger
@@ -18,14 +20,8 @@ async def get_ingredients():
     return ingredients
 
 @router.post("/ingredients/", response_model=Ingredient)
-async def create_ingredient(ingredient: CreateIngredient):
-    ingredient_json = ingredient.model_dump()
-
-    vitamins = ingredient_json.get("vitamins", "")
-    logger.debug(f"vitamins: {vitamins}")
-
-    ingredient = {key : value for key, value in ingredient_json.items() if key != "vitamins"}
-    logger.debug(f"ingredient: {ingredient}")
+async def create_ingredient(ingredient: CreateDetailedIngredient):
+    ingredient, poped_attributes = pop_attributes(ingredient, ["vitamins"])
 
     ingredient = supabase_connection.insert(
         settings.ingredient_table,
@@ -33,6 +29,22 @@ async def create_ingredient(ingredient: CreateIngredient):
     )
     logger.debug(f"ingredient_response: {ingredient}")
 
-    recipe_id = recipe[0]["id"]
-    logger.debug(f"recipe_id: {recipe_id}")
+    ingredient_id = ingredient[0]["id"]
+    logger.debug(f"ingredient_id: {ingredient_id}")
+
+    vitamins = poped_attributes[0]
+    if vitamins:
+        for vitamin in vitamins:
+            exists = await get_vitamin_by_name(vitamin["name"])
+            if exists:
+                logger.debug(f"exists: {exists}")
+
+                supabase_connection.insert(
+                    settings.vitamins_included_table,
+                    {
+                        "ingredient_id": ingredient_id,
+                        "vitamin_id": exists["id"]
+                    },
+                )
+
     return ingredient[0]

@@ -1,4 +1,4 @@
-"""/recipes_search/{phrase} endpoint"""
+"""/recipes/search/{phrase} endpoint"""
 from fastapi import APIRouter
 
 from typing import List
@@ -11,7 +11,7 @@ from config import settings
 router = APIRouter()
 
 
-@router.get("/recipes_search/{phrase}", response_model=List[Recipe])
+@router.get("/recipes/search/{phrase}", response_model=List[Recipe])
 async def search_for_matching_recipes(phrase: str):
     recipes = supabase_connection.find_by(
         settings.recipe_table,

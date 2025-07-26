@@ -4,29 +4,29 @@ from typing import Any, Dict
 from functools import wraps
 
 from config import settings
-from logger import configure_logger
+from logger import logger
 
 
 class SupabaseConnection:
-    logger = configure_logger()
-
     def __init__(self):
         self._url = settings.supabase_url
         self._key = settings.supabase_key
         try:
             self._client: Client = create_client(self._url, self._key)
         except Exception as ex:
-            SupabaseConnection.logger.error(f"Supabase connection error: {ex}")
+            logger.error(f"Supabase connection error: {ex}")
+            raise ConnectionRefusedError
 
     @staticmethod
     def error_handler(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             try:
+                logger.info(f"Processing request: {func.__name__}")
                 return func(*args, **kwargs)
             except Exception as ex:
-                SupabaseConnection.logger.error(f"Supabase error: {ex}")
-                return []
+                logger.error(f"Supabase error: {ex}")
+                raise RuntimeError
         return wrapper
 
     @error_handler
