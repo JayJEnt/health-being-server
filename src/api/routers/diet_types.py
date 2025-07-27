@@ -17,6 +17,7 @@ async def get_diet_types():
     return diet_types
 
 @router.post("/diet_types/", response_model=DietType)
+# TODO: add role validation -> only for admin
 async def create_diet_type(diet_type: DietTypeCreate):
     diet_type = supabase_connection.insert(
         settings.diet_type_table,

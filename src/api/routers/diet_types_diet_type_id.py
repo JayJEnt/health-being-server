@@ -16,7 +16,7 @@ async def get_diet_type(diet_type_id: int):
         "id",
         diet_type_id,
     )
-    return diet_type
+    return diet_type[0]
 
 @router.put("/diet_types/{diet_type_id}", response_model=DietType)
 # TODO: add role validation -> only for admin

@@ -3,7 +3,7 @@ from fastapi import APIRouter
 
 from typing import List
 
-from api.schemas.recipe import RecipePage, RecipeOverview
+from api.schemas.recipe import RecipePage, RecipeOverview, RecipePageResponse
 from api.routers.diet_types_name_diet_name import get_diet_by_name
 from api.routers.ingredients_name_ingredient_name import get_ingredient_by_name
 from api.utils.operation_on_attributes import pop_attributes, add_attributes
@@ -24,7 +24,7 @@ async def get_recipes():
         recipes_response.append(recipe)
     return recipes_response
 
-@router.post("/recipes/", response_model=RecipePage)
+@router.post("/recipes/", response_model=RecipePageResponse)
 async def create_recipe(recipe: RecipePage):
     recipe, poped_attributes = pop_attributes(recipe, ["diet_type", "ingredients"])
 
@@ -32,19 +32,22 @@ async def create_recipe(recipe: RecipePage):
         settings.recipe_table,
         recipe,
     )
-    logger.debug(f"recipe_response: {recipe_response}")
+    logger.debug(f"Recipe_response: {recipe_response}")
 
     recipe_id = recipe_response["id"]
-    logger.debug(f"recipe_id: {recipe_id}")
+    logger.debug(f"Recipe_id: {recipe_id}")
 
     diet_type_response = []
     diet_type = poped_attributes[0]
     if diet_type:
         for diet in diet_type:
-            # TODO [OPTIMALIZATION]: change on endpoint that checks exisitance, need to add new method to sb_connection
-            exists = await get_diet_by_name(diet["diet_name"])
+            try:
+                exists = exists = await get_diet_by_name(diet["diet_name"])
+            except:
+                exists = None
+                logger.error(f"Diet: {diet["diet_name"]} hasn't been recognized")
             if exists:
-                logger.debug(f"exists: {exists}")
+                logger.debug(f"Exists: {exists}")
 
                 supabase_connection.insert(
                     settings.diet_type_included_table,
@@ -59,10 +62,13 @@ async def create_recipe(recipe: RecipePage):
     ingredients = poped_attributes[1]
     if ingredients:
         for ingredient in ingredients:
-            # TODO [OPTIMALIZATION]: change on endpoint that checks exisitance, need to add new method to sb_connection
-            exists = await get_ingredient_by_name(ingredient["name"])
+            try:
+                exists = await get_ingredient_by_name(ingredient["name"])
+            except:
+                exists = None
+                logger.error(f"Ingredient: {ingredient["name"]} hasn't been recognized")
             if exists:
-                logger.debug(f"exists: {exists}")
+                logger.debug(f"Exists: {exists}")
 
                 supabase_connection.insert(
                     settings.ingredients_included_table,
@@ -75,6 +81,8 @@ async def create_recipe(recipe: RecipePage):
                 )
                 ingredients_response.append(ingredient)
 
+    if not ingredients_response:
+        logger.error("There are no valid ingredients in this recipe.")
     attributes = [{"diet_type": diet_type_response}, {"ingredients": ingredients_response}]
     recipe_response = add_attributes(
         recipe_response,

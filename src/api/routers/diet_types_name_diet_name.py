@@ -16,4 +16,4 @@ async def get_diet_by_name(diet_name: str):
         "diet_name",
         diet_name,
     )
-    return diet_type
+    return diet_type[0]

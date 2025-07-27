@@ -36,8 +36,11 @@ async def create_ingredient(ingredient: IngredientCreate):
     vitamins = poped_attributes[0]
     if vitamins:
         for vitamin in vitamins:
-            # TODO [OPTIMALIZATION]: change on endpoint that checks exisitance, need to add new method to sb_connection
-            exists = await get_vitamin_by_name(vitamin["name"])
+            try:
+                exists = await get_vitamin_by_name(vitamin["name"])
+            except:
+                exists = None
+                logger.error(f"vitamin: {vitamin["name"]} hasn't been recognized")
             if exists:
                 logger.debug(f"exists: {exists}")
 

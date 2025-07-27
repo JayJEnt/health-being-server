@@ -17,6 +17,7 @@ async def get_vitamins():
     return vitamins
 
 @router.post("/vitamins/", response_model=Vitamin)
+# TODO: add role validation -> only for admin
 async def create_vitamin(vitamin: VitaminCreate):
     vitamin = supabase_connection.insert(
         settings.vitamin_table,

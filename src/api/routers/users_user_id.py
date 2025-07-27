@@ -16,9 +16,10 @@ async def get_user(user_id: int):
         "id",
         user_id,
     )
-    return user
+    return user[0]
 
 @router.put("/users/{user_id}", response_model=User)
+# TODO: add role validation -> only for admin, or for user itself
 async def update_user(user_id: int, user: UserCreate):
     user = supabase_connection.update_by(
         settings.user_table,
@@ -29,6 +30,7 @@ async def update_user(user_id: int, user: UserCreate):
     return user
 
 @router.delete("/users/{user_id}")
+# TODO: add role validation -> only for admin, or for user itself
 async def delete_user(user_id: int):
     user = supabase_connection.delete_by(
         settings.user_table,

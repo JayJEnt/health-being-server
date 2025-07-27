@@ -16,9 +16,10 @@ async def get_vitamin(vitamin_id: int):
         "id",
         vitamin_id,
     )
-    return vitamin
+    return vitamin[0]
 
 @router.put("/vitamins/{vitamin_id}", response_model=Vitamin)
+# TODO: add role validation -> only for admin
 async def update_vitamin(vitamin_id: int, vitamin: VitaminCreate):
     vitamin = supabase_connection.update_by(
         settings.vitamin_table,
@@ -29,6 +30,7 @@ async def update_vitamin(vitamin_id: int, vitamin: VitaminCreate):
     return vitamin
 
 @router.delete("/vitamins/{vitamin_id}")
+# TODO: add role validation -> only for admin
 async def delete_vitamin(vitamin_id: int):
     vitamin = supabase_connection.delete_by(
         settings.vitamin_table,

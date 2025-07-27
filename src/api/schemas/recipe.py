@@ -8,7 +8,7 @@ class RecipeBaseModel(BaseModel):
     title: str
     image_url: Optional[str] = None
     description: str
-    instructions: str           # TODO: has to be a dict or list
+    instructions: List[str]
 
 class RecipePage(RecipeBaseModel):
     diet_type: Optional[List[DietTypeCreate]] = None
@@ -21,4 +21,8 @@ class RecipeOverview(BaseModel):
 
 class Recipe(RecipeOverview):
     description: str
-    instructions: str
+    instructions: List[str]
+
+class RecipePageResponse(Recipe):
+    diet_type: Optional[List[DietTypeCreate]] = None
+    ingredients: List[IngredientQuantity]

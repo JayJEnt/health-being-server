@@ -13,15 +13,19 @@ router = APIRouter()
 
 
 @router.get("/recipes/search/{phrase}", response_model=List[RecipeOverview])
+# TODO: overall better searching mechanizm needed
 async def search_for_matching_recipes(phrase: str):
     recipes = []
+    
+    # TODO: [OPTIMALIZATION] Consider running async
     found_by_title = find_by_title(phrase)
     if found_by_title:
-        recipes += [found_by_title]
+        recipes += found_by_title
 
+    # TODO: [OPTIMALIZATION] Consider running async
     found_by_description = find_by_description(phrase)
     if found_by_description:
-        recipes += [found_by_description]
+        recipes += found_by_description
 
     recipes_response = []
     for recipe in recipes:
@@ -30,7 +34,6 @@ async def search_for_matching_recipes(phrase: str):
     return recipes_response
 
 def find_by_title(phrase: str) -> Optional[List[Recipe]]:
-    # TODO: find_by returns only 1st matching record, use other method
     try:
         return supabase_connection.find_by(
             settings.recipe_table,
@@ -41,7 +44,6 @@ def find_by_title(phrase: str) -> Optional[List[Recipe]]:
         return None
     
 def find_by_description(phrase: str) -> Optional[List[Recipe]]:
-    # TODO: find_by returns only 1st matching record, use other method
     try:
         return supabase_connection.find_by(
             settings.recipe_table,
@@ -50,3 +52,6 @@ def find_by_description(phrase: str) -> Optional[List[Recipe]]:
         )
     except:
         return None
+    
+
+# TODO: add ilike/like search method

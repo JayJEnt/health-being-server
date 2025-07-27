@@ -69,7 +69,7 @@ class SupabaseConnection:
         return response.data[0]
 
     @error_handler
-    def find_by(self, table: str, column: str, value: Any) -> Optional[Dict[str, Any]]:
+    def find_by(self, table: str, column: str, value: Any) -> Optional[list[Dict[str, Any]]]:
         response = (
             self._client.table(table)
             .select("*")
@@ -78,7 +78,7 @@ class SupabaseConnection:
         )
         if not response.data:
             return None
-        return response.data[0]
+        return response.data
 
     @error_handler
     def delete_by(self, table: str, column: str, value: Any) -> Optional[Dict[str, Any]]:
