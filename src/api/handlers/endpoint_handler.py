@@ -1,10 +1,8 @@
 from functools import wraps
 
 from config import settings
-from logger import configure_logger
+from logger import logger
 
-
-logger = configure_logger()
 
 def error_handler(func):
     @wraps(func)

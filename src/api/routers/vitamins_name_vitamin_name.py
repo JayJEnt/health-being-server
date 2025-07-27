@@ -16,4 +16,4 @@ async def get_vitamin_by_name(vitamin_name: str):
         "name",
         vitamin_name,
     )
-    return vitamin[0]
+    return vitamin

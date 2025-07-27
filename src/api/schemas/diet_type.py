@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
 
-class CreateDietType(BaseModel):
+class DietTypeCreate(BaseModel):
     diet_name: str
 
-class DietType(CreateDietType):
+class DietType(DietTypeCreate):
     id: int

@@ -3,9 +3,9 @@ from fastapi import APIRouter
 
 from typing import List
 
-from api.schemas.ingredient import CreateDetailedIngredient, Ingredient
+from api.schemas.ingredient import IngredientCreate, Ingredient, IngredientResponse
 from api.routers.vitamins_name_vitamin_name import get_vitamin_by_name
-from api.utils.operation_on_attributes import pop_attributes
+from api.utils.operation_on_attributes import pop_attributes, add_attributes
 from database.supabase_connection import supabase_connection
 from config import settings
 from logger import logger
@@ -19,22 +19,24 @@ async def get_ingredients():
     ingredients = supabase_connection.fetch_all(settings.ingredient_table)
     return ingredients
 
-@router.post("/ingredients/", response_model=Ingredient)
-async def create_ingredient(ingredient: CreateDetailedIngredient):
+@router.post("/ingredients/", response_model=IngredientResponse)
+async def create_ingredient(ingredient: IngredientCreate):
     ingredient, poped_attributes = pop_attributes(ingredient, ["vitamins"])
 
-    ingredient = supabase_connection.insert(
+    ingredient_response = supabase_connection.insert(
         settings.ingredient_table,
         ingredient,
     )
-    logger.debug(f"ingredient_response: {ingredient}")
+    logger.debug(f"ingredient_response: {ingredient_response}")
 
-    ingredient_id = ingredient[0]["id"]
+    ingredient_id = ingredient_response["id"]
     logger.debug(f"ingredient_id: {ingredient_id}")
 
+    vitamins_response = []
     vitamins = poped_attributes[0]
     if vitamins:
         for vitamin in vitamins:
+            # TODO [OPTIMALIZATION]: change on endpoint that checks exisitance, need to add new method to sb_connection
             exists = await get_vitamin_by_name(vitamin["name"])
             if exists:
                 logger.debug(f"exists: {exists}")
@@ -46,5 +48,13 @@ async def create_ingredient(ingredient: CreateDetailedIngredient):
                         "vitamin_id": exists["id"]
                     },
                 )
+                vitamins_response.append(exists)
 
-    return ingredient[0]
+    attributes = [{"vitamins": vitamins_response}]
+    ingredient_response = add_attributes(
+        ingredient_response,
+        attributes
+    )
+    logger.debug(f"ingredient_response: {ingredient_response}")         
+
+    return ingredient_response

@@ -6,8 +6,13 @@ def pop_attributes(pydantic_model, attributes):
             attributes [list[str]]
     return: pydantic_model, poped_attributes
     """
-    pydantic_model = pydantic_model.model_dump()
-    poped_attributes = [] 
+    if not isinstance(pydantic_model, dict):
+        try:
+            pydantic_model = pydantic_model.model_dump()
+        except:
+            logger.error(f"Invalid input: {pydantic_model}")
+            raise TypeError
+    poped_attributes = []
 
     for attribute in attributes:
         poped_attribut = pydantic_model.get(f"{attribute}", "")

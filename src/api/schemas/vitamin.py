@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
 
-class CreateVitamin(BaseModel):
+class VitaminCreate(BaseModel):
     name: str
 
-class Vitamin(CreateVitamin):
+class Vitamin(VitaminCreate):
     id: int

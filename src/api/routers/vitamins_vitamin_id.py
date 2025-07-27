@@ -1,7 +1,7 @@
 """/vitamins/{vitamin_id} endpoint"""
 from fastapi import APIRouter
 
-from api.schemas.vitamin import CreateVitamin, Vitamin
+from api.schemas.vitamin import VitaminCreate, Vitamin
 from database.supabase_connection import supabase_connection
 from config import settings
 
@@ -16,17 +16,17 @@ async def get_vitamin(vitamin_id: int):
         "id",
         vitamin_id,
     )
-    return vitamin[0]
+    return vitamin
 
 @router.put("/vitamins/{vitamin_id}", response_model=Vitamin)
-async def update_vitamin(vitamin_id: int, vitamin: CreateVitamin):
+async def update_vitamin(vitamin_id: int, vitamin: VitaminCreate):
     vitamin = supabase_connection.update_by(
         settings.vitamin_table,
         "id",
         vitamin_id, 
         vitamin.model_dump(),
     )
-    return vitamin[0]
+    return vitamin
 
 @router.delete("/vitamins/{vitamin_id}")
 async def delete_vitamin(vitamin_id: int):
@@ -35,4 +35,4 @@ async def delete_vitamin(vitamin_id: int):
         "id",
         vitamin_id,
     )
-    return vitamin[0]
+    return vitamin

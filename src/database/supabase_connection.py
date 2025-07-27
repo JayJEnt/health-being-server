@@ -1,6 +1,7 @@
+from fastapi import HTTPException
 from supabase import create_client, Client
 
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from functools import wraps
 
 from config import settings
@@ -23,58 +24,84 @@ class SupabaseConnection:
         def wrapper(*args, **kwargs):
             try:
                 logger.info(f"Processing request: {func.__name__}")
-                return func(*args, **kwargs)
+                result = func(*args, **kwargs)
+                if result is None:
+                    func_args = args[1:] if args and args[0].__class__.__name__ == "SupabaseConnection" else args
+                    logger.error(
+                        f"Resource not found - Operation: {func.__name__}, "
+                        f"Args: {func_args}"
+                    )
+                    raise HTTPException(
+                        status_code=404,
+                        detail="Requested resource not found"
+                    )
+                return result
+            except HTTPException:
+                raise
             except Exception as ex:
                 logger.error(f"Supabase error: {ex}")
-                raise RuntimeError
+                raise HTTPException(
+                    status_code=500,
+                    detail="Internal server error"
+                )
         return wrapper
 
     @error_handler
-    def fetch_all(self, table: str) -> list[Dict[str, Any]]:
+    def fetch_all(self, table: str) -> Optional[list[Dict[str, Any]]]:
         response = (
             self._client.table(table)
             .select("*")
             .execute()
         )
+        if not response.data:
+            return None
         return response.data
 
     @error_handler
-    def insert(self, table: str, data: dict) -> list[Dict[str, Any]]:
+    def insert(self, table: str, data: dict) -> Optional[Dict[str, Any]]:
         response = (
             self._client.table(table)
             .insert(data)
             .execute()
         )
-        return response.data
+        if not response.data:
+            return None
+        return response.data[0]
 
     @error_handler
-    def find_by(self, table: str, column: str, value: Any) -> list[Dict[str, Any]]:
+    def find_by(self, table: str, column: str, value: Any) -> Optional[Dict[str, Any]]:
         response = (
             self._client.table(table)
             .select("*")
             .eq(column, value)
             .execute()
         )
-        return response.data
+        if not response.data:
+            return None
+        return response.data[0]
 
     @error_handler
-    def delete_by(self, table: str, column: str, value: Any) -> list[Dict[str, Any]]:
+    def delete_by(self, table: str, column: str, value: Any) -> Optional[Dict[str, Any]]:
         response = (
             self._client.table(table)
             .delete()
             .eq(column, value)
             .execute()
         )
-        return response.data
+        if not response.data:
+            return None
+        return response.data[0]
 
     @error_handler
-    def update_by(self, table: str, column: str, value: Any, updates: dict) -> list[Dict[str, Any]]:
+    def update_by(self, table: str, column: str, value: Any, updates: dict) -> Optional[Dict[str, Any]]:
         response = (
             self._client.table(table)
             .update(updates)
             .eq(column, value)
             .execute()
         )
-        return response.data
+        if not response.data:
+            return None
+        return response.data[0]
 
 supabase_connection = SupabaseConnection()

@@ -16,4 +16,4 @@ async def get_ingredient_by_name(ingredient_name: str):
         "name",
         ingredient_name,
     )
-    return ingredient[0]
+    return ingredient
