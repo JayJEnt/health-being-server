@@ -1,7 +1,7 @@
 import sys
 
 from loguru import logger
-from config import settings
+from src.config import settings
 
 
 def configure_logger():

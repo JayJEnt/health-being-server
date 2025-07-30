@@ -1,10 +1,10 @@
 """/users/{user_id} endpoint"""
 from fastapi import APIRouter
 
-from api.schemas.user import UserCreate, User
-from database.supabase_connection import supabase_connection
-from authentication.admin_access import only_admin_allowed
-from config import settings
+from src.api.schemas.user import UserCreate, User
+from src.database.supabase_connection import supabase_connection
+from src.authentication.admin_access import only_admin_allowed
+from src.config import settings
 
 
 router = APIRouter()

@@ -3,7 +3,7 @@ from fastapi import HTTPException, status, Depends
 from functools import wraps
 from typing import Callable
 
-from authentication.authentication import get_current_user_role
+from src.authentication.authentication import get_current_user_role
 
 
 def only_admin_allowed(func: Callable):

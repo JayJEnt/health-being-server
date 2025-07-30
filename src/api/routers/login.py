@@ -1,21 +1,21 @@
-"""/token endpoint"""
+"""/login endpoint"""
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from datetime import timedelta
 
 from typing import Annotated
 
-from api.schemas.token import Token
-from authentication.authentication import authenticate_user, create_access_token
-from config import settings
-from logger import logger
+from src.api.schemas.token import Token
+from src.authentication.authentication import authenticate_user, create_access_token
+from src.config import settings
+from src.logger import logger
 
 
 router = APIRouter()
 
 
-@router.post("/token", response_model=Token)
-async def login_for_token(
+@router.post("/login", response_model=Token)
+async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
     ):
     user = await authenticate_user(form_data.username, form_data.password)

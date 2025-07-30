@@ -1,10 +1,10 @@
 """/diet_types/{diet_type_id} endpoint"""
 from fastapi import APIRouter
 
-from api.schemas.diet_type import DietTypeCreate, DietType
-from database.supabase_connection import supabase_connection
-from authentication.admin_access import only_admin_allowed
-from config import settings
+from src.api.schemas.diet_type import DietTypeCreate, DietType
+from src.database.supabase_connection import supabase_connection
+from src.authentication.admin_access import only_admin_allowed
+from src.config import settings
 
 
 router = APIRouter()

@@ -1,9 +1,9 @@
 """/vitamins/name/{vitamin_name} endpoint"""
 from fastapi import APIRouter
 
-from api.schemas.vitamin import Vitamin
-from database.supabase_connection import supabase_connection
-from config import settings
+from src.api.schemas.vitamin import Vitamin
+from src.database.supabase_connection import supabase_connection
+from src.config import settings
 
 
 router = APIRouter()

@@ -4,8 +4,8 @@ from supabase import create_client, Client
 from typing import Any, Dict, Optional
 from functools import wraps
 
-from config import settings
-from logger import logger
+from src.config import settings
+from src.logger import logger
 
 
 class SupabaseConnection:

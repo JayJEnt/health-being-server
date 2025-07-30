@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
-from api.schemas.ingredient import IngredientQuantity
-from api.schemas.diet_type import DietTypeCreate
+from src.api.schemas.ingredient import IngredientQuantity
+from src.api.schemas.diet_type import DietTypeCreate
 
 class RecipeBaseModel(BaseModel):
     title: str

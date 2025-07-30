@@ -3,10 +3,10 @@ from fastapi import APIRouter
 
 from typing import List, Optional
 
-from api.schemas.recipe import RecipeOverview, Recipe
-from api.utils.operations_on_attributes import pop_attributes
-from database.supabase_connection import supabase_connection
-from config import settings
+from src.api.schemas.recipe import RecipeOverview, Recipe
+from src.api.utils.operations_on_attributes import pop_attributes
+from src.database.supabase_connection import supabase_connection
+from src.config import settings
 
 
 router = APIRouter()

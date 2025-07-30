@@ -1,9 +1,9 @@
 """/users/name/{user_name} endpoint"""
 from fastapi import APIRouter
 
-from api.schemas.user import User
-from database.supabase_connection import supabase_connection
-from config import settings
+from src.api.schemas.user import User
+from src.database.supabase_connection import supabase_connection
+from src.config import settings
 
 
 router = APIRouter()
