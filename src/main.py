@@ -14,6 +14,8 @@ from api.routers import (
     recipes_recipe_id,
     recipes_search_phrase,
     recipes,
+    token,
+    users_name_user_name,
     users_user_id,
     users,
     vitamins_name_vitamin_name,
@@ -52,6 +54,8 @@ app.include_router(ingredients.router)
 app.include_router(recipes_recipe_id.router)
 app.include_router(recipes_search_phrase.router)
 app.include_router(recipes.router)
+app.include_router(token.router)
+app.include_router(users_name_user_name.router)
 app.include_router(users_user_id.router)
 app.include_router(users.router)
 app.include_router(vitamins_name_vitamin_name.router)

@@ -1,10 +1,10 @@
 """/recipes/{recipe_id} endpoint"""
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
 from api.schemas.recipe import RecipePageResponse, RecipePage
 from api.routers.diet_types_name_diet_name import get_diet_by_name
 from api.routers.ingredients_name_ingredient_name import get_ingredient_by_name
-from api.utils.operation_on_attributes import add_attributes, pop_attributes
+from api.utils.operations_on_attributes import add_attributes, pop_attributes
 from database.supabase_connection import supabase_connection
 from config import settings
 from logger import logger

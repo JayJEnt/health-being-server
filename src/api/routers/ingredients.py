@@ -5,7 +5,8 @@ from typing import List
 
 from api.schemas.ingredient import IngredientCreate, Ingredient, IngredientResponse
 from api.routers.vitamins_name_vitamin_name import get_vitamin_by_name
-from api.utils.operation_on_attributes import pop_attributes, add_attributes
+from api.utils.operations_on_attributes import pop_attributes, add_attributes
+from authentication.admin_access import only_admin_allowed
 from database.supabase_connection import supabase_connection
 from config import settings
 from logger import logger
@@ -20,6 +21,7 @@ async def get_ingredients():
     return ingredients
 
 @router.post("/ingredients/", response_model=IngredientResponse)
+@only_admin_allowed
 async def create_ingredient(ingredient: IngredientCreate):
     ingredient, poped_attributes = pop_attributes(ingredient, ["vitamins"])
 

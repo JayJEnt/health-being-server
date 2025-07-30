@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from typing import List, Optional
 
 from api.schemas.recipe import RecipeOverview, Recipe
-from api.utils.operation_on_attributes import pop_attributes
+from api.utils.operations_on_attributes import pop_attributes
 from database.supabase_connection import supabase_connection
 from config import settings
 

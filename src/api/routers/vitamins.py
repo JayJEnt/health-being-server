@@ -5,6 +5,7 @@ from typing import List
 
 from api.schemas.vitamin import VitaminCreate, Vitamin
 from database.supabase_connection import supabase_connection
+from authentication.admin_access import only_admin_allowed
 from config import settings
 
 
@@ -17,7 +18,7 @@ async def get_vitamins():
     return vitamins
 
 @router.post("/vitamins/", response_model=Vitamin)
-# TODO: add role validation -> only for admin
+@only_admin_allowed
 async def create_vitamin(vitamin: VitaminCreate):
     vitamin = supabase_connection.insert(
         settings.vitamin_table,

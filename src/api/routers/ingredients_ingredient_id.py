@@ -1,9 +1,10 @@
 """/ingredients/{ingredient_id} endpoint"""
 from fastapi import APIRouter
 
-from api.schemas.ingredient import IngredientCreate, Ingredient, IngredientResponse
+from api.schemas.ingredient import IngredientCreate, IngredientResponse
 from api.routers.vitamins_name_vitamin_name import get_vitamin_by_name
-from api.utils.operation_on_attributes import pop_attributes, add_attributes
+from api.utils.operations_on_attributes import pop_attributes, add_attributes
+from authentication.admin_access import only_admin_allowed
 from database.supabase_connection import supabase_connection
 from config import settings
 from logger import logger
@@ -51,8 +52,8 @@ async def get_ingredient(ingredient_id: int):
     )
     return ingredient_response
 
-# TODO: add role validation -> only for admin
 @router.put("/ingredients/{ingredient_id}", response_model=IngredientResponse)
+@only_admin_allowed
 async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
     ingredient, poped_attributes = pop_attributes(ingredient, ["vitamins"])
     ingredient_response = supabase_connection.update_by(
@@ -99,8 +100,8 @@ async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
 
     return ingredient_response
 
-# TODO: add role validation -> only for admin
 @router.delete("/ingredients/{ingredient_id}")
+@only_admin_allowed
 async def delete_ingredient(ingredient_id: int):
     supabase_connection.delete_by(
         settings.vitamins_included_table,

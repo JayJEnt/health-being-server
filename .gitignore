@@ -1,4 +1,5 @@
 .env
 .venv
+.win_venv
 __pycache__
 .aws*
