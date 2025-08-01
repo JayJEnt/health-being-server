@@ -52,10 +52,10 @@ python -m pip install -r requirements.txt
 Rename example.env to .env:
 
 ```bash
-cp .env.example .env
+cp example.env .env
 ```
 
-Edit .env with given settings
+Fullfill .env with given settings
 
 
 ## ▶ Running the Project
@@ -75,7 +75,7 @@ Soon i will deliver Postman collection
 
 ## Deployment
 ```bash
-aws cloudformation deploy --template-file template.yml --stack-name health-being_server --capabilities CAPABILITY_IAM
+aws cloudformation deploy --template-file infrastructure/template.yml --stack-name health-being_server --capabilities CAPABILITY_IAM
 ```
 
 
