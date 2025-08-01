@@ -1,8 +1,7 @@
-from loguru import logger
-
 import sys
 
-from config import settings
+from loguru import logger
+from src.config import settings
 
 
 def configure_logger():

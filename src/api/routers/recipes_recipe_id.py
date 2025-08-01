@@ -1,13 +1,14 @@
 """/recipes/{recipe_id} endpoint"""
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
-from api.schemas.recipe import RecipePageResponse, RecipePage
-from api.routers.diet_types_name_diet_name import get_diet_by_name
-from api.routers.ingredients_name_ingredient_name import get_ingredient_by_name
-from api.utils.operation_on_attributes import add_attributes, pop_attributes
-from database.supabase_connection import supabase_connection
-from config import settings
-from logger import logger
+from src.api.schemas.recipe import RecipePageResponse, RecipePage
+from src.api.routers.diet_types_name_diet_name import get_diet_by_name
+from src.api.routers.ingredients_name_ingredient_name import get_ingredient_by_name
+from src.api.utils.operations_on_attributes import add_attributes, pop_attributes
+from src.api.handlers.exceptions import RescourceNotFound
+from src.database.supabase_connection import supabase_connection
+from src.config import settings
+from src.logger import logger
 
 
 router = APIRouter()
@@ -43,7 +44,7 @@ async def get_recipe(recipe_id: int):
                 diet_name = diet_type[0]["diet_name"]
                 logger.debug(f"diet_name: {diet_name}")
                 diet_type_response.append({"diet_name": diet_name})
-    except:
+    except RescourceNotFound:
         logger.info(f"No diet type found for recipe_id: {recipe_id}")
 
     # TODO: [OPTIMALIZATION] Consider running async
@@ -102,7 +103,7 @@ async def update_recipe(recipe_id: int, recipe: RecipePage):
             "recipe_id",
             recipe_id,
         )
-    except:
+    except RescourceNotFound:
         pass
 
     try:
@@ -112,7 +113,7 @@ async def update_recipe(recipe_id: int, recipe: RecipePage):
             for diet in diet_type:
                 try:
                     exists = exists = await get_diet_by_name(diet["diet_name"])
-                except:
+                except RescourceNotFound:
                     exists = None
                     logger.error(f"Diet: {diet["diet_name"]} hasn't been recognized")
                 if exists:
@@ -126,7 +127,7 @@ async def update_recipe(recipe_id: int, recipe: RecipePage):
                         },
                     )
                     diet_type_response.append(diet)
-    except:
+    except RescourceNotFound:
         pass
 
     try:
@@ -135,7 +136,7 @@ async def update_recipe(recipe_id: int, recipe: RecipePage):
             "recipe_id",
             recipe_id,
         )
-    except:
+    except RescourceNotFound:
         pass
 
     ingredients_response = []
@@ -144,7 +145,7 @@ async def update_recipe(recipe_id: int, recipe: RecipePage):
         for ingredient in ingredients:
             try:
                 exists = await get_ingredient_by_name(ingredient["name"])
-            except:
+            except RescourceNotFound:
                 exists = None
                 logger.error(f"Ingredient: {ingredient["name"]} hasn't been recognized")
             if exists:
@@ -181,21 +182,23 @@ async def delete_recipe(recipe_id: int):
             "recipe_id",
             recipe_id,
         )
-    except:
-        pass
-
+    except RescourceNotFound:
+        logger.info(f"No ingredients found attached to this recipe_id {recipe_id}")
     try:
         supabase_connection.delete_by(
             settings.diet_type_included_table,
             "recipe_id",
             recipe_id,
         )
-    except:
-        pass
-
-    recipe = supabase_connection.delete_by(
-        settings.recipe_table,
-        "id",
-        recipe_id,
-    )
+    except RescourceNotFound:
+        logger.info(f"No diet type found attached to this recipe_id {recipe_id}")
+    try:
+        recipe = supabase_connection.delete_by(
+            settings.recipe_table,
+            "id",
+            recipe_id,
+        )
+    except RescourceNotFound:
+        logger.info(f"Recipe_id: {recipe_id} is not figuring in database!")
+        raise RescourceNotFound
     return recipe

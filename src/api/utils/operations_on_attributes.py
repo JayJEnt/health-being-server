@@ -1,4 +1,6 @@
-from logger import logger
+"""Util functions operating on pydantic models and their attributes"""
+from src.logger import logger
+
 
 def pop_attributes(pydantic_model, attributes):
     """Function for poping attributes from pydantic_model

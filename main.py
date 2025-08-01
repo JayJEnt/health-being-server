@@ -4,23 +4,26 @@ from mangum import Mangum
 from contextlib import asynccontextmanager
 from datetime import datetime as dt
 
-from api.routers import (
+from src.api.routers import (
     diet_types_diet_type_id,
     diet_types,
     diet_types_name_diet_name,
     ingredients_ingredient_id,
     ingredients,
     ingredients_name_ingredient_name,
+    login,
     recipes_recipe_id,
     recipes_search_phrase,
     recipes,
+    register,
+    users_name_user_name,
     users_user_id,
     users,
     vitamins_name_vitamin_name,
     vitamins_vitamin_id,
     vitamins,
 )
-from logger import logger
+from src.logger import logger
 
 
 startup_start = dt.now()
@@ -49,9 +52,12 @@ app.include_router(diet_types.router)
 app.include_router(ingredients_ingredient_id.router)
 app.include_router(ingredients_name_ingredient_name.router)
 app.include_router(ingredients.router)
+app.include_router(login.router)
 app.include_router(recipes_recipe_id.router)
 app.include_router(recipes_search_phrase.router)
 app.include_router(recipes.router)
+app.include_router(register.router)
+app.include_router(users_name_user_name.router)
 app.include_router(users_user_id.router)
 app.include_router(users.router)
 app.include_router(vitamins_name_vitamin_name.router)

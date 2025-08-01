@@ -1,9 +1,9 @@
 """/diet_types/name/{diet_name} endpoint"""
 from fastapi import APIRouter
 
-from api.schemas.diet_type import DietType
-from database.supabase_connection import supabase_connection
-from config import settings
+from src.api.schemas.diet_type import DietType
+from src.database.supabase_connection import supabase_connection
+from src.config import settings
 
 
 router = APIRouter()

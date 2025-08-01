@@ -1,9 +1,10 @@
 """/diet_types/{diet_type_id} endpoint"""
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-from api.schemas.diet_type import DietTypeCreate, DietType
-from database.supabase_connection import supabase_connection
-from config import settings
+from src.api.schemas.diet_type import DietTypeCreate, DietType
+from src.database.supabase_connection import supabase_connection
+from src.authentication.allowed_roles import admin_only
+from src.config import settings
 
 
 router = APIRouter()
@@ -18,8 +19,7 @@ async def get_diet_type(diet_type_id: int):
     )
     return diet_type[0]
 
-@router.put("/diet_types/{diet_type_id}", response_model=DietType)
-# TODO: add role validation -> only for admin
+@router.put("/diet_types/{diet_type_id}", response_model=DietType, dependencies=[Depends(admin_only)])
 async def update_diet_type(diet_type_id: int, diet_type: DietTypeCreate):
     diet_type = supabase_connection.update_by(
         settings.diet_type_table,
@@ -29,8 +29,7 @@ async def update_diet_type(diet_type_id: int, diet_type: DietTypeCreate):
     )
     return diet_type
 
-@router.delete("/diet_types/{diet_type_id}")
-# TODO: add role validation -> only for admin
+@router.delete("/diet_types/{diet_type_id}", dependencies=[Depends(admin_only)])
 async def delete_diet_type(diet_type_id: int):
     diet_type = supabase_connection.delete_by(
         settings.diet_type_table,

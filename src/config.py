@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
+from typing import Optional
 import os
 
 
@@ -27,6 +28,11 @@ class Settings(BaseSettings):
     diet_type_included_table: str = ""
     vitamin_table: str = ""
     vitamins_included_table: str = ""
+
+    # AUTHENTICATION
+    secret_key: str = ""
+    algorithm: str = ""
+    access_token_expire: Optional[int] = None
 
     load_dotenv()
 

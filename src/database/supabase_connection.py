@@ -1,11 +1,11 @@
-from fastapi import HTTPException
 from supabase import create_client, Client
 
 from typing import Any, Dict, Optional
 from functools import wraps
 
-from config import settings
-from logger import logger
+from src.api.handlers.exceptions import RescourceNotFound, InternalServerError
+from src.config import settings
+from src.logger import logger
 
 
 class SupabaseConnection:
@@ -27,23 +27,18 @@ class SupabaseConnection:
                 result = func(*args, **kwargs)
                 if result is None:
                     func_args = args[1:] if args and args[0].__class__.__name__ == "SupabaseConnection" else args
-                    logger.error(
+                    logger.info(
                         f"Resource not found - Operation: {func.__name__}, "
                         f"Args: {func_args}"
                     )
-                    raise HTTPException(
-                        status_code=404,
-                        detail="Requested resource not found"
-                    )
+                    raise RescourceNotFound
+                logger.info(f"Sucesfully processed.")
                 return result
-            except HTTPException:
-                raise
+            except RescourceNotFound:
+                raise RescourceNotFound
             except Exception as ex:
                 logger.error(f"Supabase error: {ex}")
-                raise HTTPException(
-                    status_code=500,
-                    detail="Internal server error"
-                )
+                raise InternalServerError
         return wrapper
 
     @error_handler

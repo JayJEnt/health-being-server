@@ -3,19 +3,19 @@ from fastapi import APIRouter
 
 from typing import List
 
-from api.schemas.recipe import RecipePage, RecipeOverview, RecipePageResponse
-from api.routers.diet_types_name_diet_name import get_diet_by_name
-from api.routers.ingredients_name_ingredient_name import get_ingredient_by_name
-from api.utils.operation_on_attributes import pop_attributes, add_attributes
-from database.supabase_connection import supabase_connection
-from config import settings
-from logger import logger
+from src.api.schemas.recipe import RecipePage, RecipeOverview, RecipePageResponse
+from src.api.routers.diet_types_name_diet_name import get_diet_by_name
+from src.api.routers.ingredients_name_ingredient_name import get_ingredient_by_name
+from src.api.utils.operations_on_attributes import pop_attributes, add_attributes
+from src.database.supabase_connection import supabase_connection
+from src.config import settings
+from src.logger import logger
 
 
 router = APIRouter()
 
 
-@router.get("/recipes/", response_model=List[RecipeOverview])
+@router.get("/recipes", response_model=List[RecipeOverview])
 async def get_recipes():
     recipes = supabase_connection.fetch_all(settings.recipe_table)
     recipes_response = []
@@ -24,7 +24,7 @@ async def get_recipes():
         recipes_response.append(recipe)
     return recipes_response
 
-@router.post("/recipes/", response_model=RecipePageResponse)
+@router.post("/recipes", response_model=RecipePageResponse)
 async def create_recipe(recipe: RecipePage):
     recipe, poped_attributes = pop_attributes(recipe, ["diet_type", "ingredients"])
 

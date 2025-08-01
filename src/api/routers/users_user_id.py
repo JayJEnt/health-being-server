@@ -1,9 +1,10 @@
 """/users/{user_id} endpoint"""
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-from api.schemas.user import UserCreate, User
-from database.supabase_connection import supabase_connection
-from config import settings
+from src.api.schemas.user import UserCreate, User
+from src.database.supabase_connection import supabase_connection
+from src.authentication.allowed_roles import admin_only
+from src.config import settings
 
 
 router = APIRouter()
@@ -18,8 +19,7 @@ async def get_user(user_id: int):
     )
     return user[0]
 
-@router.put("/users/{user_id}", response_model=User)
-# TODO: add role validation -> only for admin, or for user itself
+@router.put("/users/{user_id}", response_model=User, dependencies=[Depends(admin_only)])
 async def update_user(user_id: int, user: UserCreate):
     user = supabase_connection.update_by(
         settings.user_table,
@@ -29,8 +29,7 @@ async def update_user(user_id: int, user: UserCreate):
     )
     return user
 
-@router.delete("/users/{user_id}")
-# TODO: add role validation -> only for admin, or for user itself
+@router.delete("/users/{user_id}", dependencies=[Depends(admin_only)])
 async def delete_user(user_id: int):
     user = supabase_connection.delete_by(
         settings.user_table,
@@ -38,3 +37,5 @@ async def delete_user(user_id: int):
         user_id,
     )
     return user
+
+# TODO: add other endpoint to modify/delete, for each logged user, for his own data or modify access @staticmethod
