@@ -41,7 +41,7 @@ class LocalSettings(Settings):
     log_level: str = "DEBUG"
     
 class RemoteSettings(Settings):
-    environment: str = os.getenv("environment", "remote")
+    environment: str = os.getenv("ENVIRONMENT", "remote")
     log_level: str = "INFO"
 
-settings = RemoteSettings() if os.getenv("environment", "").lower() == "remote" else LocalSettings()
+settings = RemoteSettings() if os.getenv("ENVIRONMENT", "").lower() == "remote" else LocalSettings()

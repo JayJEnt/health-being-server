@@ -1,12 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Deploy FastAPI - AWS Lambda with API Gateway
 
-
 Metadata:
-###################################################################################################
-#                                            METADATA                                             #
-###################################################################################################
-
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
@@ -16,68 +11,40 @@ Metadata:
       - Label:
           default: "Lambda Function Parameters"
         Parameters:
-          - ECRUri
-          - Environment
           - BucketName
-          - RecipesFile
-          - RefrigeratorFile
+          - LayerSourceCode
+          - LambdaSourceCode
+          - Environment
       - Label:
           default: "API Gateway parameters"
         Parameters:
           - StageName
 
-
-
 Parameters:
-###################################################################################################
-#                                             PARAMETERS                                          #
-###################################################################################################
-  
-
-#############################################################################
-#                          Project based parameters                         #
-#############################################################################
- 
   AppName:
     Type: String
     Default: health-being-app
     Description: Name of application.
 
-
-#############################################################################
-#                         Lambda Function Parameters                        #
-#############################################################################
-
   BucketName:
     Type: String
     Default: health-being-server-api
-    Description: Name of the S3 bucket for test datasets
+    Description: Name of the S3 bucket
 
-  RecipesFile:
+  LayerSourceCode:
     Type: String
-    Default: database_recipes.json
-    Description: Name of the recipes file in the S3 bucket
+    Default: python.zip
+    Description: Name of the Lambda Layer source code file on S3
 
-  RefrigeratorFile:
+  LambdaSourceCode:
     Type: String
-    Default: database_refrigerator.json
-    Description: Name of the refrigerator file in the S3 bucket
-
-  ECRUri:
-    Type: String
-    Default: 199215058137.dkr.ecr.eu-north-1.amazonaws.com/my-fastapi-lambda:latest
-    Description: ECR image URI for the Lambda function
+    Default: lambda.zip
+    Description: Name of the Lambda source code file on S3
 
   Environment:
     Type: String
     Default: remote
     Description: Environment for the Lambda function
-
-  
-
-#############################################################################
-#                           API Gateway parameters                          #
-#############################################################################
 
   StageName:
     Type: String
@@ -87,41 +54,33 @@ Parameters:
     Default: dev
     Description: The name of the API Gateway stage
 
-
-
 Resources:
-###################################################################################################
-#                                     Lambda Configuration                                        #
-###################################################################################################
-
-
-#############################################################################
-#                              Lambda base config                           #
-#############################################################################
+  LambdaLayer:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      LayerName: !Sub "${AppName}-lambda-layer"
+      Content:
+        S3Bucket: !Ref BucketName
+        S3Key: !Ref LayerSourceCode
+      CompatibleRuntimes:
+        - python3.12
 
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub "${AppName}-lambda"
+      Runtime: python3.12
+      Handler: main.handler
       Role: !GetAtt LambdaRole.Arn
-      PackageType: Image
       Code:
-        ImageUri: !Ref 'ECRUri'
-      Architectures:
-        - x86_64
-      MemorySize: 3008
+        S3Bucket: !Ref BucketName
+        S3Key: !Ref LambdaSourceCode
       Timeout: 300
+      Layers:
+        - !Ref LambdaLayer
       Environment:
         Variables:
-          BUCKET_NAME: !Ref BucketName
-          RECIPES_FILE: !Ref RecipesFile
           ENVIRONMENT: !Ref Environment
-          REFRIGERATOR_FILE: !Ref RefrigeratorFile
-
-
-#############################################################################
-#                              Lambda permissions                           #
-#############################################################################
 
   LambdaRole:
     Type: AWS::IAM::Role
@@ -137,7 +96,6 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Policies:
-      # S3 Access Policy
         - PolicyName: S3AccessPolicy
           PolicyDocument:
             Version: '2012-10-17'
@@ -150,30 +108,6 @@ Resources:
                 Resource:
                   - !Sub arn:aws:s3:::${BucketName}
                   - !Sub arn:aws:s3:::${BucketName}/*
-      # ECR Access Policy
-        - PolicyName: LambdaECRImagePullPolicy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - ecr:BatchGetImage
-                  - ecr:GetDownloadUrlForLayer
-                  - ecr:DescribeImages
-                Resource: !Sub arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/my-fastapi-lambda
-              - Effect: Allow
-                Action: ecr:GetAuthorizationToken
-                Resource: '*'
-
-                
-###################################################################################################
-#                                     API Gateway Configuration                                   #
-###################################################################################################
-
-
-#############################################################################
-#                           API Gateway base config                         #
-#############################################################################
  
   ApiGateway:
     Type: AWS::ApiGatewayV2::Api
@@ -184,10 +118,6 @@ Resources:
         AllowOrigins: ["*"]
         AllowMethods: ["*"]
         AllowHeaders: ["*"]
-  
-#############################################################################
-#                            API Gateway Resources                          #
-#############################################################################
 
   ApiGatewayMethod:
     Type: AWS::ApiGatewayV2::Integration
@@ -208,12 +138,6 @@ Resources:
         - - integrations
           - !Ref ApiGatewayMethod
 
-
-
-#############################################################################
-#                          API Gateway Permission                           #
-#############################################################################
-
   LambdaPermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -221,12 +145,6 @@ Resources:
       FunctionName: !GetAtt LambdaFunction.Arn
       Principal: "apigateway.amazonaws.com"
       SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*/*"
-
-
-
-#############################################################################
-#                            API Gateway Stage                              #
-#############################################################################
 
   ApiGatewayStage:
     Type: AWS::ApiGatewayV2::Stage
@@ -244,12 +162,6 @@ Resources:
     Properties:
       Description: Lambda API Deployment
       ApiId: !Ref ApiGateway
-
-
-
-###################################################################################################
-#                                             OUTPUTS                                             #
-###################################################################################################
 
 Outputs:
   ApiEndpoint:
