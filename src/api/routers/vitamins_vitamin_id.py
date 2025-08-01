@@ -1,9 +1,9 @@
 """/vitamins/{vitamin_id} endpoint"""
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from src.api.schemas.vitamin import VitaminCreate, Vitamin
 from src.database.supabase_connection import supabase_connection
-from src.authentication.admin_access import only_admin_allowed
+from src.authentication.allowed_roles import admin_only
 from src.config import settings
 
 
@@ -19,8 +19,7 @@ async def get_vitamin(vitamin_id: int):
     )
     return vitamin[0]
 
-@router.put("/vitamins/{vitamin_id}", response_model=Vitamin)
-@only_admin_allowed
+@router.put("/vitamins/{vitamin_id}", response_model=Vitamin, dependencies=[Depends(admin_only)])
 async def update_vitamin(vitamin_id: int, vitamin: VitaminCreate):
     vitamin = supabase_connection.update_by(
         settings.vitamin_table,
@@ -30,8 +29,7 @@ async def update_vitamin(vitamin_id: int, vitamin: VitaminCreate):
     )
     return vitamin
 
-@router.delete("/vitamins/{vitamin_id}")
-@only_admin_allowed
+@router.delete("/vitamins/{vitamin_id}", dependencies=[Depends(admin_only)])
 async def delete_vitamin(vitamin_id: int):
     vitamin = supabase_connection.delete_by(
         settings.vitamin_table,

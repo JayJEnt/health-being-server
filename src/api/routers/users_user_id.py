@@ -1,9 +1,9 @@
 """/users/{user_id} endpoint"""
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from src.api.schemas.user import UserCreate, User
 from src.database.supabase_connection import supabase_connection
-from src.authentication.admin_access import only_admin_allowed
+from src.authentication.allowed_roles import admin_only
 from src.config import settings
 
 
@@ -19,8 +19,7 @@ async def get_user(user_id: int):
     )
     return user[0]
 
-@router.put("/users/{user_id}", response_model=User)
-@only_admin_allowed
+@router.put("/users/{user_id}", response_model=User, dependencies=[Depends(admin_only)])
 async def update_user(user_id: int, user: UserCreate):
     user = supabase_connection.update_by(
         settings.user_table,
@@ -30,8 +29,7 @@ async def update_user(user_id: int, user: UserCreate):
     )
     return user
 
-@router.delete("/users/{user_id}")
-@only_admin_allowed
+@router.delete("/users/{user_id}", dependencies=[Depends(admin_only)])
 async def delete_user(user_id: int):
     user = supabase_connection.delete_by(
         settings.user_table,

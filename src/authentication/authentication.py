@@ -1,4 +1,4 @@
-from fastapi import HTTPException, Depends, status
+from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
@@ -8,6 +8,7 @@ from typing import Optional, Annotated
 from src.authentication.hash_methods import verify_password
 from src.api.schemas.user import User
 from src.api.routers.users_name_user_name import get_user_by_name
+from src.api.handlers.exceptions import InvalidToken, RescourceNotFound
 from src.config import settings
 from src.logger import logger
 
@@ -17,7 +18,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 async def authenticate_user(username: str, password: str):
     try:
         user_dict = await get_user_by_name(username)
-    except:
+    except RescourceNotFound:
         user_dict = None
     if not user_dict:
         return False
@@ -37,22 +38,18 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
     return encoded_jwt
 
-async def get_current_user_role(token: Annotated[str, Depends(oauth2_scheme)]):
-    credential_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"}
-    )
+async def validate_token(token: Annotated[str, Depends(oauth2_scheme)]):
+    logger.info("Validate token")
     try:
         payload = jwt.decode(token, settings.secret_key, algorithms=settings.algorithm)
         username: str = payload.get("sub")
         if username is None:
-            raise credential_exception
+            raise InvalidToken
     except JWTError:
-        raise credential_exception
+        raise InvalidToken
     
     user = await get_user_by_name(username)
     if user is None:
-        raise credential_exception
+        raise InvalidToken
     
-    return user["role"]
+    return user
