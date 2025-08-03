@@ -1,7 +1,6 @@
-# Health-being Web App
+# Health-being-server
 
-[![Python Version](https://img.shields.io/badge/python-3.13%2B-blue)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Python Version](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/)
 
 Backend server of health-being-app
 
@@ -10,6 +9,7 @@ Backend server of health-being-app
 - [Endpoints](#-endpoints)
 - [Setup](#-setup)
 - [Running the Project](#-running-the-project)
+- [Deployment](#-deployment)
 - [Testing](#-testing)
 
 
@@ -29,7 +29,7 @@ Backend server of health-being-app
 
 ### And many more...
 
-## 🚀 Setup
+## ⚙ Setup
 
 ### 1. Clone the Repository
 ```bash
@@ -73,17 +73,30 @@ Use this for testing api (http://127.0.0.1:8000/docs)
 Soon i will deliver Postman collection
 
 
-## Deployment
+## 🚀 Deployment
+
+### Manual deployment
+
+#### 1. Updated Lambda source code
 ```bash
-aws cloudformation deploy --template-file infrastructure/template.yml --stack-name health-being_server --capabilities CAPABILITY_IAM
+# Create a zip file from repo dir and push it on S3 bucket as "lambda.zip"
 ```
+
+#### 2. Updated Lambda layer code
+```bash
+# Create a zip file from all dependencies used in repo push file into S3 bucket as "python.zip"
+```
+
+#### 3. Create a cloudformation stack
+```bash
+aws cloudformation deploy --template-file infrastructure/template.yml --stack-name health-being-server --capabilities CAPABILITY_IAM
+```
+
+### Auto deployment
+After each time u push code to the repo, there will be auto deployment run, which is set as github workflow
 
 
 ## 🧪 Testing
 ```bash
 pytest tests/
 ```
-
-
-## 📜 License
-MIT © JayJEnt
