@@ -5,12 +5,12 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from typing import Optional, Annotated
 
-from src.authentication.hash_methods import verify_password
-from src.api.schemas.user import User
-from src.api.routers.users_name_user_name import get_user_by_name
-from src.api.handlers.exceptions import InvalidToken, RescourceNotFound
-from src.config import settings
-from src.logger import logger
+from authentication.hash_methods import verify_password
+from api.schemas.user import User
+from api.routers.users_name_user_name import get_user_by_name
+from api.handlers.exceptions import InvalidToken, RescourceNotFound
+from config import settings
+from logger import logger
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")

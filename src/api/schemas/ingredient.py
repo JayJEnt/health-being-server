@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
-from src.api.schemas.vitamin import VitaminCreate, Vitamin
+from api.schemas.vitamin import VitaminCreate, Vitamin
 
 
 class IngredientBaseModel(BaseModel):

@@ -1,13 +1,13 @@
 """/register endpoint"""
 from fastapi import APIRouter
 
-from src.api.schemas.user import UserCreate, User
-from src.authentication.hash_methods import hash_password
-from src.api.utils.operations_on_attributes import pop_attributes, add_attributes
-from src.api.handlers.exceptions import RescourceAlreadyTaken, RescourceNotFound
-from src.database.supabase_connection import supabase_connection
-from src.config import settings
-from src.logger import logger
+from api.schemas.user import UserCreate, User
+from authentication.hash_methods import hash_password
+from api.utils.operations_on_attributes import pop_attributes, add_attributes
+from api.handlers.exceptions import RescourceAlreadyTaken, RescourceNotFound
+from database.supabase_connection import supabase_connection
+from config import settings
+from logger import logger
 
 
 router = APIRouter()

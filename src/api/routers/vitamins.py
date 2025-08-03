@@ -3,10 +3,10 @@ from fastapi import APIRouter, Depends
 
 from typing import List
 
-from src.api.schemas.vitamin import VitaminCreate, Vitamin
-from src.database.supabase_connection import supabase_connection
-from src.authentication.allowed_roles import admin_only
-from src.config import settings
+from api.schemas.vitamin import VitaminCreate, Vitamin
+from database.supabase_connection import supabase_connection
+from authentication.allowed_roles import admin_only
+from config import settings
 
 
 router = APIRouter()

@@ -1,9 +1,9 @@
 """/ingredients/name/{ingredient_name} endpoint"""
 from fastapi import APIRouter
 
-from src.api.schemas.ingredient import Ingredient
-from src.database.supabase_connection import supabase_connection
-from src.config import settings
+from api.schemas.ingredient import Ingredient
+from database.supabase_connection import supabase_connection
+from config import settings
 
 
 router = APIRouter()

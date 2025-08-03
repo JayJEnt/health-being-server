@@ -1,14 +1,14 @@
 """/recipes/{recipe_id} endpoint"""
 from fastapi import APIRouter
 
-from src.api.schemas.recipe import RecipePageResponse, RecipePage
-from src.api.routers.diet_types_name_diet_name import get_diet_by_name
-from src.api.routers.ingredients_name_ingredient_name import get_ingredient_by_name
-from src.api.utils.operations_on_attributes import add_attributes, pop_attributes
-from src.api.handlers.exceptions import RescourceNotFound
-from src.database.supabase_connection import supabase_connection
-from src.config import settings
-from src.logger import logger
+from api.schemas.recipe import RecipePageResponse, RecipePage
+from api.routers.diet_types_name_diet_name import get_diet_by_name
+from api.routers.ingredients_name_ingredient_name import get_ingredient_by_name
+from api.utils.operations_on_attributes import add_attributes, pop_attributes
+from api.handlers.exceptions import RescourceNotFound
+from database.supabase_connection import supabase_connection
+from config import settings
+from logger import logger
 
 
 router = APIRouter()

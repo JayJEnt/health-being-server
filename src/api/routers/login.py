@@ -5,11 +5,11 @@ from datetime import timedelta
 
 from typing import Annotated
 
-from src.api.schemas.token import Token
-from src.authentication.authentication import authenticate_user, create_access_token
-from src.api.handlers.exceptions import InvalidCredentials
-from src.config import settings
-from src.logger import logger
+from api.schemas.token import Token
+from authentication.authentication import authenticate_user, create_access_token
+from api.handlers.exceptions import InvalidCredentials
+from config import settings
+from logger import logger
 
 
 router = APIRouter()

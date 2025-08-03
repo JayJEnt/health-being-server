@@ -3,9 +3,9 @@ from fastapi import APIRouter
 
 from typing import List
 
-from src.api.schemas.user import User
-from src.database.supabase_connection import supabase_connection
-from src.config import settings
+from api.schemas.user import User
+from database.supabase_connection import supabase_connection
+from config import settings
 
 
 router = APIRouter()

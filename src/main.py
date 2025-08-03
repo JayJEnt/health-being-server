@@ -4,7 +4,7 @@ from mangum import Mangum
 from contextlib import asynccontextmanager
 from datetime import datetime as dt
 
-from src.api.routers import (
+from api.routers import (
     diet_types_diet_type_id,
     diet_types,
     diet_types_name_diet_name,
@@ -23,7 +23,7 @@ from src.api.routers import (
     vitamins_vitamin_id,
     vitamins,
 )
-from src.logger import logger
+from logger import logger
 
 
 startup_start = dt.now()

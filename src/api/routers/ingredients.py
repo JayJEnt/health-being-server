@@ -3,13 +3,13 @@ from fastapi import APIRouter, Depends
 
 from typing import List
 
-from src.api.schemas.ingredient import IngredientCreate, Ingredient, IngredientResponse
-from src.api.routers.vitamins_name_vitamin_name import get_vitamin_by_name
-from src.api.utils.operations_on_attributes import pop_attributes, add_attributes
-from src.authentication.allowed_roles import admin_only
-from src.database.supabase_connection import supabase_connection
-from src.config import settings
-from src.logger import logger
+from api.schemas.ingredient import IngredientCreate, Ingredient, IngredientResponse
+from api.routers.vitamins_name_vitamin_name import get_vitamin_by_name
+from api.utils.operations_on_attributes import pop_attributes, add_attributes
+from authentication.allowed_roles import admin_only
+from database.supabase_connection import supabase_connection
+from config import settings
+from logger import logger
 
 
 router = APIRouter()

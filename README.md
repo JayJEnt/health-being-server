@@ -37,7 +37,7 @@ git clone https://github.com/JayJEnt/health-being-server.git
 cd health-being-server
 ```
 
-### 2. Create Environment
+### 2. Create and activate an Environment
 ```bash
 python -m venv .venv
 source .venv/bin/activate
@@ -52,10 +52,12 @@ python -m pip install -r requirements.txt
 Rename example.env to .env:
 
 ```bash
+cd src
 cp example.env .env
+cd ..
 ```
 
-Fullfill .env with given settings
+open and Fullfill .env with given settings
 
 
 ## ▶ Running the Project
@@ -63,9 +65,9 @@ Fullfill .env with given settings
 ### Local
 ```bash
 # General case
-python main.py
+python src/main.py
 # Turn on just one router
-uvicorn api.routers.[router_name]:router --reload
+uvicorn src/api.routers.[router_name]:router --reload
 ```
 Use this for testing api (http://127.0.0.1:8000/docs)
 
@@ -93,10 +95,11 @@ aws cloudformation deploy --template-file infrastructure/template.yml --stack-na
 ```
 
 ### Auto deployment
-After each time u push code to the repo, there will be auto deployment run, which is set as github workflow
+After each time u merge code to the main branch, there will be auto deployment run, which is set as github workflow.
 
 
 ## 🧪 Testing
 ```bash
+# Not yet implemented!
 pytest tests/
 ```

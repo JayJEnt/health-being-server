@@ -3,9 +3,9 @@ from supabase import create_client, Client
 from typing import Any, Dict, Optional
 from functools import wraps
 
-from src.api.handlers.exceptions import RescourceNotFound, InternalServerError
-from src.config import settings
-from src.logger import logger
+from api.handlers.exceptions import RescourceNotFound, InternalServerError
+from config import settings
+from logger import logger
 
 
 class SupabaseConnection:
