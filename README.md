@@ -1,20 +1,22 @@
-# Health-being Web App
+# Health-being-server
 
-[![Python Version](https://img.shields.io/badge/python-3.13%2B-blue)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Python Version](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/)
 
-One day there will be app description if i add it xD
+Backend server of health-being-app
 
 ## 📌 Table of Contents
 - [Prerequisites](#-prerequisites)
+- [Endpoints](#-endpoints)
 - [Setup](#-setup)
-- [Configuration](#-configuration)
 - [Running the Project](#-running-the-project)
+- [Deployment](#-deployment)
 - [Testing](#-testing)
 
+
 ## 🛠 Prerequisites
-- [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install#quickstart-install-instructions)
-- Python 3.13+
+- AWS CLI
+- Python 3.12
+
 
 ## 🔚 Endpoints
 
@@ -23,25 +25,22 @@ One day there will be app description if i add it xD
 
 ### Recipes
 - GET/POST /recipes/ (get all recipes from data base or add new one)
-- GET/PUT/DELETE /recipes/{index_id} (get single recipe with that index_id, modify it or delete it from fridge)
-- GET /recipes/filter/ (get filtered list of recipes that mach current filter)
+- GET/PUT/DELETE /recipes/{recipes_id} (get single recipe with that index_id, modify it or delete it from fridge)
 
-### Refrigerator
-- GET/POST /refrigerator/ (get list of all products that are in user's refrigerator or add one to it)
-- DELETE /refrigerator/{index_id} (remove single ingredient from refrigerator)
+### And many more...
 
-## 🚀 Setup
+## ⚙ Setup
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/projectname.git
-cd projectname
+git clone https://github.com/JayJEnt/health-being-server.git
+cd health-being-server
 ```
 
-### 2. Create Conda Environment
+### 2. Create Environment
 ```bash
-conda create --name health-being-server python=3.13
-conda activate health-being-server
+python -m venv .venv
+source .venv/bin/activate
 ```
 
 ### 3. Install Dependencies
@@ -49,22 +48,19 @@ conda activate health-being-server
 python -m pip install -r requirements.txt
 ```
 
-
-## ⚙ Configuration
-Rename .env.example to .env:
+### 4. Secrets configuration
+Rename example.env to .env:
 
 ```bash
-# No need for now
-# Not implemented
-cp .env.example .env
+cp example.env .env
 ```
 
-Edit .env with your settings
+Fullfill .env with given settings
 
 
 ## ▶ Running the Project
 
-### Development (with hot reload)
+### Local
 ```bash
 # General case
 python main.py
@@ -73,34 +69,34 @@ uvicorn api.routers.[router_name]:router --reload
 ```
 Use this for testing api (http://127.0.0.1:8000/docs)
 
-### Production
+### Development
+Soon i will deliver Postman collection
+
+
+## 🚀 Deployment
+
+### Manual deployment
+
+#### 1. Updated Lambda source code
 ```bash
-# Not implemented
+# Create a zip file from repo dir and push it on S3 bucket as "lambda.zip"
 ```
 
-
-## Docker
+#### 2. Updated Lambda layer code
 ```bash
-# Create new docker image
-docker build -f Dockerfile --platform linux/amd64 --provenance=false -t 199215058137.dkr.ecr.eu-north-1.amazonaws.com/my-fastapi-lambda:latest .
-# Connect to AWS if you haven't done it already
-aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 199215058137.dkr.ecr.eu-north-1.amazonaws.com
-# Push it on AWC ECR/my-fastapi-lambda
-docker push 199215058137.dkr.ecr.eu-north-1.amazonaws.com/my-fastapi-lambda:latest
+# Create a zip file from all dependencies used in repo push file into S3 bucket as "python.zip"
 ```
 
-
-## Deployment
+#### 3. Create a cloudformation stack
 ```bash
-aws cloudformation deploy --template-file template.yml --stack-name MyFastAPIStack --capabilities CAPABILITY_IAM
+aws cloudformation deploy --template-file infrastructure/template.yml --stack-name health-being-server --capabilities CAPABILITY_IAM
 ```
+
+### Auto deployment
+After each time u push code to the repo, there will be auto deployment run, which is set as github workflow
 
 
 ## 🧪 Testing
 ```bash
 pytest tests/
 ```
-
-
-## 📜 License
-MIT © JayJEnt

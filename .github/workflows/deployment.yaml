@@ -1,0 +1,98 @@
+name: Deploy CloudFormation template.yml
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-lambda-layer-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          mkdir -p python/lib/python3.12/site-packages
+          pip install -t python/lib/python3.12/site-packages -r requirements.txt
+
+      - name: Create layer zip
+        run: |
+          cd python
+          zip -r ../python.zip .
+          cd ..
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload to S3
+        run: |
+          aws s3 cp python.zip s3://${{ secrets.S3_BUCKET_NAME }}/python.zip
+  
+  update-lambda-source-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create filtered source zip
+        run: |
+          EXCLUDE_LIST=(
+            ".git/*"
+            ".github/*"
+            ".venv/*"
+            "**/__pycache__/**"
+            "example.env"
+            "infrastructure/*"
+            "*.md"
+            "requirements.txt"
+            ".gitignore"
+          )
+          zip -r lambda.zip . -x "${EXCLUDE_LIST[@]}"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload to S3
+        run: |
+          aws s3 cp lambda.zip s3://${{ secrets.S3_BUCKET_NAME }}/lambda.zip
+
+  deployment:
+    needs: [update-lambda-layer-code, update-lambda-source-code]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Update CloudFormation Stack
+        run: |
+          aws cloudformation deploy \
+            --template-file infrastructure/template.yml \
+            --stack-name ${{ secrets.STACK_NAME }} \
+            --capabilities CAPABILITY_IAM \

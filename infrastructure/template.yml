@@ -1,0 +1,171 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Deploy FastAPI - AWS Lambda with API Gateway
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Project based parameters"
+        Parameters:
+          - AppName
+      - Label:
+          default: "Lambda Function Parameters"
+        Parameters:
+          - BucketName
+          - LayerSourceCode
+          - LambdaSourceCode
+          - Environment
+      - Label:
+          default: "API Gateway parameters"
+        Parameters:
+          - StageName
+
+Parameters:
+  AppName:
+    Type: String
+    Default: health-being-app
+    Description: Name of application.
+
+  BucketName:
+    Type: String
+    Default: health-being-server-api
+    Description: Name of the S3 bucket
+
+  LayerSourceCode:
+    Type: String
+    Default: python.zip
+    Description: Name of the Lambda Layer source code file on S3
+
+  LambdaSourceCode:
+    Type: String
+    Default: lambda.zip
+    Description: Name of the Lambda source code file on S3
+
+  Environment:
+    Type: String
+    Default: remote
+    Description: Environment for the Lambda function
+
+  StageName:
+    Type: String
+    AllowedValues:
+      - dev
+      - prod
+    Default: dev
+    Description: The name of the API Gateway stage
+
+Resources:
+  LambdaLayer:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      LayerName: !Sub "${AppName}-lambda-layer"
+      Content:
+        S3Bucket: !Ref BucketName
+        S3Key: !Ref LayerSourceCode
+      CompatibleRuntimes:
+        - python3.12
+
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "${AppName}-lambda"
+      Runtime: python3.12
+      Handler: main.handler
+      Role: !GetAtt LambdaRole.Arn
+      Code:
+        S3Bucket: !Ref BucketName
+        S3Key: !Ref LambdaSourceCode
+      Timeout: 300
+      Layers:
+        - !Ref LambdaLayer
+      Environment:
+        Variables:
+          ENVIRONMENT: !Ref Environment
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: S3AccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub arn:aws:s3:::${BucketName}
+                  - !Sub arn:aws:s3:::${BucketName}/*
+ 
+  ApiGateway:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub "${AppName}-api"
+      ProtocolType: HTTP
+      CorsConfiguration:
+        AllowOrigins: ["*"]
+        AllowMethods: ["*"]
+        AllowHeaders: ["*"]
+
+  ApiGatewayMethod:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref ApiGateway
+      IntegrationMethod: POST
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt LambdaFunction.Arn
+      PayloadFormatVersion: "2.0"
+
+  ApiGatewayResourceRoot:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref ApiGateway
+      RouteKey: "ANY /{proxy+}"
+      Target: !Join
+        - /
+        - - integrations
+          - !Ref ApiGatewayMethod
+
+  LambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: "lambda:InvokeFunction"
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Principal: "apigateway.amazonaws.com"
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/*/*"
+
+  ApiGatewayStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref ApiGateway
+      DeploymentId: !Ref ApiGatewayDeployment
+      StageName: !Ref StageName
+      AutoDeploy: true
+
+  ApiGatewayDeployment:
+    Type: AWS::ApiGatewayV2::Deployment
+    DependsOn:
+      - ApiGatewayMethod
+      - ApiGatewayResourceRoot
+    Properties:
+      Description: Lambda API Deployment
+      ApiId: !Ref ApiGateway
+
+Outputs:
+  ApiEndpoint:
+    Description: API Gateway endpoint URL
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/${StageName}"
+    Export:
+      Name: !Sub "${AppName}-ApiEndpoint"
