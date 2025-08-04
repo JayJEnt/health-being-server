@@ -12,15 +12,15 @@ from config import settings
 from logger import logger
 
 
-router = APIRouter()
+router = APIRouter(prefix="/ingredients", tags=["ingredients"])
 
 
-@router.get("/ingredients", response_model=List[Ingredient])
+@router.get("", response_model=List[Ingredient])
 async def get_ingredients():
     ingredients = supabase_connection.fetch_all(settings.ingredient_table)
     return ingredients
 
-@router.post("/ingredients", response_model=IngredientResponse, dependencies=[Depends(admin_only)])
+@router.post("", response_model=IngredientResponse, dependencies=[Depends(admin_only)])
 async def create_ingredient(ingredient: IngredientCreate):
     ingredient, poped_attributes = pop_attributes(ingredient, ["vitamins"])
 

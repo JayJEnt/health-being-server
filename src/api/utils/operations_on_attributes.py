@@ -32,6 +32,12 @@ def add_attributes(pydantic_model, attributes):
             attributes [list[dict]]
     return: pydantic_model
     """
+    if not isinstance(pydantic_model, dict):
+        try:
+            pydantic_model = pydantic_model.model_dump()
+        except:
+            logger.error(f"Invalid input: {pydantic_model}")
+            raise TypeError
     for attribute in attributes:
         logger.debug(f"Attribute about to add: {attribute}")
         for key, value in attribute.items():

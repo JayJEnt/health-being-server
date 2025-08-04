@@ -34,6 +34,14 @@ class Settings(BaseSettings):
     algorithm: str = ""
     access_token_expire: Optional[int] = None
 
+    # OAUTH2 - GOOGLE SECRETS
+    GOOGLE_CLIENT_ID: str = ""
+    GOOGLE_CLIENT_SECRET: str = ""
+    GOOGLE_REDIRECT_URI: str = ""
+    GOOGLE_AUTH_ENDPOINT: str = ""
+    GOOGLE_TOKEN_ENDPOINT: str = ""
+    GOOGLE_USERINFO_ENDPOINT: str = ""
+
     load_dotenv()
 
 class LocalSettings(Settings):

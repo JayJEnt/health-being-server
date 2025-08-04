@@ -12,10 +12,10 @@ from config import settings
 from logger import logger
 
 
-router = APIRouter()
+router = APIRouter(prefix="/recipes", tags=["recipes"])
 
 
-@router.get("/recipes", response_model=List[RecipeOverview])
+@router.get("", response_model=List[RecipeOverview])
 async def get_recipes():
     recipes = supabase_connection.fetch_all(settings.recipe_table)
     recipes_response = []
@@ -24,7 +24,7 @@ async def get_recipes():
         recipes_response.append(recipe)
     return recipes_response
 
-@router.post("/recipes", response_model=RecipePageResponse)
+@router.post("", response_model=RecipePageResponse)
 async def create_recipe(recipe: RecipePage):
     recipe, poped_attributes = pop_attributes(recipe, ["diet_type", "ingredients"])
 

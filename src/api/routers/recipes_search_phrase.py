@@ -9,10 +9,10 @@ from database.supabase_connection import supabase_connection
 from config import settings
 
 
-router = APIRouter()
+router = APIRouter(prefix="/recipes/search/{phrase}", tags=["recipes"])
 
 
-@router.get("/recipes/search/{phrase}", response_model=List[RecipeOverview])
+@router.get("", response_model=List[RecipeOverview])
 # TODO: overall better searching mechanizm needed
 async def search_for_matching_recipes(phrase: str):
     recipes = []

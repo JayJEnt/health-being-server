@@ -11,10 +11,10 @@ from config import settings
 from logger import logger
 
 
-router = APIRouter()
+router = APIRouter(prefix="/ingredients/{ingredient_id}", tags=["ingredients"])
 
 
-@router.get("/ingredients/{ingredient_id}", response_model=IngredientResponse)
+@router.get("", response_model=IngredientResponse)
 async def get_ingredient(ingredient_id: int):
     ingredient_response = supabase_connection.find_by(
         settings.ingredient_table,
@@ -56,7 +56,7 @@ async def get_ingredient(ingredient_id: int):
         logger.info("There were no linked vitamins to this ingredient")
     return ingredient_response
 
-@router.put("/ingredients/{ingredient_id}", response_model=IngredientResponse, dependencies=[Depends(admin_only)])
+@router.put("", response_model=IngredientResponse, dependencies=[Depends(admin_only)])
 async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
     ingredient, poped_attributes = pop_attributes(ingredient, ["vitamins"])
     ingredient_response = supabase_connection.update_by(
@@ -103,7 +103,7 @@ async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
 
     return ingredient_response
 
-@router.delete("/ingredients/{ingredient_id}", dependencies=[Depends(admin_only)])
+@router.delete("", dependencies=[Depends(admin_only)])
 async def delete_ingredient(ingredient_id: int):
     supabase_connection.delete_by(
         settings.vitamins_included_table,

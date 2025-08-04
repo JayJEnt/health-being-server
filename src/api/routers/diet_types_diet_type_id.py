@@ -7,10 +7,10 @@ from authentication.allowed_roles import admin_only
 from config import settings
 
 
-router = APIRouter()
+router = APIRouter(prefix="/diet_types/{diet_type_id}", tags=["diet_types"])
 
 
-@router.get("/diet_types/{diet_type_id}", response_model=DietType)
+@router.get("", response_model=DietType)
 async def get_diet_type(diet_type_id: int):
     diet_type = supabase_connection.find_by(
         settings.diet_type_table,
@@ -19,7 +19,7 @@ async def get_diet_type(diet_type_id: int):
     )
     return diet_type[0]
 
-@router.put("/diet_types/{diet_type_id}", response_model=DietType, dependencies=[Depends(admin_only)])
+@router.put("", response_model=DietType, dependencies=[Depends(admin_only)])
 async def update_diet_type(diet_type_id: int, diet_type: DietTypeCreate):
     diet_type = supabase_connection.update_by(
         settings.diet_type_table,
@@ -29,7 +29,7 @@ async def update_diet_type(diet_type_id: int, diet_type: DietTypeCreate):
     )
     return diet_type
 
-@router.delete("/diet_types/{diet_type_id}", dependencies=[Depends(admin_only)])
+@router.delete("", dependencies=[Depends(admin_only)])
 async def delete_diet_type(diet_type_id: int):
     diet_type = supabase_connection.delete_by(
         settings.diet_type_table,

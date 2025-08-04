@@ -6,10 +6,10 @@ from database.supabase_connection import supabase_connection
 from config import settings
 
 
-router = APIRouter()
+router = APIRouter(prefix="/diet_types/name/{diet_name}", tags=["diet_types"])
 
 
-@router.get("/diet_types/name/{diet_name}", response_model=DietType)
+@router.get("", response_model=DietType)
 async def get_diet_by_name(diet_name: str):
     diet_type = supabase_connection.find_by(
         settings.diet_type_table,
