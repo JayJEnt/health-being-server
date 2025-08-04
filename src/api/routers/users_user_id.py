@@ -7,10 +7,10 @@ from authentication.allowed_roles import admin_only
 from config import settings
 
 
-router = APIRouter()
+router = APIRouter(prefix="/users/{user_id}", tags=["users"])
 
 
-@router.get("/users/{user_id}", response_model=User)
+@router.get("", response_model=User)
 async def get_user(user_id: int):
     user = supabase_connection.find_by(
         settings.user_table,
@@ -19,7 +19,7 @@ async def get_user(user_id: int):
     )
     return user[0]
 
-@router.put("/users/{user_id}", response_model=User, dependencies=[Depends(admin_only)])
+@router.put("", response_model=User, dependencies=[Depends(admin_only)])
 async def update_user(user_id: int, user: UserCreate):
     user = supabase_connection.update_by(
         settings.user_table,
@@ -29,7 +29,7 @@ async def update_user(user_id: int, user: UserCreate):
     )
     return user
 
-@router.delete("/users/{user_id}", dependencies=[Depends(admin_only)])
+@router.delete("", dependencies=[Depends(admin_only)])
 async def delete_user(user_id: int):
     user = supabase_connection.delete_by(
         settings.user_table,

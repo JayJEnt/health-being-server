@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 from typing import Optional, Annotated
 
 from authentication.hash_methods import verify_password
-from api.schemas.user import User
-from api.routers.users_name_user_name import get_user_by_name
+from api.schemas.user import UserOurAuthentication
+from api.routers.users_email_email import get_user_by_email
 from api.handlers.exceptions import InvalidToken, RescourceNotFound
 from config import settings
 from logger import logger
@@ -15,14 +15,14 @@ from logger import logger
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-async def authenticate_user(username: str, password: str):
+async def authenticate_user(email: str, password: str):
     try:
-        user_dict = await get_user_by_name(username)
+        user_dict = await get_user_by_email(email)
     except RescourceNotFound:
         user_dict = None
     if not user_dict:
         return False
-    user = User(**user_dict)
+    user = UserOurAuthentication(**user_dict)
     if not verify_password(password, user.hashed_password):
         return False
     return user
@@ -42,13 +42,13 @@ async def validate_token(token: Annotated[str, Depends(oauth2_scheme)]):
     logger.info("Validate token")
     try:
         payload = jwt.decode(token, settings.secret_key, algorithms=settings.algorithm)
-        username: str = payload.get("sub")
-        if username is None:
+        email: str = payload.get("sub")
+        if email is None:
             raise InvalidToken
     except JWTError:
         raise InvalidToken
     
-    user = await get_user_by_name(username)
+    user = await get_user_by_email(email)
     if user is None:
         raise InvalidToken
     

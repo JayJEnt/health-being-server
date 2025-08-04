@@ -9,15 +9,15 @@ from authentication.allowed_roles import admin_only
 from config import settings
 
 
-router = APIRouter()
+router = APIRouter(prefix="/diet_types", tags=["diet_types"])
 
 
-@router.get("/diet_types", response_model=List[DietType])
+@router.get("", response_model=List[DietType])
 async def get_diet_types():
     diet_types = supabase_connection.fetch_all(settings.diet_type_table)
     return diet_types
 
-@router.post("/diet_types", response_model=DietType, dependencies=[Depends(admin_only)])
+@router.post("", response_model=DietType, dependencies=[Depends(admin_only)])
 async def create_diet_type(diet_type: DietTypeCreate):
     diet_type = supabase_connection.insert(
         settings.diet_type_table,

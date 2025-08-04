@@ -11,10 +11,10 @@ from config import settings
 from logger import logger
 
 
-router = APIRouter()
+router = APIRouter(prefix="/recipes/{recipe_id}", tags=["recipes"])
 
 
-@router.get("/recipes/{recipe_id}", response_model=RecipePageResponse)
+@router.get("", response_model=RecipePageResponse)
 async def get_recipe(recipe_id: int):
     recipe_response = supabase_connection.find_by(
         settings.recipe_table,
@@ -86,7 +86,7 @@ async def get_recipe(recipe_id: int):
     )
     return recipe_response
 
-@router.put("/recipes/{recipe_id}", response_model=RecipePageResponse)
+@router.put("", response_model=RecipePageResponse)
 async def update_recipe(recipe_id: int, recipe: RecipePage):
     recipe, poped_attributes = pop_attributes(recipe, ["diet_type", "ingredients"])
     recipe_response = supabase_connection.update_by(
@@ -174,7 +174,7 @@ async def update_recipe(recipe_id: int, recipe: RecipePage):
 
     return recipe_response
 
-@router.delete("/recipes/{recipe_id}")
+@router.delete("")
 async def delete_recipe(recipe_id: int):
     try:
         supabase_connection.delete_by(

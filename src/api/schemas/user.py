@@ -1,5 +1,7 @@
 from pydantic import BaseModel, EmailStr
 
+from typing import Optional
+
 
 class UserBaseModel(BaseModel):
     username: str
@@ -10,5 +12,7 @@ class UserCreate(UserBaseModel):
 
 class User(UserBaseModel):
     id: int
-    hashed_password: str
     role: str = "user"
+
+class UserOurAuthentication(User):
+    hashed_password: str

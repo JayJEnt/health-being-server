@@ -8,10 +8,10 @@ from database.supabase_connection import supabase_connection
 from config import settings
 
 
-router = APIRouter()
+router = APIRouter(prefix="/users", tags=["users"])
 
 
-@router.get("/users", response_model=List[User])
+@router.get("", response_model=List[User])
 async def get_users():
     users = supabase_connection.fetch_all(settings.user_table)
     return users

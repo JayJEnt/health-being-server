@@ -11,12 +11,12 @@ from api.routers import (
     ingredients_ingredient_id,
     ingredients,
     ingredients_name_ingredient_name,
-    login,
+    oauth2_google,
+    oauth2_our,
     recipes_recipe_id,
     recipes_search_phrase,
     recipes,
-    register,
-    users_name_user_name,
+    users_email_email,
     users_user_id,
     users,
     vitamins_name_vitamin_name,
@@ -52,12 +52,12 @@ app.include_router(diet_types.router)
 app.include_router(ingredients_ingredient_id.router)
 app.include_router(ingredients_name_ingredient_name.router)
 app.include_router(ingredients.router)
-app.include_router(login.router)
+app.include_router(oauth2_google.router)
+app.include_router(oauth2_our.router)
 app.include_router(recipes_recipe_id.router)
 app.include_router(recipes_search_phrase.router)
 app.include_router(recipes.router)
-app.include_router(register.router)
-app.include_router(users_name_user_name.router)
+app.include_router(users_email_email.router)
 app.include_router(users_user_id.router)
 app.include_router(users.router)
 app.include_router(vitamins_name_vitamin_name.router)
