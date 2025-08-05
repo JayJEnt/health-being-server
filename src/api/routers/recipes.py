@@ -42,7 +42,7 @@ async def create_recipe(recipe: RecipePage):
     if diet_type:
         for diet in diet_type:
             try:
-                exists = exists = await get_diet_by_name(diet["diet_name"])
+                exists = await get_diet_by_name(diet["diet_name"])
             except:
                 exists = None
                 logger.error(f"Diet: {diet["diet_name"]} hasn't been recognized")

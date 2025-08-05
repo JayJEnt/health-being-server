@@ -3,10 +3,10 @@ from logger import logger
 
 
 def pop_attributes(pydantic_model, attributes):
-    """Function for poping attributes from pydantic_model
+    """Function for popping attributes from pydantic_model
     args:   pydantic_model [pydantic]
             attributes [list[str]]
-    return: pydantic_model, poped_attributes
+    return: pydantic_model, popped_attributes
     """
     if not isinstance(pydantic_model, dict):
         try:
@@ -14,17 +14,17 @@ def pop_attributes(pydantic_model, attributes):
         except:
             logger.error(f"Invalid input: {pydantic_model}")
             raise TypeError
-    poped_attributes = []
+    popped_attributes = []
 
     for attribute in attributes:
-        poped_attribut = pydantic_model.get(f"{attribute}", "")
-        logger.debug(f"Poped_attribut: {poped_attribut}")
-        poped_attributes.append(poped_attribut)
+        popped_attribut = pydantic_model.get(f"{attribute}", "")
+        logger.debug(f"Popped_attribut: {popped_attribut}")
+        popped_attributes.append(popped_attribut)
 
         pydantic_model = {key : value for key, value in pydantic_model.items() if key != f"{attribute}"}
         logger.debug(f"Pydantic_model after drop of attribut: {pydantic_model}")
 
-    return pydantic_model, poped_attributes
+    return pydantic_model, popped_attributes
 
 def add_attributes(pydantic_model, attributes):
     """Function for adding attributes to pydantic_model
