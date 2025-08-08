@@ -35,12 +35,12 @@ async def create_user(user: UserCreate, other_provider: bool=False):
         else:
             user = add_attributes(user, [{"role": "user"}])
         
-        user = supabase_connection.insert(
+        user_response = supabase_connection.insert(
             settings.user_table,
             user,
         )
-        logger.info(f"Email: {user.email} is successfully registered.")
-        return user
+        logger.info(f"Email: {user['email']} is successfully registered.")
+        return user_response
     
 @router.post("/login", response_model=Token)
 async def login(
@@ -50,7 +50,8 @@ async def login(
     if not user:
         raise InvalidCredentials
     access_token_expires = timedelta(minutes=settings.access_token_expire)
+    logger.debug(F"Email: {user.email}")
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": user.email}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
