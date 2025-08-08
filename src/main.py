@@ -16,7 +16,9 @@ from api.routers import (
     recipes_recipe_id,
     recipes_search_phrase,
     recipes,
+    token_data,
     users_email_email,
+    users_name_username,
     users_user_id,
     users,
     vitamins_name_vitamin_name,
@@ -57,7 +59,9 @@ app.include_router(oauth2_our.router)
 app.include_router(recipes_recipe_id.router)
 app.include_router(recipes_search_phrase.router)
 app.include_router(recipes.router)
+app.include_router(token_data.router)
 app.include_router(users_email_email.router)
+app.include_router(users_name_username.router)
 app.include_router(users_user_id.router)
 app.include_router(users.router)
 app.include_router(vitamins_name_vitamin_name.router)
