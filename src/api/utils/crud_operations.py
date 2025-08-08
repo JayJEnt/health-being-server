@@ -7,47 +7,45 @@ from database.supabase_connection import supabase_connection
 from api.utils.operations_on_attributes import pop_attributes, add_attributes
 
 
-own_table_name_mapping = {
-    "recipe": f"{settings.recipe_table}",
-    "diet_type": f"{settings.diet_type_table}",
-    "ingredients": f"{settings.ingredient_table}",
+mapping_for_nested_create = {
+    "recipe": {
+        "table_name": settings.recipe_table,
+        "nested_attributes": ["diet_type", "ingredients"],
+        "diet_type_join_column": "",
+        "ingredients_join_column": ""
+    },
+    "diet_type": {
+        "table_name": settings.diet_type_table,
+    },
+    "ingredients": {
+        "table_name": settings.ingredient_table,
+    }
 }
 
-extended_table_names_mapping = {
-    "recipe": [f"{settings.ingredient_table}", f"{settings.diet_type_table}"]
-}
-
-joined_table_names_mapping = {
-    "recipe": [f"{settings.ingredients_included_table}", f"{settings.diet_type_included_table}"]
-}
-
-joined_attribute_names_mapping = {
-    f"{settings.ingredients_included_table}": ["recipe_id", "ingredient_id", "amount", "measure_unit"],
-    f"{settings.diet_type_included_table}": ["recipe_id", "diet_type_id"]
-}
-
-async def create_element(
+def create_element(
         element: Any,
         element_name: str,
-        extended_attributes: List[str],         # TODO: also can be done by mapping
         exteded_attributes_tables: List[str],   # TODO: also can be done by mapping
         exteded_attributes_columns: list[str],  # TODO: also can be done by mapping
     ):
     """
-    element - the main element you are adding.
-    extended_attributes - attributes that are extend from this element model.
-    exteded_attributes_tables - all tables names of extended attributes, the same order as in extended_attributes.
+    Base create element method, that will be used for each create/post endpoint
     """
-    element, popped_attributes = pop_attributes(element, extended_attributes)
+    # INIT
+    element_dict = mapping_for_nested_create[element_name]
+    element_table = element_dict.get("table_name", "")
+    nested_attributes = element_dict.get("nested_attributes", [])
+    
+    element, popped_attributes = pop_attributes(element, nested_attributes)
 
     element_response = supabase_connection.insert(
-        own_table_name_mapping[element_name],
+        element_table,
         element,
     )
     element_id = element_response["id"]
     logger.debug(
         f"Inserted element: {element_response}."
-        f"To table: {own_table_name_mapping[element_name]}."
+        f"To table: {element_table}."
         f"Newly created element's id: {element_id}."
     )
 
@@ -58,12 +56,9 @@ async def create_element(
         popped_attribute_response = []
         if popped_attribute:
             for popped_attribute_element in popped_attribute:
-                # TODO: It has to be mapping other way it need to much parameters in input and it gets messy
-                extended_element = supabase_connection.find_by(
-                    exteded_attributes_tables[index],
-                    f"{[exteded_attributes_columns[index]]}",
-                    popped_attribute_element[exteded_attributes_columns[index]],
-                )[0]
+                popped_element_table_name = mapping_for_nested_create[popped_attribute_element["name"]].get("table_name", "")
+                # If there is any matching, get it
+                extended_element = get_element_by_name()
 
                 logger.debug(f"Extended element found in our database.")
 
@@ -88,3 +83,14 @@ async def create_element(
     logger.debug(f"element_response: {element_response}")
 
     return element_response
+
+def get_element_by_name(element_category_name: str, element_name: str,):
+    """
+    Base get element by name method, that will be used for each get endpoint, which tries to reach data by name
+    """
+    found_element = supabase_connection.find_by(
+        mapping_for_nested_create[element_category_name].get("table_name"),
+        "name",
+        element_name,
+    )
+    return found_element[0]
