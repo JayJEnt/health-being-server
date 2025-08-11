@@ -31,7 +31,6 @@ class Settings(BaseSettings):
 
     # S3 IMAGES
     bucket_name: str = ""
-    file_name: str = ""
 
     # AUTHENTICATION
     secret_key: str = ""
