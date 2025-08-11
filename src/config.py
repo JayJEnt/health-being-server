@@ -29,6 +29,10 @@ class Settings(BaseSettings):
     vitamin_table: str = ""
     vitamins_included_table: str = ""
 
+    # S3 IMAGES
+    bucket_name: str = ""
+    file_name: str = ""
+
     # AUTHENTICATION
     secret_key: str = ""
     algorithm: str = ""

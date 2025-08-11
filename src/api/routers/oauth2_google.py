@@ -3,9 +3,12 @@ from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import RedirectResponse
 import httpx
 
+from datetime import timedelta
+
 from api.handlers.exceptions import RescourceNotFound
 from api.routers.oauth2_our import create_user
 from api.routers.users_email_email import get_user_by_email
+from authentication.authentication import create_access_token
 from api.schemas.user import User, UserBaseModel
 from config import settings
 from logger import logger
@@ -75,4 +78,17 @@ async def auth_callback(request: Request):
             user_create = UserBaseModel(**user_creat_dict)
             user: User = await create_user(user_create, other_provider=True)
 
-        return user
+        user_data = {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "provider": "google"
+        }
+
+        access_token_expires = timedelta(minutes=settings.access_token_expire)
+
+        access_token = create_access_token(
+            data=user_data, expires_delta=access_token_expires
+        )
+
+        return {"access_token": access_token, "token_type": "bearer"}

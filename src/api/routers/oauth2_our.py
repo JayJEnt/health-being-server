@@ -43,15 +43,21 @@ async def create_user(user: UserCreate, other_provider: bool=False):
         return user_response
     
 @router.post("/login", response_model=Token)
-async def login(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
-    ):
+async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     user = await authenticate_user(form_data.username, form_data.password)
     if not user:
         raise InvalidCredentials
+
+    user_data = {
+        "id": user.id,
+        "username": user.username,
+        "sub": user.email,
+        "provider": "health-being-server"
+    }
+
     access_token_expires = timedelta(minutes=settings.access_token_expire)
-    logger.debug(F"Email: {user.email}")
+
     access_token = create_access_token(
-        data={"sub": user.email}, expires_delta=access_token_expires
+        data=user_data, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
