@@ -79,7 +79,8 @@ Resources:
       Code:
         S3Bucket: !Ref BucketName
         S3Key: !Sub "${LambdaSourceCode}-${DeploymentVersion}.zip"
-      Timeout: 300
+      Timeout: 30
+      MemorySize: 512
       Layers:
         - !Ref LambdaLayer
       Environment:
