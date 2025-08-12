@@ -67,17 +67,11 @@ jobs:
 
       - name: Create filtered source zip
         run: |
-          EXCLUDE_LIST=(
-            ".git/*"
-            ".github/*"
-            ".venv/*"
+          EXCLUDE_LIST=("
             "**/__pycache__/**"
             "example.env"
-            "infrastructure/*"
-            "*.md"
-            "requirements.txt"
-            ".gitignore"
           )
+          cd src
           zip -r lambda-${{ needs.update-version.outputs.version }}.zip . -x "${EXCLUDE_LIST[@]}"
 
       - name: Configure AWS credentials
