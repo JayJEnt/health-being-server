@@ -6,7 +6,22 @@ on:
       - main
 
 jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.read-version.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Read version
+        id: read-version
+        run: |
+          VERSION=$(cat version.txt)
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
   update-lambda-layer-code:
+    needs: update-version
     runs-on: ubuntu-latest
 
     steps:
@@ -28,7 +43,7 @@ jobs:
       - name: Create layer zip
         run: |
           cd python
-          zip -r ../python.zip .
+          zip -r ../python-${{ needs.update-version.outputs.version }}.zip .
           cd ..
 
       - name: Configure AWS credentials
@@ -40,9 +55,10 @@ jobs:
 
       - name: Upload to S3
         run: |
-          aws s3 cp python.zip s3://${{ secrets.S3_BUCKET_NAME }}/python.zip
+          aws s3 cp python-${{ needs.update-version.outputs.version }}.zip s3://${{ secrets.S3_BUCKET_NAME }}/lambda-layer-${{ needs.update-version.outputs.version }}.zip
   
   update-lambda-source-code:
+    needs: update-version
     runs-on: ubuntu-latest
 
     steps:
@@ -62,7 +78,7 @@ jobs:
             "requirements.txt"
             ".gitignore"
           )
-          zip -r lambda.zip . -x "${EXCLUDE_LIST[@]}"
+          zip -r lambda-${{ needs.update-version.outputs.version }}.zip . -x "${EXCLUDE_LIST[@]}"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -73,10 +89,10 @@ jobs:
 
       - name: Upload to S3
         run: |
-          aws s3 cp lambda.zip s3://${{ secrets.S3_BUCKET_NAME }}/lambda.zip
+          aws s3 cp lambda-${{ needs.update-version.outputs.version }}.zip s3://${{ secrets.S3_BUCKET_NAME }}/lambda-source-${{ needs.update-version.outputs.version }}.zip
 
   deployment:
-    needs: [update-lambda-layer-code, update-lambda-source-code]
+    needs: [update-lambda-layer-code, update-lambda-source-code, update-version]
     runs-on: ubuntu-latest
 
     steps:
@@ -96,3 +112,4 @@ jobs:
             --template-file infrastructure/template.yml \
             --stack-name ${{ secrets.STACK_NAME }} \
             --capabilities CAPABILITY_IAM \
+            --parameter-overrides DeploymentVersion=${{ needs.update-version.outputs.version }}

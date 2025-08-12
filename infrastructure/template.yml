@@ -21,6 +21,10 @@ Metadata:
           - StageName
 
 Parameters:
+  DeploymentVersion:
+    Type: String
+    Default: "0.0.1"
+
   AppName:
     Type: String
     Default: health-being-app
@@ -33,12 +37,12 @@ Parameters:
 
   LayerSourceCode:
     Type: String
-    Default: python.zip
+    Default: lambda-layer
     Description: Name of the Lambda Layer source code file on S3
 
   LambdaSourceCode:
     Type: String
-    Default: lambda.zip
+    Default: lambda-source
     Description: Name of the Lambda source code file on S3
 
   Environment:
@@ -58,23 +62,23 @@ Resources:
   LambdaLayer:
     Type: AWS::Lambda::LayerVersion
     Properties:
-      LayerName: !Sub "${AppName}-lambda-layer"
+      LayerName: !Sub "${AppName}-lambda-layer-${DeploymentVersion}"
       Content:
         S3Bucket: !Ref BucketName
-        S3Key: !Ref LayerSourceCode
+        S3Key: !Sub "${LayerSourceCode}-${DeploymentVersion}.zip"
       CompatibleRuntimes:
         - python3.12
 
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub "${AppName}-lambda"
+      FunctionName: !Sub "${AppName}-lambda-${DeploymentVersion}"
       Runtime: python3.12
       Handler: main.handler
       Role: !GetAtt LambdaRole.Arn
       Code:
         S3Bucket: !Ref BucketName
-        S3Key: !Ref LambdaSourceCode
+        S3Key: !Sub "${LambdaSourceCode}-${DeploymentVersion}.zip"
       Timeout: 300
       Layers:
         - !Ref LambdaLayer
@@ -160,7 +164,7 @@ Resources:
       - ApiGatewayMethod
       - ApiGatewayResourceRoot
     Properties:
-      Description: Lambda API Deployment
+      Description: "Lambda API Deployment ${DeploymentVersion}"
       ApiId: !Ref ApiGateway
 
 Outputs:
