@@ -17,7 +17,7 @@ jobs:
       - name: Read version
         id: read-version
         run: |
-          VERSION=$(cat version.txt)
+          VERSION=$(cat version.txt | tr '.' '-')
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
   update-lambda-layer-code:
