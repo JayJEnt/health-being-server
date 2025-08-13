@@ -164,8 +164,6 @@ Resources:
       Environment:
         Variables:
           ENVIRONMENT: !Ref Environment
-          # AWS Configuration
-          AWS_REGION: !Ref AWS::Region
           # Supabase Configuration
           SUPABASE_URL: !Ref SupabaseUrl
           SUPABASE_KEY: !Ref SupabaseKey
