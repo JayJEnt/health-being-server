@@ -16,7 +16,7 @@ async def upload_image(file: UploadFile = File(...)):
     s3 = boto3.client("s3")
     try:
         s3.put_object(
-            Bucket=settings.bucket_name,
+            Bucket=settings.BUCKET_NAME,
             Key=file.filename,
             Body=await file.read(),
             ContentType=file.content_type
@@ -31,7 +31,7 @@ async def upload_image(file: UploadFile = File(...)):
 async def download_image(filename: str):
     s3 = boto3.client("s3")
     try:
-        response = s3.get_object(Bucket=settings.bucket_name, Key=filename)
+        response = s3.get_object(Bucket=settings.BUCKET_NAME, Key=filename)
         file_content = response['Body'].read()
         return Response(
             content=file_content,

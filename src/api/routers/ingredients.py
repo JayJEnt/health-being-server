@@ -17,7 +17,7 @@ router = APIRouter(prefix="/ingredients", tags=["ingredients"])
 
 @router.get("", response_model=List[Ingredient])
 async def get_ingredients():
-    ingredients = supabase_connection.fetch_all(settings.ingredient_table)
+    ingredients = supabase_connection.fetch_all(settings.INGREDIENT_TABLE)
     return ingredients
 
 @router.post("", response_model=IngredientResponse, dependencies=[Depends(admin_only)])
@@ -25,7 +25,7 @@ async def create_ingredient(ingredient: IngredientCreate):
     ingredient, poped_attributes = pop_attributes(ingredient, ["vitamins"])
 
     ingredient_response = supabase_connection.insert(
-        settings.ingredient_table,
+        settings.INGREDIENT_TABLE,
         ingredient,
     )
     logger.debug(f"ingredient_response: {ingredient_response}")
@@ -46,7 +46,7 @@ async def create_ingredient(ingredient: IngredientCreate):
                 logger.debug(f"exists: {exists}")
 
                 supabase_connection.insert(
-                    settings.vitamins_included_table,
+                    settings.VITAMINS_INCLUDED_TABLE,
                     {
                         "ingredient_id": ingredient_id,
                         "vitamin_id": exists["id"]

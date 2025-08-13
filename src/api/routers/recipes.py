@@ -17,7 +17,7 @@ router = APIRouter(prefix="/recipes", tags=["recipes"])
 
 @router.get("", response_model=List[RecipeOverview])
 async def get_recipes():
-    recipes = supabase_connection.fetch_all(settings.recipe_table)
+    recipes = supabase_connection.fetch_all(settings.RECIPE_TABLE)
     recipes_response = []
     for recipe in recipes:
         recipe, dropped_attributes = pop_attributes(recipe, ["description", "instructions"])
@@ -29,7 +29,7 @@ async def create_recipe(recipe: RecipePage):
     recipe, poped_attributes = pop_attributes(recipe, ["diet_type", "ingredients"])
 
     recipe_response = supabase_connection.insert(
-        settings.recipe_table,
+        settings.RECIPE_TABLE,
         recipe,
     )
     logger.debug(f"Recipe_response: {recipe_response}")
@@ -50,7 +50,7 @@ async def create_recipe(recipe: RecipePage):
                 logger.debug(f"Exists: {exists}")
 
                 supabase_connection.insert(
-                    settings.diet_type_included_table,
+                    settings.DIET_TYPE_INCLUDED_TABLE,
                     {
                         "recipe_id": recipe_id,
                         "diet_type_id": exists["id"]
@@ -71,7 +71,7 @@ async def create_recipe(recipe: RecipePage):
                 logger.debug(f"Exists: {exists}")
 
                 supabase_connection.insert(
-                    settings.ingredients_included_table,
+                    settings.INGREDIENTS_INCLUDED_TABLE,
                     {
                         "recipe_id": recipe_id,
                         "ingredient_id": exists["id"],

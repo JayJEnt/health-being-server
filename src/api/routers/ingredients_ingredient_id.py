@@ -17,14 +17,14 @@ router = APIRouter(prefix="/ingredients/{ingredient_id}", tags=["ingredients"])
 @router.get("", response_model=IngredientResponse)
 async def get_ingredient(ingredient_id: int):
     ingredient_response = supabase_connection.find_by(
-        settings.ingredient_table,
+        settings.INGREDIENT_TABLE,
         "id",
         ingredient_id,
     )
 
     try:
         vitamins_included = supabase_connection.find_by(
-            settings.vitamins_included_table,
+            settings.VITAMINS_INCLUDED_TABLE,
             "ingredient_id",
             ingredient_id,
         )
@@ -35,7 +35,7 @@ async def get_ingredient(ingredient_id: int):
                 logger.debug(f"vitamin_id: {vitamin_id}")
 
                 vitamin = supabase_connection.find_by(
-                    settings.vitamin_table,
+                    settings.VITAMIN_TABLE,
                     "id",
                     vitamin_id,
                 )
@@ -60,7 +60,7 @@ async def get_ingredient(ingredient_id: int):
 async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
     ingredient, poped_attributes = pop_attributes(ingredient, ["vitamins"])
     ingredient_response = supabase_connection.update_by(
-        settings.ingredient_table,
+        settings.INGREDIENT_TABLE,
         "id",
         ingredient_id, 
         ingredient,
@@ -68,7 +68,7 @@ async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
     logger.debug(f"Ingredient_response: {ingredient_response}.")
 
     supabase_connection.delete_by(
-        settings.vitamins_included_table,
+        settings.VITAMINS_INCLUDED_TABLE,
         "ingredient_id",
         ingredient_id,
     )
@@ -86,7 +86,7 @@ async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
                 logger.debug(f"Exists: {exists}.")
 
                 supabase_connection.insert(
-                    settings.vitamins_included_table,
+                    settings.VITAMINS_INCLUDED_TABLE,
                     {
                         "ingredient_id": ingredient_id,
                         "vitamin_id": exists["id"]
@@ -106,13 +106,13 @@ async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
 @router.delete("", dependencies=[Depends(admin_only)])
 async def delete_ingredient(ingredient_id: int):
     supabase_connection.delete_by(
-        settings.vitamins_included_table,
+        settings.VITAMINS_INCLUDED_TABLE,
         "ingredient_id",
         ingredient_id,
     )
 
     ingredient = supabase_connection.delete_by(
-        settings.ingredient_table,
+        settings.INGREDIENT_TABLE,
         "id",
         ingredient_id,
     )

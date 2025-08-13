@@ -17,7 +17,7 @@ router = APIRouter(prefix="/recipes/{recipe_id}", tags=["recipes"])
 @router.get("", response_model=RecipePageResponse)
 async def get_recipe(recipe_id: int):
     recipe_response = supabase_connection.find_by(
-        settings.recipe_table,
+        settings.RECIPE_TABLE,
         "id",
         recipe_id,
     )
@@ -25,7 +25,7 @@ async def get_recipe(recipe_id: int):
     
     try:
         diet_types_included = supabase_connection.find_by(
-            settings.diet_type_included_table,
+            settings.DIET_TYPE_INCLUDED_TABLE,
             "recipe_id",
             recipe_id,
         )
@@ -36,7 +36,7 @@ async def get_recipe(recipe_id: int):
                 logger.debug(f"diet_id: {diet_id}")
 
                 diet_type = supabase_connection.find_by(
-                    settings.diet_type_table,
+                    settings.DIET_TYPE_TABLE,
                     "id",
                     diet_id,
                 )
@@ -49,7 +49,7 @@ async def get_recipe(recipe_id: int):
 
     # TODO: [OPTIMALIZATION] Consider running async
     ingredients_included = supabase_connection.find_by(
-        settings.ingredients_included_table,
+        settings.INGREDIENTS_INCLUDED_TABLE,
         "recipe_id",
         recipe_id,
     )
@@ -60,7 +60,7 @@ async def get_recipe(recipe_id: int):
             logger.debug(f"ingredient_id: {ingredient_id}")
 
             ingredient = supabase_connection.find_by(
-                settings.ingredient_table,
+                settings.INGREDIENT_TABLE,
                 "id",
                 ingredient_id,
             )
@@ -90,7 +90,7 @@ async def get_recipe(recipe_id: int):
 async def update_recipe(recipe_id: int, recipe: RecipePage):
     recipe, poped_attributes = pop_attributes(recipe, ["diet_type", "ingredients"])
     recipe_response = supabase_connection.update_by(
-        settings.recipe_table,
+        settings.RECIPE_TABLE,
         "id",
         recipe_id, 
         recipe,
@@ -99,7 +99,7 @@ async def update_recipe(recipe_id: int, recipe: RecipePage):
 
     try:
         supabase_connection.delete_by(
-            settings.diet_type_included_table,
+            settings.DIET_TYPE_INCLUDED_TABLE,
             "recipe_id",
             recipe_id,
         )
@@ -120,7 +120,7 @@ async def update_recipe(recipe_id: int, recipe: RecipePage):
                     logger.debug(f"Exists: {exists}")
 
                     supabase_connection.insert(
-                        settings.diet_type_included_table,
+                        settings.DIET_TYPE_INCLUDED_TABLE,
                         {
                             "recipe_id": recipe_id,
                             "diet_type_id": exists["id"]
@@ -132,7 +132,7 @@ async def update_recipe(recipe_id: int, recipe: RecipePage):
 
     try:
         supabase_connection.delete_by(
-            settings.ingredients_included_table,
+            settings.INGREDIENTS_INCLUDED_TABLE,
             "recipe_id",
             recipe_id,
         )
@@ -152,7 +152,7 @@ async def update_recipe(recipe_id: int, recipe: RecipePage):
                 logger.debug(f"Exists: {exists}")
 
                 supabase_connection.insert(
-                    settings.ingredients_included_table,
+                    settings.INGREDIENTS_INCLUDED_TABLE,
                     {
                         "recipe_id": recipe_id,
                         "ingredient_id": exists["id"],
@@ -178,7 +178,7 @@ async def update_recipe(recipe_id: int, recipe: RecipePage):
 async def delete_recipe(recipe_id: int):
     try:
         supabase_connection.delete_by(
-            settings.ingredients_included_table,
+            settings.INGREDIENTS_INCLUDED_TABLE,
             "recipe_id",
             recipe_id,
         )
@@ -186,7 +186,7 @@ async def delete_recipe(recipe_id: int):
         logger.info(f"No ingredients found attached to this recipe_id {recipe_id}")
     try:
         supabase_connection.delete_by(
-            settings.diet_type_included_table,
+            settings.DIET_TYPE_INCLUDED_TABLE,
             "recipe_id",
             recipe_id,
         )
@@ -194,7 +194,7 @@ async def delete_recipe(recipe_id: int):
         logger.info(f"No diet type found attached to this recipe_id {recipe_id}")
     try:
         recipe = supabase_connection.delete_by(
-            settings.recipe_table,
+            settings.RECIPE_TABLE,
             "id",
             recipe_id,
         )

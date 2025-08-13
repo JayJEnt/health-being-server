@@ -13,5 +13,5 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.get("", response_model=List[User])
 async def get_users():
-    users = supabase_connection.fetch_all(settings.user_table)
+    users = supabase_connection.fetch_all(settings.USER_TABLE)
     return users

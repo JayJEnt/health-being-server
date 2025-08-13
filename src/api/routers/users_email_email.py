@@ -12,7 +12,7 @@ router = APIRouter(prefix="/users/email/{email}", tags=["users"])
 @router.get("", response_model=User)
 async def get_user_by_email(email: str):
     user = supabase_connection.find_by(
-        settings.user_table,
+        settings.USER_TABLE,
         "email",
         email,
     )

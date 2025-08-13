@@ -8,6 +8,7 @@ Metadata:
           default: "Project based parameters"
         Parameters:
           - AppName
+          - DeploymentVersion
       - Label:
           default: "Lambda Function Parameters"
         Parameters:
@@ -19,6 +20,26 @@ Metadata:
           default: "API Gateway parameters"
         Parameters:
           - StageName
+      - Label:
+          default: "Supabase Configuration"
+        Parameters:
+          - SupabaseUrl
+          - SupabaseKey
+      - Label:
+          default: "Authentication"
+        Parameters:
+          - SecretKey
+          - Algorithm
+          - AccessTokenExpire
+      # - Label:
+      #     default: "Google OAuth"
+      #   Parameters:
+      #     - GoogleClientId
+      #     - GoogleClientSecret
+      #     - GoogleRedirectUri
+      #     - GoogleAuthEndpoint
+      #     - GoogleTokenEndpoint
+      #     - GoogleUserinfoEndpoint
 
 Parameters:
   DeploymentVersion:
@@ -58,6 +79,63 @@ Parameters:
     Default: dev
     Description: The name of the API Gateway stage
 
+  # Supabase Configuration
+  SupabaseUrl:
+    Type: String
+    Description: Supabase project URL
+    Default: https://psyqjmzmwspxbszmxavb.supabase.co
+    NoEcho: true
+
+  SupabaseKey:
+    Type: String
+    Description: Supabase API key
+    Default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzeXFqbXptd3NweGJzem14YXZiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0ODc5OTg5NCwiZXhwIjoyMDY0Mzc1ODk0fQ.oQjNDjWSAxy1j2hEERugJsL4EPP0ucD6ab4VhvCTVF0
+    NoEcho: true
+
+  # Authentication
+  SecretKey:
+    Type: String
+    Description: Secret key for authentication
+    Default: 509b457f643c66a683b3e2d0d298a23454d1d2f404c492c5662ca48f5bbd0e3e
+    NoEcho: true
+
+  Algorithm:
+    Type: String
+    Description: Algorithm for authentication
+    Default: HS256
+
+  AccessTokenExpire:
+    Type: Number
+    Description: Access token expiration in minutes
+    Default: 30
+
+  # Google OAuth
+  # GoogleClientId:
+  #   Type: String
+  #   Description: Google OAuth client ID
+  #   NoEcho: true
+
+  # GoogleClientSecret:
+  #   Type: String
+  #   Description: Google OAuth client secret
+  #   NoEcho: true
+
+  # GoogleRedirectUri:
+  #   Type: String
+  #   Description: Google OAuth redirect URI
+
+  # GoogleAuthEndpoint:
+  #   Type: String
+  #   Description: Google OAuth authorization endpoint
+
+  # GoogleTokenEndpoint:
+  #   Type: String
+  #   Description: Google OAuth token endpoint
+
+  # GoogleUserinfoEndpoint:
+  #   Type: String
+  #   Description: Google OAuth userinfo endpoint
+
 Resources:
   LambdaLayer:
     Type: AWS::Lambda::LayerVersion
@@ -86,6 +164,22 @@ Resources:
       Environment:
         Variables:
           ENVIRONMENT: !Ref Environment
+          # AWS Configuration
+          AWS_REGION: !Ref AWS::Region
+          # Supabase Configuration
+          SUPABASE_URL: !Ref SupabaseUrl
+          SUPABASE_KEY: !Ref SupabaseKey
+          # Authentication
+          SECRET_KEY: !Ref SecretKey
+          ALGORITHM: !Ref Algorithm
+          ACCESS_TOKEN_EXPIRE: !Ref AccessTokenExpire
+          # Google OAuth
+          # GOOGLE_CLIENT_ID: !Ref GoogleClientId
+          # GOOGLE_CLIENT_SECRET: !Ref GoogleClientSecret
+          # GOOGLE_REDIRECT_URI: !Ref GoogleRedirectUri
+          # GOOGLE_AUTH_ENDPOINT: !Ref GoogleAuthEndpoint
+          # GOOGLE_TOKEN_ENDPOINT: !Ref GoogleTokenEndpoint
+          # GOOGLE_USERINFO_ENDPOINT: !Ref GoogleUserinfoEndpoint
 
   LambdaRole:
     Type: AWS::IAM::Role

@@ -9,7 +9,7 @@ def configure_logger():
     logger.remove()
     logger.add(
         sys.stdout,
-        level=settings.log_level,
+        level=settings.LOG_LEVEL,
         format="<level>{level: <8}</level> <yellow>{name}</yellow>:<yellow>{function}</yellow>:<yellow>{line}</yellow> - <level>{message}</level>",
         )
 

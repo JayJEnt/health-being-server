@@ -36,14 +36,14 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
     to_encode.update({"exp": expire})
     logger.debug(f"Data: {to_encode}")
-    encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt
 
 async def validate_token(token: Annotated[str, Depends(oauth2_scheme)]):
     logger.info("Validate token")
     try:
         logger.debug(f"Token: {token}")
-        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         logger.debug(f"Got payload: {payload}")
         email: str = payload.get("sub")
         if email is None:

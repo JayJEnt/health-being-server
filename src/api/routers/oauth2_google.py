@@ -85,7 +85,7 @@ async def auth_callback(request: Request):
             "provider": "google"
         }
 
-        access_token_expires = timedelta(minutes=settings.access_token_expire)
+        access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE)
 
         access_token = create_access_token(
             data=user_data, expires_delta=access_token_expires

@@ -13,7 +13,7 @@ router = APIRouter(prefix="/diet_types/{diet_type_id}", tags=["diet_types"])
 @router.get("", response_model=DietType)
 async def get_diet_type(diet_type_id: int):
     diet_type = supabase_connection.find_by(
-        settings.diet_type_table,
+        settings.DIET_TYPE_TABLE,
         "id",
         diet_type_id,
     )
@@ -22,7 +22,7 @@ async def get_diet_type(diet_type_id: int):
 @router.put("", response_model=DietType, dependencies=[Depends(admin_only)])
 async def update_diet_type(diet_type_id: int, diet_type: DietTypeCreate):
     diet_type = supabase_connection.update_by(
-        settings.diet_type_table,
+        settings.DIET_TYPE_TABLE,
         "id",
         diet_type_id, 
         diet_type.model_dump(),
@@ -32,7 +32,7 @@ async def update_diet_type(diet_type_id: int, diet_type: DietTypeCreate):
 @router.delete("", dependencies=[Depends(admin_only)])
 async def delete_diet_type(diet_type_id: int):
     diet_type = supabase_connection.delete_by(
-        settings.diet_type_table,
+        settings.DIET_TYPE_TABLE,
         "id",
         diet_type_id,
     )

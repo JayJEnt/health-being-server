@@ -10,8 +10,8 @@ from logger import logger
 
 class SupabaseConnection:
     def __init__(self):
-        self._url = settings.supabase_url
-        self._key = settings.supabase_key
+        self._url = settings.SUPABASE_URL
+        self._key = settings.SUPABASE_KEY
         try:
             self._client: Client = create_client(self._url, self._key)
         except Exception as ex:

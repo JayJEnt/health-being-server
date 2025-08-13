@@ -36,7 +36,7 @@ async def create_user(user: UserCreate, other_provider: bool=False):
             user = add_attributes(user, [{"role": "user"}])
         
         user_response = supabase_connection.insert(
-            settings.user_table,
+            settings.USER_TABLE,
             user,
         )
         logger.info(f"Email: {user['email']} is successfully registered.")
@@ -55,7 +55,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
         "provider": "health-being-server"
     }
 
-    access_token_expires = timedelta(minutes=settings.access_token_expire)
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE)
 
     access_token = create_access_token(
         data=user_data, expires_delta=access_token_expires
