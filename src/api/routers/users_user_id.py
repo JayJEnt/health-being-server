@@ -10,7 +10,7 @@ from config import settings
 router = APIRouter(prefix="/users/{user_id}", tags=["users"])
 
 
-@router.get("", response_model=User)
+@router.get("", response_model=User, dependencies=[Depends(admin_only)])
 async def get_user(user_id: int):
     user = supabase_connection.find_by(
         settings.USER_TABLE,
@@ -37,5 +37,3 @@ async def delete_user(user_id: int):
         user_id,
     )
     return user
-
-# TODO: add other endpoint to modify/delete, for each logged user, for his own data or modify access @staticmethod

@@ -20,8 +20,9 @@ from api.routers import (
     token_data,
     users_email_email,
     users_name_username,
-    users_user_id,
+    users_owner_user_id,
     users,
+    users_user_id,
 )
 from api.routers.vitamins import vitamins, vitamins_id, vitamins_name
 from logger import logger
@@ -62,6 +63,7 @@ app.include_router(recipes.router)
 app.include_router(token_data.router)
 app.include_router(users_email_email.router)
 app.include_router(users_name_username.router)
+app.include_router(users_owner_user_id.router)
 app.include_router(users_user_id.router)
 app.include_router(users.router)
 app.include_router(vitamins_name.router)

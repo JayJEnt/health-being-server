@@ -1,5 +1,5 @@
 """/recipes endpoint"""
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from typing import List
 
@@ -7,6 +7,7 @@ from api.schemas.recipe import RecipePage, RecipeOverview, RecipePageResponse
 from api.routers.diet_types_name_diet_name import get_diet_by_name
 from api.routers.ingredients_name_ingredient_name import get_ingredient_by_name
 from api.utils.operations_on_attributes import pop_attributes, add_attributes
+from authentication.allowed_roles import logged_only
 from database.supabase_connection import supabase_connection
 from config import settings
 from logger import logger
@@ -24,7 +25,7 @@ async def get_recipes():
         recipes_response.append(recipe)
     return recipes_response
 
-@router.post("", response_model=RecipePageResponse)
+@router.post("", response_model=RecipePageResponse, dependencies=[Depends(logged_only)])
 async def create_recipe(recipe: RecipePage):
     recipe, poped_attributes = pop_attributes(recipe, ["diet_type", "ingredients"])
 

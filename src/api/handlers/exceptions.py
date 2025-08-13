@@ -16,6 +16,20 @@ class DemandAdminAccess(BaseHTTPException):
             detail="You need admin access for this action"
         )
 
+class DemandBeingLogged(BaseHTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="You need to be logged in for this action"
+        )
+
+class DemandOwnerAccess(BaseHTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="You can perform this action only at your own data"
+        )
+
 class InvalidToken(BaseHTTPException):
     def __init__(self):
         super().__init__(
