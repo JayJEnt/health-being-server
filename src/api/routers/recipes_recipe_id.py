@@ -2,9 +2,9 @@
 from fastapi import APIRouter
 
 from api.schemas.recipe import RecipePageResponse, RecipePage
-from api.routers.diet_types_name_diet_name import get_diet_by_name
 from api.routers.ingredients_name_ingredient_name import get_ingredient_by_name
 from api.utils.operations_on_attributes import add_attributes, pop_attributes
+from api.utils.crud_operations import delete_element, get_element_by_id, get_element_by_name
 from api.handlers.exceptions import RescourceNotFound
 from database.supabase_connection import supabase_connection
 from config import settings
@@ -16,75 +16,7 @@ router = APIRouter(prefix="/recipes/{recipe_id}", tags=["recipes"])
 
 @router.get("", response_model=RecipePageResponse)
 async def get_recipe(recipe_id: int):
-    recipe_response = supabase_connection.find_by(
-        settings.RECIPE_TABLE,
-        "id",
-        recipe_id,
-    )
-    # TODO: [OPTIMALIZATION] Consider running async
-    
-    try:
-        diet_types_included = supabase_connection.find_by(
-            settings.DIET_TYPE_INCLUDED_TABLE,
-            "recipe_id",
-            recipe_id,
-        )
-        diet_type_response = []
-        if diet_types_included:
-            for diet_type_included in diet_types_included:
-                diet_id = diet_type_included["diet_type_id"]
-                logger.debug(f"diet_id: {diet_id}")
-
-                diet_type = supabase_connection.find_by(
-                    settings.DIET_TYPE_TABLE,
-                    "id",
-                    diet_id,
-                )
-
-                diet_name = diet_type[0]["diet_name"]
-                logger.debug(f"diet_name: {diet_name}")
-                diet_type_response.append({"diet_name": diet_name})
-    except RescourceNotFound:
-        logger.info(f"No diet type found for recipe_id: {recipe_id}")
-
-    # TODO: [OPTIMALIZATION] Consider running async
-    ingredients_included = supabase_connection.find_by(
-        settings.INGREDIENTS_INCLUDED_TABLE,
-        "recipe_id",
-        recipe_id,
-    )
-    ingredients_response = []
-    if ingredients_included:
-        for ingredient_included in ingredients_included:
-            ingredient_id = ingredient_included["ingredient_id"]
-            logger.debug(f"ingredient_id: {ingredient_id}")
-
-            ingredient = supabase_connection.find_by(
-                settings.INGREDIENT_TABLE,
-                "id",
-                ingredient_id,
-            )
-
-            ingredient_name = ingredient[0]["name"]
-            logger.debug(
-                f"ingredient_name: {ingredient_name},   "
-                f"amount: {ingredient_included["amount"]},  "
-                f"measure_unit: {ingredient_included["measure_unit"]}"
-            )
-            ingredients_response.append(
-                {
-                    "name": ingredient_name,
-                    "amount": ingredient_included["amount"],
-                    "measure_unit": ingredient_included["measure_unit"]
-                }
-            )
-            
-    attributes = [{"diet_type": diet_type_response}, {"ingredients": ingredients_response}]
-    recipe_response = add_attributes(
-        recipe_response[0],
-        attributes
-    )
-    return recipe_response
+    return await get_element_by_id("recipes", recipe_id)
 
 @router.put("", response_model=RecipePageResponse)
 async def update_recipe(recipe_id: int, recipe: RecipePage):
@@ -112,7 +44,7 @@ async def update_recipe(recipe_id: int, recipe: RecipePage):
         if diet_type:
             for diet in diet_type:
                 try:
-                    exists = exists = await get_diet_by_name(diet["diet_name"])
+                    exists = exists = await get_element_by_name("diet_type", diet["diet_name"])
                 except RescourceNotFound:
                     exists = None
                     logger.error(f"Diet: {diet["diet_name"]} hasn't been recognized")
@@ -176,29 +108,4 @@ async def update_recipe(recipe_id: int, recipe: RecipePage):
 
 @router.delete("")
 async def delete_recipe(recipe_id: int):
-    try:
-        supabase_connection.delete_by(
-            settings.INGREDIENTS_INCLUDED_TABLE,
-            "recipe_id",
-            recipe_id,
-        )
-    except RescourceNotFound:
-        logger.info(f"No ingredients found attached to this recipe_id {recipe_id}")
-    try:
-        supabase_connection.delete_by(
-            settings.DIET_TYPE_INCLUDED_TABLE,
-            "recipe_id",
-            recipe_id,
-        )
-    except RescourceNotFound:
-        logger.info(f"No diet type found attached to this recipe_id {recipe_id}")
-    try:
-        recipe = supabase_connection.delete_by(
-            settings.RECIPE_TABLE,
-            "id",
-            recipe_id,
-        )
-    except RescourceNotFound:
-        logger.info(f"Recipe_id: {recipe_id} is not figuring in database!")
-        raise RescourceNotFound
-    return recipe
+    return await delete_element("recipes", recipe_id)

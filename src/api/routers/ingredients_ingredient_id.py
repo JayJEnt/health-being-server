@@ -2,10 +2,9 @@
 from fastapi import APIRouter, Depends
 
 from api.schemas.ingredient import IngredientCreate, IngredientResponse
-from api.routers.vitamins.vitamins_name import get_vitamin_by_name
 from api.utils.operations_on_attributes import pop_attributes, add_attributes
+from api.utils.crud_operations import delete_element, get_element_by_id, get_element_by_name
 from authentication.allowed_roles import admin_only
-from api.handlers.exceptions import RescourceNotFound
 from database.supabase_connection import supabase_connection
 from config import settings
 from logger import logger
@@ -16,45 +15,7 @@ router = APIRouter(prefix="/ingredients/{ingredient_id}", tags=["ingredients"])
 
 @router.get("", response_model=IngredientResponse)
 async def get_ingredient(ingredient_id: int):
-    ingredient_response = supabase_connection.find_by(
-        settings.INGREDIENT_TABLE,
-        "id",
-        ingredient_id,
-    )
-
-    try:
-        vitamins_included = supabase_connection.find_by(
-            settings.VITAMINS_INCLUDED_TABLE,
-            "ingredient_id",
-            ingredient_id,
-        )
-        vitamins_response = []
-        if vitamins_included:
-            for vitamin_included in vitamins_included:
-                vitamin_id = vitamin_included["vitamin_id"]
-                logger.debug(f"vitamin_id: {vitamin_id}")
-
-                vitamin = supabase_connection.find_by(
-                    settings.VITAMIN_TABLE,
-                    "id",
-                    vitamin_id,
-                )
-
-                vitamin_name = vitamin[0]["name"]
-                logger.debug(f"vitamin_name: {vitamin_name}")
-                vitamins_response.append({
-                    "name": vitamin_name,
-                    "id": vitamin_id
-                })
-
-        attributes = [{"vitamins": vitamins_response}]
-        ingredient_response = add_attributes(
-            ingredient_response[0],
-            attributes
-        )
-    except RescourceNotFound:
-        logger.info("There were no linked vitamins to this ingredient")
-    return ingredient_response
+    return await get_element_by_id("ingredients", ingredient_id)
 
 @router.put("", response_model=IngredientResponse, dependencies=[Depends(admin_only)])
 async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
@@ -78,7 +39,7 @@ async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
     if vitamins:
         for vitamin in vitamins:
             try:
-                exists = await get_vitamin_by_name(vitamin["name"])
+                exists = await get_element_by_name("vitamins", vitamin["name"])
             except:
                 exists = None
                 logger.error(f"Vitamin: {vitamin["name"]} hasn't been recognized.")
@@ -105,15 +66,4 @@ async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
 
 @router.delete("", dependencies=[Depends(admin_only)])
 async def delete_ingredient(ingredient_id: int):
-    supabase_connection.delete_by(
-        settings.VITAMINS_INCLUDED_TABLE,
-        "ingredient_id",
-        ingredient_id,
-    )
-
-    ingredient = supabase_connection.delete_by(
-        settings.INGREDIENT_TABLE,
-        "id",
-        ingredient_id,
-    )
-    return ingredient
+    return await delete_element("ingredients", ingredient_id)

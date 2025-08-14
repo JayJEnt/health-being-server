@@ -5,9 +5,7 @@ from contextlib import asynccontextmanager
 from datetime import datetime as dt
 
 from api.routers import (
-    diet_types_diet_type_id,
     diet_types,
-    diet_types_name_diet_name,
     images,
     ingredients_ingredient_id,
     ingredients,
@@ -18,13 +16,9 @@ from api.routers import (
     recipes_search_phrase,
     recipes,
     token_data,
-    users_email_email,
-    users_name_username,
-    users_owner_user_id,
     users,
-    users_user_id,
+    vitamins,
 )
-from api.routers.vitamins import vitamins, vitamins_id, vitamins_name
 from logger import logger
 
 
@@ -48,8 +42,6 @@ app = FastAPI(lifespan=None)
 def root_handler():
     return {"message": "Hello!"}
 
-app.include_router(diet_types_name_diet_name.router)
-app.include_router(diet_types_diet_type_id.router)
 app.include_router(diet_types.router)
 app.include_router(images.router)
 app.include_router(ingredients_ingredient_id.router)
@@ -61,13 +53,7 @@ app.include_router(recipes_recipe_id.router)
 app.include_router(recipes_search_phrase.router)
 app.include_router(recipes.router)
 app.include_router(token_data.router)
-app.include_router(users_email_email.router)
-app.include_router(users_name_username.router)
-app.include_router(users_owner_user_id.router)
-app.include_router(users_user_id.router)
 app.include_router(users.router)
-app.include_router(vitamins_name.router)
-app.include_router(vitamins_id.router)
 app.include_router(vitamins.router)
 
 def handler(event, context):
