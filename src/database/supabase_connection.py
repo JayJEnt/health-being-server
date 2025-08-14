@@ -74,6 +74,18 @@ class SupabaseConnection:
         if not response.data:
             return None
         return response.data
+    
+    @error_handler
+    def find_ilike(self, table: str, column: str, value: Any) -> Optional[list[Dict[str, Any]]]:
+        response = (
+            self._client.table(table)
+            .select("*")
+            .ilike(column, f"%{value}%")
+            .execute()
+        )
+        if not response.data:
+            return None
+        return response.data
 
     @error_handler
     def delete_by(self, table: str, column: str, value: Any) -> Optional[Dict[str, Any]]:
