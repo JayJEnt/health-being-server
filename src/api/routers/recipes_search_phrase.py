@@ -16,16 +16,21 @@ router = APIRouter(prefix="/recipes/search/{phrase}", tags=["recipes"])
 # TODO: overall better searching mechanizm needed
 async def search_for_matching_recipes(phrase: str):
     recipes = []
-    
-    # TODO: [OPTIMALIZATION] Consider running async
+
     found_by_title = find_by_title(phrase)
     if found_by_title:
         recipes += found_by_title
 
-    # TODO: [OPTIMALIZATION] Consider running async
     found_by_description = find_by_description(phrase)
     if found_by_description:
-        recipes += found_by_description
+        for recipe_found in found_by_description:
+            duplicated = False
+            for recipe in recipes:
+                if recipe_found["id"] == recipe["id"]:
+                    duplicated = True
+                    break
+            if not duplicated:
+                recipes += recipe_found
 
     recipes_response = []
     for recipe in recipes:
@@ -52,6 +57,3 @@ def find_by_description(phrase: str) -> Optional[List[Recipe]]:
         )
     except:
         return None
-    
-
-# TODO: add ilike/like search method
