@@ -7,7 +7,7 @@ from datetime import timedelta
 
 from api.handlers.exceptions import RescourceNotFound
 from api.routers.oauth2_our import create_user
-from api.routers.users_email_email import get_user_by_email
+from api.utils.get_user_by_email import get_user_by_email
 from authentication.authentication import create_access_token
 from api.schemas.user import User, UserBaseModel
 from config import settings
@@ -63,7 +63,7 @@ async def auth_callback(request: Request):
         user = user_response.json()
 
         try:
-            user_found_dict = await get_user_by_email(user["email"])
+            user_found_dict = get_user_by_email(user["email"])
             user = User(**user_found_dict)
             logger.info(f'Successfully loged {user.email} in.')
         except RescourceNotFound:

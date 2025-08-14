@@ -1,9 +1,10 @@
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, Depends
 from fastapi.responses import Response
 from botocore.exceptions import ClientError
 import boto3
 
 from api.handlers.exceptions import RescourceNotFound, InternalServerError
+from authentication.allowed_roles import logged_only
 from config import settings
 from logger import logger
 
@@ -11,7 +12,7 @@ from logger import logger
 router = APIRouter(prefix="/images", tags=["images"])
 
 
-@router.post("/upload")
+@router.post("/upload", dependencies=[Depends(logged_only)])
 async def upload_image(file: UploadFile = File(...)):
     s3 = boto3.client("s3")
     try:

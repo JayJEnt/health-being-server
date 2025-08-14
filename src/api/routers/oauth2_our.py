@@ -8,7 +8,7 @@ from typing import Annotated
 from api.schemas.user import UserCreate, User
 from api.schemas.token import Token
 from api.utils.operations_on_attributes import pop_attributes, add_attributes
-from api.routers.users_email_email import get_user_by_email
+from api.utils.get_user_by_email import get_user_by_email
 from api.handlers.exceptions import RescourceAlreadyTaken, RescourceNotFound, InvalidCredentials
 from authentication.hash_methods import hash_password
 from authentication.authentication import authenticate_user, create_access_token
@@ -23,7 +23,7 @@ router = APIRouter(prefix="/oauth2_our", tags=["oauth2_our"])
 @router.post("/register", response_model=User)
 async def create_user(user: UserCreate, other_provider: bool=False):
     try:
-        user_response = await get_user_by_email(user.email)
+        user_response = get_user_by_email(user.email)
         logger.error(f"Email: {user.email} is already registered in our base.")
         raise RescourceAlreadyTaken
     
