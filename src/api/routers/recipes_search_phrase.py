@@ -35,7 +35,7 @@ async def search_for_matching_recipes(phrase: str):
 
 def find_by_title(phrase: str) -> Optional[List[Recipe]]:
     try:
-        return supabase_connection.find_by(
+        return supabase_connection.find_ilike(
             settings.RECIPE_TABLE,
             "title",
             phrase
@@ -45,7 +45,7 @@ def find_by_title(phrase: str) -> Optional[List[Recipe]]:
     
 def find_by_description(phrase: str) -> Optional[List[Recipe]]:
     try:
-        return supabase_connection.find_by(
+        return supabase_connection.find_ilike(
             settings.RECIPE_TABLE,
             "description",
             phrase

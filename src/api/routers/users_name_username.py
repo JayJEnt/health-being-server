@@ -12,7 +12,7 @@ router = APIRouter(prefix="/users/name/{username}", tags=["users"])
 
 @router.get("", response_model=User, dependencies=[Depends(admin_only)])
 async def get_user_by_name(username: str):
-    user = supabase_connection.find_by(
+    user = supabase_connection.find_ilike(
         settings.USER_TABLE,
         "username",
         username,
