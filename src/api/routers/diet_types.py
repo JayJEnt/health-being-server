@@ -5,7 +5,7 @@ from typing import List
 
 from api.schemas.diet_type import DietTypeCreate, DietType
 from database.supabase_connection import supabase_connection
-from authentication.allowed_roles import admin_only
+from api.authentication.allowed_roles import admin_only
 from config import settings
 
 

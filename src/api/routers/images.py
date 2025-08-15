@@ -1,10 +1,11 @@
+"""/images router"""
 from fastapi import APIRouter, UploadFile, File, Depends
 from fastapi.responses import Response
 from botocore.exceptions import ClientError
 import boto3
 
 from api.handlers.exceptions import RescourceNotFound, InternalServerError
-from authentication.allowed_roles import logged_only
+from api.authentication.allowed_roles import logged_only
 from config import settings
 from logger import logger
 
@@ -12,6 +13,7 @@ from logger import logger
 router = APIRouter(prefix="/images", tags=["images"])
 
 
+"""/images/upload endpoint"""
 @router.post("/upload", dependencies=[Depends(logged_only)])
 async def upload_image(file: UploadFile = File(...)):
     s3 = boto3.client("s3")
@@ -27,7 +29,11 @@ async def upload_image(file: UploadFile = File(...)):
         if e.response['Error']['Code'] == 'NoSuchKey':
             raise RescourceNotFound
         raise InternalServerError
-    
+
+
+
+
+"""/images/download/{filename} endpoint"""
 @router.post("/download/{filename}")
 async def download_image(filename: str):
     s3 = boto3.client("s3")

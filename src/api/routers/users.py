@@ -5,9 +5,8 @@ from typing import List
 
 from api.schemas.user import User, UserCreate
 from database.supabase_connection import supabase_connection
-from authentication.allowed_roles import admin_only
-from authentication.allowed_roles import logged_only
-from authentication.authentication import validate_token
+from api.authentication.allowed_roles import admin_only, logged_only
+from api.authentication.token import validate_token
 from api.handlers.exceptions import DemandOwnerAccess
 from config import settings
 

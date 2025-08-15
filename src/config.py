@@ -1,13 +1,15 @@
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
-from typing import Optional
+from typing import Optional, List
 import os
 
 
 class Settings(BaseSettings):
-    # AWS
+    """AWS"""
     AWS_REGION: str = "eu-north-1"
+    BUCKET_NAME: str = "health-being-server-api"
     
+    """DATABASE"""
     # SUPABASE SECRETS
     SUPABASE_URL: str = ""
     SUPABASE_KEY: str = ""
@@ -28,15 +30,16 @@ class Settings(BaseSettings):
     VITAMIN_TABLE: str = "vitamins"
     VITAMINS_INCLUDED_TABLE: str = "vitamins_included"
 
-    # S3 IMAGES
-    BUCKET_NAME: str = "health-being-server-api"
-
-    # AUTHENTICATION
+    """AUTHENTICATION"""
+    # OUR SECRETS
     SECRET_KEY: str = ""
     ALGORITHM: str = ""
     ACCESS_TOKEN_EXPIRE: Optional[int] = None
 
-    # OAUTH2 - GOOGLE SECRETS
+    # EXTERNAL PROVIDERS
+    EXTERNAL_PROVIDERS: List[str] = ["google"]
+
+    # GOOGLE SECRETS
     GOOGLE_CLIENT_ID: str = ""
     GOOGLE_CLIENT_SECRET: str = ""
     GOOGLE_REDIRECT_URI: str = ""
@@ -48,11 +51,13 @@ class Settings(BaseSettings):
 
 
 class LocalSettings(Settings):
+    """ENVIORNMENT CONFIG"""
     ENVIRONMENT: str = "local"
     LOG_LEVEL: str = "DEBUG"
     
 
 class RemoteSettings(Settings):
+    """ENVIORNMENT CONFIG"""
     ENVIRONMENT: str = "remote"
     LOG_LEVEL: str = "INFO"
 

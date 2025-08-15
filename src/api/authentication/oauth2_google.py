@@ -1,24 +1,19 @@
-"""/oauth2_google endpoint"""
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import Request, HTTPException
 from fastapi.responses import RedirectResponse
 import httpx
 
 from datetime import timedelta
 
 from api.handlers.exceptions import RescourceNotFound
-from api.routers.oauth2_our import create_user
+from api.authentication.oauth2_our import register
 from api.utils.crud_operations import get_element_by_name
-from authentication.authentication import create_access_token
+from api.authentication.token import create_access_token
 from api.schemas.user import User, UserBaseModel
 from config import settings
 from logger import logger
 
 
-router = APIRouter(prefix="/oauth2_google", tags=["oauth2_google"])
-
-
-@router.get("/login")
-def login():
+async def google_login():
     if not all([settings.GOOGLE_CLIENT_ID, settings.GOOGLE_CLIENT_SECRET, settings.GOOGLE_REDIRECT_URI]):
         raise RuntimeError("Missing required Google OAuth environment variables")
     url = (
@@ -33,8 +28,8 @@ def login():
     logger.debug(f"Full google authentication url with params:\n{url}")
     return RedirectResponse(url)
 
-@router.get("/callback")
-async def auth_callback(request: Request):
+
+async def google_auth_callback(request: Request):
     code = request.query_params.get("code")
     if not code:
         raise HTTPException(status_code=404, detail="Authorization code not found")
@@ -63,7 +58,7 @@ async def auth_callback(request: Request):
         user = user_response.json()
 
         try:
-            user_found_dict = get_element_by_name("user", user["email"])
+            user_found_dict = await get_element_by_name("user", user["email"])
             user = User(**user_found_dict)
             logger.info(f'Successfully loged {user.email} in.')
         except RescourceNotFound:
@@ -76,7 +71,7 @@ async def auth_callback(request: Request):
                 "email": user["email"]
             }
             user_create = UserBaseModel(**user_creat_dict)
-            user: User = await create_user(user_create, other_provider=True)
+            user: User = await register(user_create, other_provider=True)
 
         user_data = {
             "id": user.id,

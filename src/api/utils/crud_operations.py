@@ -1,56 +1,9 @@
 """Util functions allowing basic crud operations"""
 from logger import logger
-from config import settings
 from database.supabase_connection import supabase_connection
+from api.utils.entity_mapping import ENTITY_MAPPING
 from api.utils.operations_on_attributes import pop_attributes, add_attributes
 from api.handlers.exceptions import RescourceNotFound
-
-
-ENTITY_MAPPING = {
-    "recipes": {
-        "table": settings.RECIPE_TABLE,         # Table name
-        "column_name": "title",                 # Column name used to find by name
-        "nested": [                             # All nested attributes
-            {
-                "name": "diet_type",
-                "join_table": settings.DIET_TYPE_INCLUDED_TABLE,
-                "join_keys": ("recipe_id", "diet_type_id"),
-            },
-            {
-                "name": "ingredients",
-                "join_table": settings.INGREDIENTS_INCLUDED_TABLE,
-                "join_keys": ("recipe_id", "ingredient_id"),
-                "extra_fields": ["amount", "measure_unit"],
-            }
-        ]
-    },
-    "ingredients": {
-        "table": settings.INGREDIENT_TABLE,
-        "column_name": "name",
-        "nested": [
-            {
-                "name": "vitamins",
-                "join_table": settings.VITAMINS_INCLUDED_TABLE,
-                "join_keys": ("ingredient_id", "vitamin_id"),
-            }
-        ]
-    },
-    "vitamins": {
-        "table": settings.VITAMIN_TABLE,
-        "column_name": "name",
-        "nested": []
-    },
-    "diet_type": {
-        "table": settings.DIET_TYPE_TABLE,
-        "column_name": "diet_name",
-        "nested": []
-    },
-        "user": {
-        "table": settings.USER_TABLE,
-        "column_name": "username",
-        "nested": []
-    },
-}
 
 
 async def create_element(element_type: str, element_data: dict):
@@ -89,14 +42,16 @@ async def create_element(element_type: str, element_data: dict):
                             join_data[field] = item[field]
 
                     supabase_connection.insert(nested_config["join_table"], join_data)
+                    logger.debug(f"Nested element: {join_data} inserted to table {nested_config["join_table"]}.")
                     attribute_responses.append(exists)
+
         attributes_responses.append({nested_config["name"]: attribute_responses})
 
     element_response = add_attributes(element_response, attributes_responses)
     return element_response
 
 
-async def delete_element(element_type: str, element_id: int):
+async def delete_element_by_id(element_type: str, element_id: int):
     config = ENTITY_MAPPING[element_type]
 
     for nested in config["nested"]:
@@ -183,10 +138,15 @@ async def get_element_by_id(element_type: str, element_id: int):
     return element_data
 
 
-async def get_element_by_name(element_type: str, element_name: str):
+async def get_element_by_name(element_type: str, element_name: str, alternative_name: bool=False):
     config = ENTITY_MAPPING[element_type]
+    if alternative_name:
+        column_name = config["alternative_column_name"]
+    else:
+        column_name = config["column_name"]
+
     return supabase_connection.find_ilike(
         config["table"],
-        config["column_name"],
+        column_name,
         element_name,
-    )
+    )[0]

@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends
 from typing import List
 
 from database.supabase_connection import supabase_connection
-from authentication.allowed_roles import admin_only
-from api.utils.crud_operations import create_element, delete_element, get_element_by_id, get_element_by_name
+from api.authentication.allowed_roles import admin_only
+from api.utils.crud_operations import create_element, delete_element_by_id, get_element_by_id, get_element_by_name
 from api.schemas.vitamin import VitaminCreate, Vitamin
 from config import settings
 
@@ -43,7 +43,7 @@ async def update_vitamin(vitamin_id: int, vitamin: VitaminCreate):
 
 @router.delete("/{vitamin_id}", dependencies=[Depends(admin_only)])
 async def delete_vitamin(vitamin_id: int):
-    return await delete_element("vitamins", vitamin_id)
+    return await delete_element_by_id("vitamins", vitamin_id)
 
 
 
