@@ -3,11 +3,16 @@ from fastapi import APIRouter, Depends
 
 from typing import List
 
-from database.supabase_connection import supabase_connection
 from api.authentication.allowed_roles import admin_only
-from api.utils.crud_operations import create_element, delete_element_by_id, get_element_by_id, get_element_by_name
+from api.crud.crud_operator import (
+    get_elements,
+    create_element,
+    delete_element_by_id,
+    get_element_by_id,
+    get_element_by_name,
+    update_element_by_id,
+)
 from api.schemas.vitamin import VitaminCreate, Vitamin
-from config import settings
 
 
 router = APIRouter(prefix="/vitamins", tags=["vitamins"])
@@ -16,8 +21,7 @@ router = APIRouter(prefix="/vitamins", tags=["vitamins"])
 """/vitamins endpoint"""
 @router.get("", response_model=List[Vitamin])
 async def get_vitamins():
-    vitamins = supabase_connection.fetch_all(settings.VITAMIN_TABLE)
-    return vitamins
+    return await get_elements("vitamins")
 
 @router.post("", response_model=Vitamin, dependencies=[Depends(admin_only)])
 async def create_vitamin(vitamin: VitaminCreate):
@@ -33,13 +37,7 @@ async def get_vitamin(vitamin_id: int):
 
 @router.put("/{vitamin_id}", response_model=Vitamin, dependencies=[Depends(admin_only)])
 async def update_vitamin(vitamin_id: int, vitamin: VitaminCreate):
-    vitamin = supabase_connection.update_by(
-        settings.VITAMIN_TABLE,
-        "id",
-        vitamin_id, 
-        vitamin.model_dump(),
-    )
-    return vitamin
+    return await update_element_by_id("vitamins", vitamin_id, vitamin)
 
 @router.delete("/{vitamin_id}", dependencies=[Depends(admin_only)])
 async def delete_vitamin(vitamin_id: int):

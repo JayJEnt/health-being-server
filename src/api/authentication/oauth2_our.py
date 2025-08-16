@@ -8,8 +8,8 @@ from api.authentication.hash_methods import verify_password, hash_password
 from api.authentication.token import create_access_token
 from api.handlers.exceptions import RescourceAlreadyTaken, RescourceNotFound, InvalidCredentials
 from api.schemas.user import UserOurAuthentication, UserCreate
-from api.utils.crud_operations import get_element_by_name
-from api.utils.operations_on_attributes import pop_attributes, add_attributes
+from api.crud.crud_operator import get_element_by_name
+from api.crud.operations_on_attributes import pop_attributes, add_attributes
 from database.supabase_connection import supabase_connection
 from config import settings
 from logger import logger

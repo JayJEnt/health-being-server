@@ -1,11 +1,12 @@
 """/oauth2 router"""
-from fastapi import APIRouter, Request, Depends, HTTPException  # TODO: create custom exceptions
+from fastapi import APIRouter, Request, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
 from typing import Annotated
 
 from api.authentication.oauth2_google import google_login, google_auth_callback
 from api.authentication.oauth2_our import our_login
+from api.handlers.exceptions import UnknownProvider, InvalidMethod
 from api.schemas.token import Token
 from config import settings
 
@@ -19,9 +20,9 @@ async def login(provider: str):
     if provider == "google":
         return await google_login()
     elif provider == "our":
-        raise HTTPException(status_code=405, detail="Use POST method for our provider")
+        raise InvalidMethod
     else:
-        raise HTTPException(status_code=404, detail="Unknown provider")
+        raise UnknownProvider
 
 
 
@@ -32,7 +33,7 @@ async def auth_callback(provider: str, request: Request):
     if provider == "google":
         return await google_auth_callback(request)
     else:
-        raise HTTPException(status_code=404, detail="Unknown provider")
+        raise UnknownProvider
 
 
 
@@ -46,7 +47,7 @@ async def login_with_form(
     if provider == "our":
         return await our_login(form_data)
     elif provider in settings.EXTERNAL_PROVIDERS:
-        raise HTTPException(status_code=405, detail="Use GET method for external providers")
+        raise InvalidMethod
     else:
-        raise HTTPException(status_code=404, detail="Unknown provider")
+        raise UnknownProvider
 

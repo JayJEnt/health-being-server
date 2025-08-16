@@ -6,7 +6,7 @@ from datetime import timedelta
 
 from api.handlers.exceptions import RescourceNotFound
 from api.authentication.oauth2_our import register
-from api.utils.crud_operations import get_element_by_name
+from api.crud.crud_operator import get_element_by_name
 from api.authentication.token import create_access_token
 from api.schemas.user import User, UserBaseModel
 from config import settings
