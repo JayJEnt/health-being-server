@@ -5,27 +5,14 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from typing import Optional, Annotated
 
-from authentication.hash_methods import verify_password
-from api.schemas.user import UserOurAuthentication
-from api.utils.get_user_by_email import get_user_by_email
-from api.handlers.exceptions import InvalidToken, RescourceNotFound
+from api.crud.crud_operator import get_element_by_name
+from api.handlers.exceptions import InvalidToken
 from config import settings
 from logger import logger
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-async def authenticate_user(email: str, password: str):
-    try:
-        user_dict = get_user_by_email(email)
-    except RescourceNotFound:
-        user_dict = None
-    if not user_dict:
-        return False
-    user = UserOurAuthentication(**user_dict)
-    if not verify_password(password, user.hashed_password):
-        return False
-    return user
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
@@ -52,7 +39,7 @@ async def validate_token(token: Annotated[str, Depends(oauth2_scheme)]):
     except JWTError:
         raise InvalidToken
     
-    user = get_user_by_email(email)
+    user = await get_element_by_name("user", email, alternative_name=True)
     if user is None:
         raise InvalidToken
     

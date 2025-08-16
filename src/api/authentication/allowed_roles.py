@@ -3,7 +3,7 @@ from fastapi import Depends
 from typing import Annotated
 
 from api.schemas.user import User
-from authentication.authentication import validate_token
+from api.authentication.token import validate_token
 from api.handlers.exceptions import DemandAdminAccess, DemandBeingLogged
 
 
