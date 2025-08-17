@@ -3,15 +3,11 @@ from fastapi import APIRouter, Depends
 
 from typing import List
 
-from api.schemas.user import User, UserCreate
+from api.schemas.user import User, UserCreate, FullUser
 from api.authentication.allowed_roles import admin_only, logged_only
-from api.crud.crud_operator import (
-    get_elements,
-    delete_element_by_id,
-    get_element_by_id,
-    get_element_by_name,
-    update_element_by_id,
-)
+from api.crud.get_methods import get_elements, get_element_by_id, get_element_by_name
+from api.crud.delete_methods import delete_element_by_id
+from api.crud.put_methods import update_element_by_id
 from api.authentication.token import validate_token
 from api.handlers.exceptions import DemandOwnerAccess
 
@@ -28,7 +24,7 @@ async def get_users():
 
 
 """/users/{user_id} endpoint"""
-@router.get("/{user_id}", response_model=User, dependencies=[Depends(admin_only)])
+@router.get("/{user_id}", response_model=FullUser, dependencies=[Depends(admin_only)])
 async def get_user(user_id: int):
     return await get_element_by_id("user", user_id)
 
@@ -44,6 +40,12 @@ async def delete_user(user_id: int):
 
 
 """/users/owner/{user_id} endpoint"""
+@router.get("/owner/{user_id}", response_model=FullUser, dependencies=[Depends(logged_only)])
+async def get_owner(user_id: int, requesting_user: User = Depends(validate_token)):
+    if user_id != requesting_user["id"]:
+        raise DemandOwnerAccess
+    return await get_element_by_id("user", user_id)
+
 @router.put("/owner/{user_id}", response_model=User, dependencies=[Depends(logged_only)])
 async def update_owner(user_id: int, user: UserCreate, requesting_user: User = Depends(validate_token)):
     if user_id != requesting_user["id"]:

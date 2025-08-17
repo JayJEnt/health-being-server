@@ -7,7 +7,7 @@ from typing import Annotated
 from api.authentication.oauth2_google import google_login, google_auth_callback
 from api.authentication.oauth2_our import our_login, register
 from api.handlers.exceptions import UnknownProvider, InvalidMethod
-from api.schemas.user import UserCreate, UserOurAuthentication
+from api.schemas.user import UserCreate, UserOurAuth
 from api.schemas.token import Token
 from config import settings
 
@@ -57,6 +57,6 @@ async def login_with_form(
 
 
 """/oauth2/register endpoint"""
-@router.post("/register", response_model=UserOurAuthentication)
+@router.post("/register", response_model=UserOurAuth)
 async def our_register(user: UserCreate):
     return register(user) 

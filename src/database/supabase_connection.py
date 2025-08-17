@@ -3,7 +3,7 @@ from supabase import create_client, Client
 from typing import Any, Dict, Optional
 from functools import wraps
 
-from api.handlers.exceptions import RescourceNotFound, InternalServerError
+from api.handlers.exceptions import ResourceNotFound, InternalServerError
 from config import settings
 from logger import logger
 
@@ -31,11 +31,11 @@ class SupabaseConnection:
                         f"Resource not found - Operation: {func.__name__}, "
                         f"Args: {func_args}"
                     )
-                    raise RescourceNotFound
+                    raise ResourceNotFound
                 logger.info(f"Sucesfully processed.")
                 return result
-            except RescourceNotFound:
-                raise RescourceNotFound
+            except ResourceNotFound:
+                raise ResourceNotFound
             except Exception as ex:
                 logger.error(f"Supabase error: {ex}")
                 raise InternalServerError

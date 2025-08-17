@@ -1,51 +1,22 @@
 """/images router"""
 from fastapi import APIRouter, UploadFile, File, Depends
-from fastapi.responses import Response
-from botocore.exceptions import ClientError
-import boto3
 
-from api.handlers.exceptions import RescourceNotFound, InternalServerError
 from api.authentication.allowed_roles import logged_only
-from config import settings
-from logger import logger
+from database.s3_connection import s3
 
 
 router = APIRouter(prefix="/images", tags=["images"])
 
 
 """/images/upload endpoint"""
-@router.post("/upload", dependencies=[Depends(logged_only)])
-async def upload_image(file: UploadFile = File(...)):
-    s3 = boto3.client("s3")
-    try:
-        s3.put_object(
-            Bucket=settings.BUCKET_NAME,
-            Key=file.filename,
-            Body=await file.read(),
-            ContentType=file.content_type
-        )
-        logger.info("File uploaded successfully.")
-    except ClientError as e:
-        if e.response['Error']['Code'] == 'NoSuchKey':
-            raise RescourceNotFound
-        raise InternalServerError
+@router.post("/upload/{recipe_id}", dependencies=[Depends(logged_only)])
+async def upload_image(recipe_id: int, file: UploadFile = File(...)):
+    await s3.upload(recipe_id, file)
 
 
 
 
 """/images/download/{filename} endpoint"""
-@router.post("/download/{filename}")
-async def download_image(filename: str):
-    s3 = boto3.client("s3")
-    try:
-        response = s3.get_object(Bucket=settings.BUCKET_NAME, Key=filename)
-        file_content = response['Body'].read()
-        return Response(
-            content=file_content,
-            media_type=response['ContentType'],
-            headers={"Content-Disposition": f"attachment; filename={filename}"}
-        )
-    except ClientError as e:
-        if e.response['Error']['Code'] == 'NoSuchKey':
-            raise RescourceNotFound
-        raise InternalServerError
+@router.post("/download/{recipe_id}")
+async def download_image(recipe_id: str):
+    return await s3.download(recipe_id)
