@@ -4,9 +4,9 @@ import httpx
 
 from datetime import timedelta
 
-from api.handlers.exceptions import RescourceNotFound
+from api.handlers.exceptions import ResourceNotFound
 from api.authentication.oauth2_our import register
-from api.crud.crud_operator import get_element_by_name
+from api.crud.get_methods import get_element_by_name
 from api.authentication.token import create_access_token
 from api.schemas.user import User, UserBaseModel
 from config import settings
@@ -61,7 +61,7 @@ async def google_auth_callback(request: Request):
             user_found_dict = await get_element_by_name("user", user["email"])
             user = User(**user_found_dict)
             logger.info(f'Successfully loged {user.email} in.')
-        except RescourceNotFound:
+        except ResourceNotFound:
             logger.info(
                 f"Email: {user['email']} is not registered."
                 f"Starting registeration process..."

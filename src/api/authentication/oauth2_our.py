@@ -6,10 +6,10 @@ from typing import Annotated
 
 from api.authentication.hash_methods import verify_password, hash_password
 from api.authentication.token import create_access_token
-from api.handlers.exceptions import RescourceAlreadyTaken, RescourceNotFound, InvalidCredentials
-from api.schemas.user import UserOurAuthentication, UserCreate
-from api.crud.crud_operator import get_element_by_name
-from api.crud.operations_on_attributes import pop_attributes, add_attributes
+from api.handlers.exceptions import ResourceAlreadyTaken, ResourceNotFound, InvalidCredentials
+from api.schemas.user import UserOurAuth, UserCreate
+from api.crud.get_methods import get_element_by_name
+from api.crud.utils import pop_attributes, add_attributes
 from database.supabase_connection import supabase_connection
 from config import settings
 from logger import logger
@@ -18,11 +18,11 @@ from logger import logger
 async def authenticate_user(email: str, password: str):
     try:
         user_dict = await get_element_by_name("user", email, alternative_name=True)
-    except RescourceNotFound:
+    except ResourceNotFound:
         user_dict = None
     if not user_dict:
         return False
-    user = UserOurAuthentication(**user_dict)
+    user = UserOurAuth(**user_dict)
     if not verify_password(password, user.hashed_password):
         return False
     return user
@@ -49,15 +49,15 @@ async def our_login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
 async def register(user: UserCreate, other_provider: bool=False):
     try:
         user_response = await get_element_by_name("user", user.email)
-        raise RescourceAlreadyTaken
+        raise ResourceAlreadyTaken
     
-    except RescourceAlreadyTaken:
+    except ResourceAlreadyTaken:
         logger.info(
             f"Email: {user.email} is already registered in our base."
             f"Try to log into."
         )
 
-    except RescourceNotFound:
+    except ResourceNotFound:
         if not other_provider:
             user, password = pop_attributes(user, ["password"])
             hashed_password = hash_password(password[0])

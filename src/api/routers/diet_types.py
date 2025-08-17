@@ -5,14 +5,10 @@ from typing import List
 
 from api.schemas.diet_type import DietTypeCreate, DietType
 from api.authentication.allowed_roles import admin_only
-from api.crud.crud_operator import (
-    get_elements,
-    create_element,
-    delete_element_by_id,
-    update_element_by_id,
-    get_element_by_id,
-    get_element_by_name,
-)
+from api.crud.get_methods import get_elements, get_element_by_id, get_element_by_name
+from api.crud.post_methods import create_element
+from api.crud.delete_methods import delete_element_by_id
+from api.crud.put_methods import update_element_by_id
 
 
 router = APIRouter(prefix="/diet_types", tags=["diet_types"])

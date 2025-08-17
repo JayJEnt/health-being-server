@@ -58,18 +58,18 @@ class InvalidCredentials(BaseHTTPException):
             detail="Incorrect username or password"
         )
 
-class RescourceNotFound(BaseHTTPException):
+class ResourceNotFound(BaseHTTPException):
     def __init__(self):
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Requested resource not found"
         )
 
-class RescourceAlreadyTaken(BaseHTTPException):
+class ResourceAlreadyTaken(BaseHTTPException):
     def __init__(self):
         super().__init__(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Conflict, the rescource is already taken"
+            detail="Conflict, the resource is already taken"
         )
 
 class InternalServerError(BaseHTTPException):
