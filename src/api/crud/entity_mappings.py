@@ -54,7 +54,12 @@ ENTITY_MAPPING = {
                 "join_keys": ("ingredient_id", "vitamin_id"),
             }
         ],
-        "nested": [],
+        "nested": [
+            {
+                "name": "ingredients_data",
+                "join_key": "ingredient_id",
+            }
+        ],
         "restricted": [],
     },
     "vitamins": {
@@ -89,6 +94,14 @@ ENTITY_MAPPING = {
     },
     "user_data": {
         "table": settings.USER_DATA_TABLE,
+        "search_columns": [],
+        "column_name": "user_id",
+        "relation": [],
+        "nested": [],
+        "restricted": [],
+    },
+    "ingredients_data": {
+        "table": settings.INGREDIENT_DATA_TABLE,
         "search_columns": [],
         "column_name": "user_id",
         "relation": [],

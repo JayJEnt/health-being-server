@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 
 from typing import List
 
-from api.schemas.user import User, UserCreate, FullUser
+from api.schemas.user import User, UserCreate, UserPostCreate
 from api.authentication.allowed_roles import admin_only, logged_only
 from api.crud.get_methods import get_elements, get_element_by_id, get_element_by_name
 from api.crud.delete_methods import delete_element_by_id
@@ -24,11 +24,11 @@ async def get_users():
 
 
 """/users/{user_id} endpoint"""
-@router.get("/{user_id}", response_model=FullUser, dependencies=[Depends(admin_only)])
+@router.get("/{user_id}", response_model=User, dependencies=[Depends(admin_only)])
 async def get_user(user_id: int):
     return await get_element_by_id("user", user_id)
 
-@router.put("/{user_id}", response_model=User, dependencies=[Depends(admin_only)])
+@router.put("/{user_id}", response_model=UserPostCreate, dependencies=[Depends(admin_only)])
 async def update_user(user_id: int, user: UserCreate):
     return await update_element_by_id("user", user_id, user)
 
@@ -40,21 +40,21 @@ async def delete_user(user_id: int):
 
 
 """/users/owner/{user_id} endpoint"""
-@router.get("/owner/{user_id}", response_model=FullUser, dependencies=[Depends(logged_only)])
+@router.get("/owner/{user_id}", response_model=User, dependencies=[Depends(logged_only)]) # seperated
 async def get_owner(user_id: int, requesting_user: User = Depends(validate_token)):
-    if user_id != requesting_user["id"]:
+    if user_id != requesting_user.id:
         raise DemandOwnerAccess
     return await get_element_by_id("user", user_id)
 
-@router.put("/owner/{user_id}", response_model=User, dependencies=[Depends(logged_only)])
+@router.put("/owner/{user_id}", response_model=UserPostCreate, dependencies=[Depends(logged_only)])
 async def update_owner(user_id: int, user: UserCreate, requesting_user: User = Depends(validate_token)):
-    if user_id != requesting_user["id"]:
+    if user_id != requesting_user.id:
         raise DemandOwnerAccess
     return await update_element_by_id("user", user_id, user)
 
 @router.delete("/owner/{user_id}", dependencies=[Depends(logged_only)])
 async def delete_owner(user_id: int, requesting_user: User = Depends(validate_token)):
-    if user_id != requesting_user["id"]:
+    if user_id != requesting_user.id:
         raise DemandOwnerAccess
     return await delete_element_by_id("user", user_id)
 
@@ -72,4 +72,4 @@ async def get_user_by_name(username: str):
 """/users/email/{email} endpoint"""
 @router.get("/email/{email}", response_model=User, dependencies=[Depends(admin_only)])
 async def get_user_by_email(email: str):
-    return await get_element_by_name("user", email, True)
+    return await get_element_by_name("user", email, alternative_name=True)

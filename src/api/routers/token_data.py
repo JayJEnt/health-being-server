@@ -21,4 +21,4 @@ async def get_token_owner(user: Annotated[User, Depends(validate_token)]):
 """/token_data/admin_role endpoint"""
 @router.get("/admin_role", response_model=bool)
 async def is_user_an_admin(user: Annotated[User, Depends(validate_token)]):
-    return user["role"] == "admin"
+    return user.role == "admin"

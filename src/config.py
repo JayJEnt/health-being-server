@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     PREFERED_RECIPE_TYPE_TABLE: str = "prefered_recipe_type"
     REFRIGERATOR_TABLE: str = "refrigerator"
     INGREDIENT_TABLE: str = "ingredients"
+    INGREDIENT_DATA_TABLE: str = "ingredients_data"
     INGREDIENTS_INCLUDED_TABLE: str = "ingredients_included"
     DIET_TYPE_TABLE: str = "diet_types"
     DIET_TYPE_INCLUDED_TABLE: str = "diet_type_included"

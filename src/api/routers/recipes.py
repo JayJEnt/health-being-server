@@ -3,13 +3,16 @@ from fastapi import APIRouter, Depends
 
 from typing import List
 
-from api.schemas.recipe import RecipePage, RecipeOverview, RecipePageResponse
+from api.schemas.recipe import RecipeCreate, RecipeOverview, RecipeResponse
+from api.schemas.user import User
 from api.crud.get_methods import get_elements, get_element_by_id
 from api.crud.post_methods import create_element
 from api.crud.delete_methods import delete_element_by_id
 from api.crud.put_methods import update_element_by_id
 from api.crud.search_methods import search_elements
+from api.crud.utils import add_attributes
 from api.authentication.allowed_roles import logged_only
+from api.authentication.token import validate_token
 
 
 router = APIRouter(prefix="/recipes", tags=["recipes"])
@@ -20,20 +23,22 @@ router = APIRouter(prefix="/recipes", tags=["recipes"])
 async def get_recipes():
     return await get_elements("recipes", True)
 
-@router.post("", response_model=RecipePageResponse, dependencies=[Depends(logged_only)])
-async def create_recipe(recipe: RecipePage):
+@router.post("", response_model=RecipeResponse)
+async def create_recipe(recipe: RecipeCreate, author: User = Depends(validate_token)):
+    recipe = add_attributes(recipe, [{"owner_id": author.id}])
     return await create_element("recipes", recipe)
 
 
 
 
 """/recipes/{recipe_id} endpoint"""
-@router.get("/{recipe_id}", response_model=RecipePageResponse)
+@router.get("/{recipe_id}", response_model=RecipeResponse)
 async def get_recipe(recipe_id: int):
     return await get_element_by_id("recipes", recipe_id)
 
-@router.put("/{recipe_id}", response_model=RecipePageResponse)
-async def update_recipe(recipe_id: int, recipe: RecipePage):
+@router.put("/{recipe_id}", response_model=RecipeResponse, dependencies=[Depends(logged_only)])
+async def update_recipe(recipe_id: int, recipe: RecipeCreate, author: User = Depends(validate_token)):
+    recipe = add_attributes(recipe, [{"owner_id": author.id}])
     return await update_element_by_id("recipes", recipe_id, recipe)
 
 @router.delete("/{recipe_id}")

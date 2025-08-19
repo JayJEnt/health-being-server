@@ -3,6 +3,24 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 
 
+"""UserData models"""
+class UserDataCreate(BaseModel):
+    weight: Optional[float] = None
+    height: Optional[float] = None
+    age: Optional[int] = None
+    activity_level: Optional[str] = None  # e.g. sedentary, lightly active, moderately active, very active
+    silhouette: Optional[str] = None  # e.g. ectomorph, mesomorph, endomorph
+
+
+
+
+"""UserData response models"""
+class UserData(UserDataCreate):
+    user_id: int
+
+
+
+
 """User models"""
 class UserBaseModel(BaseModel):
     username: str
@@ -10,7 +28,12 @@ class UserBaseModel(BaseModel):
 
 class UserCreate(UserBaseModel):
     password: str
+    user_data: Optional[UserDataCreate]
 
+
+
+
+"""User models"""
 class User(UserBaseModel):
     id: int
     role: str = "user"
@@ -21,20 +44,6 @@ class UserOurAuth(User):
 
 
 
-"""UserData models"""
-class UserDataCreate(BaseModel):
-    weight: Optional[float] = None
-    height: Optional[float] = None
-    age: Optional[int] = None
-    activity_level: Optional[str] = None  # e.g. sedentary, lightly active, moderately active, very active
-    sillouette: Optional[str] = None  # e.g. ectomorph, mesomorph, endomorph
-
-class UserData(UserDataCreate):
-    user_id: int
-
-
-
-
-"""FullUser models"""
-class FullUser(User, UserDataCreate):
-    pass
+"""User postcreate models"""
+class UserPostCreate(User):
+    user_data: Optional[UserData]
