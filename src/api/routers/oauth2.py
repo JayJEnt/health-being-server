@@ -7,16 +7,16 @@ from typing import Annotated
 from api.authentication.oauth2_google import google_login, google_auth_callback
 from api.authentication.oauth2_our import our_login, register
 from api.handlers.exceptions import UnknownProvider, InvalidMethod
-from api.schemas.user import UserCreate, UserOurAuth
+from api.schemas.user import UserCreate, User
 from api.schemas.token import Token
 from config import settings
 
 
-router = APIRouter(prefix="/oauth2/{provider}", tags=["oauth2"])
+router = APIRouter(prefix="/oauth2", tags=["oauth2"])
 
 
 """/oauth2/{external_provider}/login endpoint"""
-@router.get("/login")
+@router.get("/{provider}/login")
 async def login(provider: str):
     if provider == "google":
         return await google_login()
@@ -29,7 +29,7 @@ async def login(provider: str):
 
 
 """/oauth2/{external_provider}/callback endpoint"""
-@router.get("/callback", response_model=Token)
+@router.get("/{provider}/callback", response_model=Token)
 async def auth_callback(provider: str, request: Request):
     if provider == "google":
         return await google_auth_callback(request)
@@ -40,7 +40,7 @@ async def auth_callback(provider: str, request: Request):
 
 
 """/oauth2/our/login endpoint"""
-@router.post("/login", response_model=Token)
+@router.post("/our/login", response_model=Token)
 async def login_with_form(
     provider: str,
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
@@ -56,7 +56,7 @@ async def login_with_form(
 
 
 
-"""/oauth2/register endpoint"""
-@router.post("/register", response_model=UserOurAuth)
+"""/oauth2/our/register endpoint"""
+@router.post("/our/register", response_model=User)
 async def our_register(user: UserCreate):
-    return register(user) 
+    return await register(user) 

@@ -9,6 +9,7 @@ from api.authentication.token import create_access_token
 from api.handlers.exceptions import ResourceAlreadyTaken, ResourceNotFound, InvalidCredentials
 from api.schemas.user import UserOurAuth, UserCreate
 from api.crud.get_methods import get_element_by_name
+from api.crud.post_methods import create_element
 from api.crud.utils import pop_attributes, add_attributes
 from database.supabase_connection import supabase_connection
 from config import settings
@@ -26,6 +27,7 @@ async def authenticate_user(email: str, password: str):
     if not verify_password(password, user.hashed_password):
         return False
     return user
+
 
 async def our_login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     user = await authenticate_user(form_data.username, form_data.password)
@@ -46,9 +48,10 @@ async def our_login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
+
 async def register(user: UserCreate, other_provider: bool=False):
     try:
-        user_response = await get_element_by_name("user", user.email)
+        user_response = await get_element_by_name("user", user.email, alternative_name=True)
         raise ResourceAlreadyTaken
     
     except ResourceAlreadyTaken:
@@ -65,10 +68,8 @@ async def register(user: UserCreate, other_provider: bool=False):
         else:
             user = add_attributes(user, [{"role": "user"}])
         
-        user_response = supabase_connection.insert(
-            settings.USER_TABLE,
-            user,
-        )
+
+        user_response = await create_element("user", user)
         logger.info(
             f"Email: {user['email']} is successfully registered."
             f"Now you can log into."

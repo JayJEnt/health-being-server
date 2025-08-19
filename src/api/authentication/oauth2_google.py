@@ -58,7 +58,7 @@ async def google_auth_callback(request: Request):
         user = user_response.json()
 
         try:
-            user_found_dict = await get_element_by_name("user", user["email"])
+            user_found_dict = await get_element_by_name("user", user["email"], alternative_name=True)
             user = User(**user_found_dict)
             logger.info(f'Successfully loged {user.email} in.')
         except ResourceNotFound:

@@ -1,6 +1,6 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
-from api.crud.entity_mapping import ENTITY_MAPPING
+from api.crud.entity_mappings import ENTITY_MAPPING
 from api.handlers.exceptions import ResourceNotFound
 
 
@@ -39,6 +39,7 @@ async def delete_relationships(element_type: str, element_id: int):
         except ResourceNotFound:
             logger.info(f"No {relation['name']} entries found for {relation['join_keys'][0]}={element_id}")
 
+
 async def delete_nested(element_type: str, element_id: int):
     """Function delets a records in nested tables"""
     config = ENTITY_MAPPING[element_type]
@@ -49,6 +50,6 @@ async def delete_nested(element_type: str, element_id: int):
                 ENTITY_MAPPING[nested["name"]]["table"],
                 nested["join_key"],
                 element_id
-            )[0]
+            )
         except ResourceNotFound:
             logger.info(f"No {nested["name"]} entries found for {nested["join_key"]}={element_id}")

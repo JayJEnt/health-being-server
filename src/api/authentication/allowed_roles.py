@@ -8,8 +8,9 @@ from api.handlers.exceptions import DemandAdminAccess, DemandBeingLogged
 
 
 async def admin_only(user: Annotated[User, Depends(validate_token)]):
-    if user["role"] != "admin":
+    if user.role != "admin":
         raise DemandAdminAccess
+
 
 async def logged_only(user: Annotated[User, Depends(validate_token)]):
     if not user:

@@ -7,6 +7,7 @@ from typing import Optional, Annotated
 
 from api.crud.get_methods import get_element_by_name
 from api.handlers.exceptions import InvalidToken
+from api.schemas.user import User
 from config import settings
 from logger import logger
 
@@ -42,5 +43,5 @@ async def validate_token(token: Annotated[str, Depends(oauth2_scheme)]):
     user = await get_element_by_name("user", email, alternative_name=True)
     if user is None:
         raise InvalidToken
-    
+    user = User(**user)
     return user

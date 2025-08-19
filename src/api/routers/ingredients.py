@@ -19,7 +19,7 @@ router = APIRouter(prefix="/ingredients", tags=["ingredients"])
 async def get_ingredients():
     return await get_elements("ingredients")
 
-@router.post("", response_model=IngredientResponse, dependencies=[Depends(admin_only)])
+@router.post("", response_model=IngredientResponse)
 async def create_ingredient(ingredient: IngredientCreate):
     return await create_element("ingredients", ingredient)
 
@@ -35,7 +35,7 @@ async def get_ingredient(ingredient_id: int):
 async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
     return await update_element_by_id("ingredients", ingredient_id, ingredient)
 
-@router.delete("/{ingredient_id}", dependencies=[Depends(admin_only)])
+@router.delete("/{ingredient_id}")
 async def delete_ingredient(ingredient_id: int):
     return await delete_element_by_id("ingredients", ingredient_id)
 

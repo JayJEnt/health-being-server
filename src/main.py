@@ -8,6 +8,7 @@ from datetime import datetime as dt
 from api.routers import (
     diet_types,
     images,
+    ingredients_data,
     ingredients,
     oauth2,
     recipes,
@@ -50,6 +51,7 @@ def root_handler():
 
 app.include_router(diet_types.router)
 app.include_router(images.router)
+app.include_router(ingredients_data.router)
 app.include_router(ingredients.router)
 app.include_router(oauth2.router)
 app.include_router(recipes.router)

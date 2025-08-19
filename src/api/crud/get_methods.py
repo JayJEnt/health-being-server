@@ -1,6 +1,6 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
-from api.crud.entity_mapping import ENTITY_MAPPING
+from api.crud.entity_mappings import ENTITY_MAPPING
 from api.crud.utils import pop_attributes, add_attributes
 from api.handlers.exceptions import ResourceNotFound
 
@@ -50,14 +50,14 @@ async def get_element_by_id(element_type: str, element_id: int):
     element_data = element_data[0]
 
     attributes_to_add = await get_relationships(element_type, element_id)
-    attributes_to_add += await get_nested(element_type, element_id)
+    # attributes_to_add += await get_nested(element_type, element_id)
     element_data = add_attributes(element_data, attributes_to_add)
     return element_data
 
 
 async def get_relationships(element_type: str, element_id: int) -> list:
         """
-        Function get a data from foreign tables to get element with it's relation attributes.
+        Function get a data from relationships/join tables (N:M) to get element with it's relation attributes.
             Returns: list of attributes from foreign tables
         """
         config = ENTITY_MAPPING[element_type]
@@ -83,7 +83,7 @@ async def get_relationships(element_type: str, element_id: int) -> list:
 
 async def get_items(relation: dict, join_table_items: list) -> list:
     """
-    Function get a items from foreign table and merge them with join table items
+    Function get a items from foreign table and merge them with relationships/join table items
         Returns: list of items of 1 foreign attribute
     """
     items_to_add = []
@@ -158,6 +158,6 @@ async def get_element_by_name(element_type: str, element_name: str, alternative_
         column_name,
         element_name,
     )
-    if not elements:
+    if not elements or elements[0][column_name].lower()!=element_name.lower():
         raise ResourceNotFound
     return elements[0]
