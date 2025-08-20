@@ -30,6 +30,12 @@ class UserCreate(UserBaseModel):
     password: str
     user_data: Optional[UserDataCreate]
 
+class UserUpdate(UserBaseModel):
+    password: str
+
+class UserUpdateAdmin(UserUpdate):
+    role: str
+
 
 
 

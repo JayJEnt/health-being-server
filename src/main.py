@@ -50,15 +50,22 @@ def root_handler():
     return {"message": "Hello!"}
 
 app.include_router(diet_types.router)
+app.include_router(diet_types.admin_router)
 app.include_router(images.router)
-app.include_router(ingredients_data.router)
+app.include_router(ingredients_data.admin_router)
 app.include_router(ingredients.router)
+app.include_router(ingredients.admin_router)
 app.include_router(oauth2.router)
 app.include_router(recipes.router)
+app.include_router(recipes.admin_router)
 app.include_router(token_data.router)
 app.include_router(users_data.router)
+app.include_router(users_data.admin_router)
 app.include_router(users.router)
+app.include_router(users.admin_router)
 app.include_router(vitamins.router)
+app.include_router(vitamins.admin_router)
+
 
 def handler(event, context):
     logger.debug(f"Event: {event}")

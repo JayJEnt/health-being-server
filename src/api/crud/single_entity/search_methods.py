@@ -1,8 +1,8 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
-from api.crud.entity_mappings import ENTITY_MAPPING
+from api.crud.entity_mapping import ENTITY_MAPPING
 from api.handlers.exceptions import ResourceNotFound
-from api.crud.get_methods import restrict_data
+from api.crud.utils import restrict_data
 
 
 """SEARCH ELEMENTS BY PHRASE"""

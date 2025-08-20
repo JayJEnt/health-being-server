@@ -1,37 +1,8 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
-from api.crud.entity_mappings import ENTITY_MAPPING
-from api.crud.utils import pop_attributes, add_attributes
+from api.crud.entity_mapping import ENTITY_MAPPING
+from api.crud.utils import add_attributes
 from api.handlers.exceptions import ResourceNotFound
-
-
-"""GET ALL ELEMENTS"""
-async def get_elements(element_type: str, restrict: bool=False):
-    """Function get all records in element table."""
-    config = ENTITY_MAPPING[element_type]
-
-    elements_response = supabase_connection.fetch_all(config["table"])
-    if restrict:
-        elements_response = await restrict_data(element_type, elements_response)
-
-    return elements_response
-
-
-async def restrict_data(element_type: str, elements: list):
-    """Function that filter data and drop restriction keys."""
-    config = ENTITY_MAPPING[element_type]
-
-    filtered_response = []
-    for element in elements:
-        filtered_element, popped_attributes = pop_attributes(
-            element,
-            [n["name"] for n in config["restricted"]]
-        )
-        filtered_response.append(filtered_element)
-
-    return filtered_response
-
-
 
 
 """GET ELEMENT BY ID"""
@@ -49,13 +20,13 @@ async def get_element_by_id(element_type: str, element_id: int):
         raise ResourceNotFound
     element_data = element_data[0]
 
-    attributes_to_add = await get_relationships(element_type, element_id)
-    # attributes_to_add += await get_nested(element_type, element_id)
+    attributes_to_add = await get_relationships_and_related_tables(element_type, element_id)
+    attributes_to_add += await get_nested_table_items(element_type, element_id)
     element_data = add_attributes(element_data, attributes_to_add)
     return element_data
 
 
-async def get_relationships(element_type: str, element_id: int) -> list:
+async def get_relationships_and_related_tables(element_type: str, element_id: int) -> list:
         """
         Function get a data from relationships/join tables (N:M) to get element with it's relation attributes.
             Returns: list of attributes from foreign tables
@@ -75,16 +46,16 @@ async def get_relationships(element_type: str, element_id: int) -> list:
                 attributes_to_add.append({relation["name"]: []})
                 continue
 
-            related_items = await get_items(relation, join_table_items)
+            related_items = await get_related_tables_items(relation, join_table_items)
             attributes_to_add.append({relation["name"]: related_items})
 
         return attributes_to_add
 
 
-async def get_items(relation: dict, join_table_items: list) -> list:
+async def get_related_tables_items(relation: dict, join_table_items: list) -> list:
     """
     Function get a items from foreign table and merge them with relationships/join table items
-        Returns: list of items of 1 foreign attribute
+        Returns: list of items of 1 foreign table
     """
     items_to_add = []
     for join_table_item in join_table_items:
@@ -96,7 +67,7 @@ async def get_items(relation: dict, join_table_items: list) -> list:
             )
         except ResourceNotFound:
             logger.error(
-                f"Couldn't find item: {relation["name"]} in {ENTITY_MAPPING[relation["name"]]["table"]}."
+                f"Couldn't find item: {relation["name"]} in {ENTITY_MAPPING[relation["name"]]["table"]}. "
                 f"The previously found relationship is matching not exisiting item!"
             )
             raise
@@ -115,7 +86,7 @@ async def get_items(relation: dict, join_table_items: list) -> list:
     return items_to_add
 
 
-async def get_nested(element_type: str, element_id: int) -> list:
+async def get_nested_table_items(element_type: str, element_id: int) -> list:
         """
         Function get a data from nested tables (1:1) to get element with it's relation attributes.
             Returns: list of attributes from nested tables
@@ -139,25 +110,3 @@ async def get_nested(element_type: str, element_id: int) -> list:
                 attributes_to_add.append({key: value})
 
         return attributes_to_add
-
-
-
-
-"""GET ELEMENT BY NAME"""
-async def get_element_by_name(element_type: str, element_name: str, alternative_name: bool=False):
-    """Function get a record in element table by element's name."""
-    config = ENTITY_MAPPING[element_type]
-
-    if alternative_name:
-        column_name = config["alternative_column_name"]
-    else:
-        column_name = config["column_name"]
-
-    elements = supabase_connection.find_ilike(
-        config["table"],
-        column_name,
-        element_name,
-    )
-    if not elements or elements[0][column_name].lower()!=element_name.lower():
-        raise ResourceNotFound
-    return elements[0]

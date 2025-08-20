@@ -1,6 +1,6 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
-from api.crud.entity_mappings import ENTITY_MAPPING
+from api.crud.entity_mapping import ENTITY_MAPPING
 from api.handlers.exceptions import ResourceNotFound
 
 

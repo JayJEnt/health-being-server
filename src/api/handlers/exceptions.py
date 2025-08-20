@@ -44,13 +44,6 @@ class UnknownProvider(BaseHTTPException):
             detail="Unknown provider"
         )
 
-class InvalidMethod(BaseHTTPException):
-    def __init__(self):
-        super().__init__(
-            status_code=status.HTTP_405_METHOD_NOT_ALLOWED,
-            detail="This method is not supported for requested provider"
-        )
-
 class InvalidCredentials(BaseHTTPException):
     def __init__(self):
         super().__init__(

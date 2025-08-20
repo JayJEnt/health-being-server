@@ -1,5 +1,6 @@
 """Util functions operating on pydantic models and their attributes"""
 from logger import logger
+from api.crud.entity_mapping import ENTITY_MAPPING
 
 
 def pop_attributes(pydantic_model, attributes):
@@ -26,6 +27,7 @@ def pop_attributes(pydantic_model, attributes):
 
     return pydantic_model, poped_attributes
 
+
 def add_attributes(pydantic_model, attributes):
     """Function for adding attributes to pydantic_model
     args:   pydantic_model [json]
@@ -45,3 +47,18 @@ def add_attributes(pydantic_model, attributes):
         logger.debug(f"Pydantic_model after new attribute: {pydantic_model}")
 
     return pydantic_model
+
+
+async def restrict_data(element_type: str, elements: list):
+    """Function that filter data and drop restriction keys."""
+    config = ENTITY_MAPPING[element_type]
+
+    filtered_response = []
+    for element in elements:
+        filtered_element, popped_attributes = pop_attributes(
+            element,
+            [n["name"] for n in config["restricted"]]
+        )
+        filtered_response.append(filtered_element)
+
+    return filtered_response

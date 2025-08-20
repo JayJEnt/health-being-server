@@ -1,8 +1,8 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
-from api.crud.entity_mappings import ENTITY_MAPPING
+from api.crud.entity_mapping import ENTITY_MAPPING
 from api.crud.utils import pop_attributes, add_attributes
-from api.crud.get_methods import get_element_by_name
+from api.crud.single_entity.get_methods import get_element_by_name
 from api.handlers.exceptions import ResourceNotFound
 
 

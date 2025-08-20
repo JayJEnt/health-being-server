@@ -6,10 +6,9 @@ from typing import Annotated
 
 from api.authentication.oauth2_google import google_login, google_auth_callback
 from api.authentication.oauth2_our import our_login, register
-from api.handlers.exceptions import UnknownProvider, InvalidMethod
+from api.handlers.exceptions import UnknownProvider
 from api.schemas.user import UserCreate, User
 from api.schemas.token import Token
-from config import settings
 
 
 router = APIRouter(prefix="/oauth2", tags=["oauth2"])
@@ -20,8 +19,6 @@ router = APIRouter(prefix="/oauth2", tags=["oauth2"])
 async def login(provider: str):
     if provider == "google":
         return await google_login()
-    elif provider == "our":
-        raise InvalidMethod
     else:
         raise UnknownProvider
 
@@ -42,15 +39,9 @@ async def auth_callback(provider: str, request: Request):
 """/oauth2/our/login endpoint"""
 @router.post("/our/login", response_model=Token)
 async def login_with_form(
-    provider: str,
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ):
-    if provider == "our":
-        return await our_login(form_data)
-    elif provider in settings.EXTERNAL_PROVIDERS:
-        raise InvalidMethod
-    else:
-        raise UnknownProvider
+    return await our_login(form_data)
     
 
 
