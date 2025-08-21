@@ -38,6 +38,11 @@ ENTITY_MAPPING = {
                 "join_table": settings.INGREDIENTS_INCLUDED_TABLE,
                 "join_keys": ("recipe_id", "ingredient_id"),
                 "extra_fields": ["amount", "measure_unit"],
+            },
+            {
+                "name": "user",
+                "join_table": settings.RECIPE_FAVOURITE,
+                "join_keys": ("recipe_id", "user_id"),
             }
         ],
         "nested": [],
@@ -83,12 +88,18 @@ ENTITY_MAPPING = {
         "search_columns": [],
         "column_name": "username",
         "alternative_column_name": "email",
-        "relation": [],
+        "relation": [
+            {
+                "name": "recipes",
+                "join_table": settings.RECIPE_FAVOURITE,
+                "join_keys": ("user_id", "recipe_id"),
+            }
+        ],
         "nested": [
             {
                 "name": "user_data",
                 "join_key": "user_id",
-            }
+            },
         ],
         "restricted": [],
     },

@@ -98,6 +98,19 @@ class SupabaseConnection:
         if not response.data:
             return None
         return response.data[0]
+    
+    @error_handler
+    def delete_join_record(self, table: str, first_column: str, first_value: Any, second_column: str, second_value: Any) -> Optional[Dict[str, Any]]:
+        response = (
+            self._client.table(table)
+            .delete()
+            .eq(first_column, first_value)
+            .eq(second_column, second_value)
+            .execute()
+        )
+        if not response.data:
+            return None
+        return response.data[0]
 
     @error_handler
     def update_by(self, table: str, column: str, value: Any, updates: dict) -> Optional[Dict[str, Any]]:

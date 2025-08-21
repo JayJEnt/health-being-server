@@ -57,7 +57,7 @@ async def restrict_data(element_type: str, elements: list):
     for element in elements:
         filtered_element, popped_attributes = pop_attributes(
             element,
-            [n["name"] for n in config["restricted"]]
+            [name for name in config["restricted"]]
         )
         filtered_response.append(filtered_element)
 

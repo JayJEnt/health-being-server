@@ -11,6 +11,7 @@ from api.routers import (
     ingredients_data,
     ingredients,
     oauth2,
+    recipe_favourite,
     recipes,
     token_data,
     users_data,
@@ -56,6 +57,7 @@ app.include_router(ingredients_data.admin_router)
 app.include_router(ingredients.router)
 app.include_router(ingredients.admin_router)
 app.include_router(oauth2.router)
+app.include_router(recipe_favourite.router)
 app.include_router(recipes.router)
 app.include_router(recipes.admin_router)
 app.include_router(token_data.router)
