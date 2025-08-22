@@ -21,8 +21,6 @@ async def logged_only(user: Annotated[User, Depends(validate_token)]):
 async def owner_only(element_type: str, element_id: int, user: User):
         user_id_names_mapping = {
             "recipes": "owner_id",
-            "user": "id",
-            "user_data": "user_id",
         }
         element_response = await get_element_by_id(element_type, element_id)
         if element_response[user_id_names_mapping[element_type]] != user.id:

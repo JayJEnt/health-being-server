@@ -9,14 +9,8 @@ def pop_attributes(pydantic_model, attributes):
             attributes [list[str]]
     return: pydantic_model, poped_attributes
     """
-    if not isinstance(pydantic_model, dict):
-        try:
-            pydantic_model = pydantic_model.model_dump()
-        except:
-            logger.error(f"Invalid input: {pydantic_model}")
-            raise TypeError
+    pydantic_model = pydantic_to_dict(pydantic_model)
     poped_attributes = []
-
     for attribute in attributes:
         poped_attribut = pydantic_model.get(f"{attribute}", "")
         logger.debug(f"Poped_attribut: {poped_attribut}")
@@ -34,12 +28,7 @@ def add_attributes(pydantic_model, attributes):
             attributes [list[dict]]
     return: pydantic_model
     """
-    if not isinstance(pydantic_model, dict):
-        try:
-            pydantic_model = pydantic_model.model_dump()
-        except:
-            logger.error(f"Invalid input: {pydantic_model}")
-            raise TypeError
+    pydantic_model = pydantic_to_dict(pydantic_model)
     for attribute in attributes:
         logger.debug(f"Attribute about to add: {attribute}")
         for key, value in attribute.items():
@@ -49,7 +38,7 @@ def add_attributes(pydantic_model, attributes):
     return pydantic_model
 
 
-async def restrict_data(element_type: str, elements: list):
+def restrict_data(element_type: str, elements: list):
     """Function that filter data and drop restriction keys."""
     config = ENTITY_MAPPING[element_type]
 
@@ -62,3 +51,13 @@ async def restrict_data(element_type: str, elements: list):
         filtered_response.append(filtered_element)
 
     return filtered_response
+
+
+def pydantic_to_dict(pydantic_model):
+    if not isinstance(pydantic_model, dict):
+        try:
+            pydantic_model = pydantic_model.model_dump()
+        except:
+            logger.error(f"Invalid input: {pydantic_model}")
+            raise TypeError
+    return pydantic_model

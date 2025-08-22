@@ -57,7 +57,13 @@ ENTITY_MAPPING = {
                 "name": "vitamins",
                 "join_table": settings.VITAMINS_INCLUDED_TABLE,
                 "join_keys": ("ingredient_id", "vitamin_id"),
-            }
+            },
+            {
+                "name": "user",
+                "join_table": settings.PREFERED_INGREDIENTS_TABLE,
+                "join_keys": ("ingredient_id", "user_id"),
+                "extra_fields": ["preference"],
+            },
         ],
         "nested": [
             {
@@ -79,7 +85,13 @@ ENTITY_MAPPING = {
         "table": settings.DIET_TYPE_TABLE,
         "search_columns": [],
         "column_name": "diet_name",
-        "relation": [],
+        "relation": [
+            {
+                "name": "user",
+                "join_table": settings.PREFERED_RECIPE_TYPE_TABLE,
+                "join_keys": ("type_id", "user_id"),
+            },
+        ],
         "nested": [],
         "restricted": [],
     },
@@ -93,7 +105,23 @@ ENTITY_MAPPING = {
                 "name": "recipes",
                 "join_table": settings.RECIPE_FAVOURITE,
                 "join_keys": ("user_id", "recipe_id"),
-            }
+            },
+            {
+                "name": "user",
+                "join_table": settings.FOLLOW_TABLE,
+                "join_keys": ("user_id", "followed_user_id"),
+            },
+            {
+                "name": "ingredients",
+                "join_table": settings.PREFERED_INGREDIENTS_TABLE,
+                "join_keys": ("user_id", "ingredient_id"),
+                "extra_fields": ["preference"],
+            },
+            {
+                "name": "diet_type",
+                "join_table": settings.PREFERED_RECIPE_TYPE_TABLE,
+                "join_keys": ("user_id", "type_id"),
+            },
         ],
         "nested": [
             {
@@ -117,6 +145,47 @@ ENTITY_MAPPING = {
         "column_name": "user_id",
         "relation": [],
         "nested": [],
+        "restricted": [],
+    },
+    "ingredients_refrigerator": {
+        "table": settings.INGREDIENT_TABLE,
+        "search_columns": [],
+        "column_name": "name",
+        "relation": [
+            {
+                "name": "user_refrigerator",
+                "join_table": settings.PREFERED_INGREDIENTS_TABLE,
+                "join_keys": ("ingredient_id", "user_id"),
+                "extra_fields": ["preference"],
+            },
+        ],
+        "nested": [
+            {
+                "name": "ingredients_data",
+                "join_key": "ingredient_id",
+            }
+        ],
+        "restricted": [],
+    },
+    "user_refrigerator": {
+        "table": settings.USER_TABLE,
+        "search_columns": [],
+        "column_name": "username",
+        "alternative_column_name": "email",
+        "relation": [
+            {
+                "name": "ingredients_refrigerator",
+                "join_table": settings.REFRIGERATOR_TABLE,
+                "join_keys": ("user_id", "ingredient_id"),
+                "extra_fields": ["amount"],
+            },
+        ],
+        "nested": [
+            {
+                "name": "user_data",
+                "join_key": "user_id",
+            },
+        ],
         "restricted": [],
     },
 }

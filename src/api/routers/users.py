@@ -18,25 +18,19 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 """/users/{user_id} endpoint"""
 @router.get("/{user_id}", response_model=UserPostCreate, dependencies=[Depends(logged_only)])
-async def get_owner(user_id: int, requesting_user: User = Depends(validate_token)):
-    owner_only("user", user_id, requesting_user)
-    
-    return await get_element_by_id("user", user_id)
+async def get_owner(requesting_user: User = Depends(validate_token)):
+    return await get_element_by_id("user", requesting_user.id)
 
 
 @router.put("/{user_id}", response_model=User, dependencies=[Depends(logged_only)])
-async def update_owner(user_id: int, user: UserUpdate, requesting_user: User = Depends(validate_token)):
-    owner_only("user", user_id, requesting_user)
-    
+async def update_owner(user: UserUpdate, requesting_user: User = Depends(validate_token)):
     user = await hash_pass_for_user(user)
-    return await update_element_by_id("user", user_id, user)
+    return await update_element_by_id("user", requesting_user.id, user)
 
 
 @router.delete("/{user_id}", dependencies=[Depends(logged_only)])
-async def delete_owner(user_id: int, requesting_user: User = Depends(validate_token)):
-    owner_only("user", user_id, requesting_user)
-    
-    return await delete_element_by_id("user", user_id)
+async def delete_owner(requesting_user: User = Depends(validate_token)):
+    return await delete_element_by_id("user", requesting_user.id)
 
 
 

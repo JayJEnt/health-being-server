@@ -58,6 +58,13 @@ class ResourceNotFound(BaseHTTPException):
             detail="Requested resource not found"
         )
 
+class ReferencesToItself(BaseHTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_405_METHOD_NOT_ALLOWED,
+            detail="Referencing to itself is not allowed."
+        )
+
 class ResourceAlreadyTaken(BaseHTTPException):
     def __init__(self):
         super().__init__(

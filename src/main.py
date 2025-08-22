@@ -7,10 +7,12 @@ from datetime import datetime as dt
 
 from api.routers import (
     diet_types,
+    follows,
     images,
     ingredients_data,
     ingredients,
     oauth2,
+    prefered_ingredients,
     recipe_favourite,
     recipes,
     token_data,
@@ -52,11 +54,13 @@ def root_handler():
 
 app.include_router(diet_types.router)
 app.include_router(diet_types.admin_router)
+app.include_router(follows.router)
 app.include_router(images.router)
 app.include_router(ingredients_data.admin_router)
 app.include_router(ingredients.router)
 app.include_router(ingredients.admin_router)
 app.include_router(oauth2.router)
+app.include_router(prefered_ingredients.router)
 app.include_router(recipe_favourite.router)
 app.include_router(recipes.router)
 app.include_router(recipes.admin_router)

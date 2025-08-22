@@ -14,10 +14,10 @@ from api.schemas.token import Token
 router = APIRouter(prefix="/oauth2", tags=["oauth2"])
 
 
-"""/oauth2/{external_provider}/login endpoint"""
-@router.get("/{provider}/login")
-async def login(provider: str):
-    if provider == "google":
+"""/oauth2_{external_provider}/login endpoint"""
+@router.get("_{external_provider}/login")
+async def login(external_provider: str):
+    if external_provider == "google":
         return await google_login()
     else:
         raise UnknownProvider
@@ -25,19 +25,16 @@ async def login(provider: str):
 
 
 
-"""/oauth2/{external_provider}/callback endpoint"""
-@router.get("/{provider}/callback", response_model=Token)
-async def auth_callback(provider: str, request: Request):
-    if provider == "google":
-        return await google_auth_callback(request)
-    else:
-        raise UnknownProvider
+"""/oauth2_{external_provider}/callback endpoint"""
+@router.get("_google/callback", response_model=Token) #TODO CHANGE URL AFTER UPDATE
+async def auth_callback(request: Request):
+    return await google_auth_callback(request)
 
 
 
 
-"""/oauth2/our/login endpoint"""
-@router.post("/our/login", response_model=Token)
+"""/oauth2_our/login endpoint"""
+@router.post("_our/login", response_model=Token)
 async def login_with_form(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ):
@@ -47,7 +44,7 @@ async def login_with_form(
 
 
 
-"""/oauth2/our/register endpoint"""
-@router.post("/our/register", response_model=User)
+"""/oauth2_our/register endpoint"""
+@router.post("/our_register", response_model=User)
 async def our_register(user: UserCreate):
     return await register(user) 

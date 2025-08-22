@@ -1,8 +1,9 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
 from api.crud.single_entity.get_methods import get_element_by_name
+from api.crud.utils import pydantic_to_dict
 from api.crud.entity_mapping import ENTITY_MAPPING
-from api.handlers.exceptions import ResourceNotFound
+from api.handlers.exceptions import ResourceNotFound, ReferencesToItself
 
 
 async def create_relationship(
@@ -23,6 +24,8 @@ async def create_relationship(
     Returns:
         dict: Related item data (with extra fields if any).
     """
+    related_data = pydantic_to_dict(related_data)
+
     config = ENTITY_MAPPING[element_type]
 
     relation_config = next(
@@ -32,15 +35,13 @@ async def create_relationship(
     if not relation_config:
         raise ValueError(f"Relation '{relation_name}' not defined for element '{element_type}'")
 
+    # if data reference to itself drop operation with warning
+    if element_type == relation_name and element_id == related_data["id"]:
+        logger.error(f"Element {element_type} with id={element_id} tries to reference to itself.")
+        raise ReferencesToItself
+
     related_config = ENTITY_MAPPING[relation_config['name']]
     related_column = related_config['column_name']
-
-    if not isinstance(related_data, dict):
-        try:
-            related_data = related_data.model_dump()
-        except:
-            logger.error(f"Invalid input: {related_data}")
-            raise TypeError
 
     try:
         exists = await get_element_by_name(relation_config['name'], related_data[related_column])

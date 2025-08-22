@@ -16,7 +16,7 @@ async def get_elements(element_type: str, restrict: bool=False):
 
     elements_response = supabase_connection.fetch_all(config["table"])
     if restrict:
-        elements_response = await restrict_data(element_type, elements_response)
+        elements_response = restrict_data(element_type, elements_response)
 
     return elements_response
 

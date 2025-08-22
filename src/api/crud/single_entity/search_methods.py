@@ -35,6 +35,6 @@ async def search_elements(element_type: str, phrase: str, restrict: bool=False):
         raise ResourceNotFound
 
     if restrict:
-        found_elements = await restrict_data(element_type, found_elements)
+        found_elements = restrict_data(element_type, found_elements)
 
     return found_elements
