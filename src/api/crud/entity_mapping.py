@@ -154,9 +154,9 @@ ENTITY_MAPPING = {
         "relation": [
             {
                 "name": "user_refrigerator",
-                "join_table": settings.PREFERED_INGREDIENTS_TABLE,
+                "join_table": settings.REFRIGERATOR_TABLE,
                 "join_keys": ("ingredient_id", "user_id"),
-                "extra_fields": ["preference"],
+                "extra_fields": ["amount"],
             },
         ],
         "nested": [
