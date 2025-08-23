@@ -61,3 +61,40 @@ def pydantic_to_dict(pydantic_model):
             logger.error(f"Invalid input: {pydantic_model}")
             raise TypeError
     return pydantic_model
+
+
+def get_main_config(element_type: str):
+    """Get a config for main entity table"""
+    config = ENTITY_MAPPING.get(element_type, None)
+
+    if not config:
+        raise ValueError(f"Table '{config}' not defined")
+    
+    return config
+
+
+def get_relation_config(element_type: str, relation_name: str):
+    """Get a config for relation/join table"""
+    config = get_main_config(element_type)
+
+    relation_config = next(
+        (rel for rel in config["relation"] if rel["name"] == relation_name),
+        None
+    )
+    if not relation_config:
+        raise ValueError(f"Relation '{relation_name}' not defined for element '{element_type}'")
+    
+    return relation_config
+
+
+def get_related_config(element_type: str, relation_name: str):
+    """Get a config for related entity table"""
+    relation_config = get_relation_config(element_type, relation_name)
+
+    related_config = ENTITY_MAPPING.get(relation_config['name'], None)
+
+    if not related_config:
+        logger.error(f"Related '{relation_name}' config not defined in ENTITY_MAPPING")
+        raise ValueError
+    
+    return relation_config

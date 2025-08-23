@@ -1,20 +1,29 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
-from api.crud.entity_mapping import ENTITY_MAPPING
+from api.crud.utils import get_relation_config
 from api.handlers.exceptions import ResourceNotFound
 
 
 
-async def delete_relationship(element_type: str, element_id: int, relation_name: str, relation_id: int):
-    """Function delets a records in relationship/join tables"""
-    config = ENTITY_MAPPING[element_type]
+async def delete_relationship(
+        element_type: str,
+        element_id: int,
+        relation_name: str,
+        relation_id: int
+) -> dict:
+    """
+    Delete relationship between an element and one related item.
 
-    relation_config = next(
-        (rel for rel in config["relation"] if rel["name"] == relation_name),
-        None
-    )
-    if not relation_config:
-        raise ValueError(f"Relation '{relation_name}' not defined for element '{element_type}'")
+    Args:
+        element_type (str): The type of the main element (e.g., "recipes").
+        element_id (int): The ID of the main element.
+        relation_name (str): The name of the relation (e.g., "ingredients").
+        relation_id (int): The ID of the relation element.
+
+    Returns:
+        dict: Relationship item data.
+    """
+    relation_config = get_relation_config (element_type, relation_name)
     
     try:
         element = supabase_connection.delete_join_record(

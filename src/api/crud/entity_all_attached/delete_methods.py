@@ -19,7 +19,7 @@ async def delete_element_by_id(element_type: str, element_id: int):
             element_id
         )
     except ResourceNotFound:
-        logger.info(f"{element_type.capitalize()} with id={element_id} not found in database")
+        logger.info(f"{element_type} with id={element_id} not found in database")
         raise
 
     return element

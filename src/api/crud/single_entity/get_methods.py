@@ -1,18 +1,21 @@
 from database.supabase_connection import supabase_connection
-from api.crud.entity_mapping import ENTITY_MAPPING
 from api.handlers.exceptions import ResourceNotFound
-from api.crud.utils import restrict_data
+from api.crud.utils import restrict_data, get_main_config
 from logger import logger
 
 
+async def get_elements(element_type: str, restrict: bool=False) -> dict:
+    """
+    Get all records in element table.
 
-"""GET ALL ELEMENTS"""
-async def get_elements(element_type: str, restrict: bool=False):
+    Args:
+        element_type (str): The type of the element (e.g., "recipes").
+        restrict (bool): The optional argument, that allows to drop some of the attributes.
+
+    Returns:
+        dict: Element item response data from database.
     """
-    Function get all records in element table.
-    restrict is optional and allows to drop attributes from list in ENTITY_MAPPING.
-    """
-    config = ENTITY_MAPPING[element_type]
+    config = get_main_config(element_type)
 
     elements_response = supabase_connection.fetch_all(config["table"])
     if restrict:
@@ -21,15 +24,19 @@ async def get_elements(element_type: str, restrict: bool=False):
     return elements_response
 
 
-
-
-"""GET ELEMENT BY NAME"""
-async def get_element_by_name(element_type: str, element_name: str, alternative_name: bool=False):
+async def get_element_by_name(element_type: str, element_name: str, alternative_name: bool=False) -> dict:
     """
-    Function get a record in element table by element's name.
-    alternative_name is optional and allows to pick diffrent search column, which is stored in ENTITY_MAPPING
+    Get a record in element table by element's name.
+
+    Args:
+        element_type (str): The type of the element (e.g., "recipes").
+        element_name (str): The name of the element (e.g., "Marchewka").
+        alternative_name (bool): The optional argument, that allows to search by diffrent column name.
+
+    Returns:
+        dict: Element item response data from database.
     """
-    config = ENTITY_MAPPING[element_type]
+    config = get_main_config(element_type)
 
     if alternative_name:
         column_name = config["alternative_column_name"]
@@ -47,12 +54,18 @@ async def get_element_by_name(element_type: str, element_name: str, alternative_
     return elements[0]
 
 
+async def get_element_by_id(element_type: str, element_id: int) -> dict:
+    """
+    Get a record in element table by it's id.
 
+    Args:
+        element_type (str): The type of the element (e.g., "recipes").
+        element_id (int): The ID of the element.
 
-"""GET ELEMENT BY ID"""
-async def get_element_by_id(element_type: str, element_id: int):
-    """Function get element by id from element table."""
-    config = ENTITY_MAPPING[element_type]
+    Returns:
+        dict: Element item response data from database.
+    """
+    config = get_main_config(element_type)
 
     element_data = supabase_connection.find_by(
         config["table"],

@@ -50,7 +50,7 @@ async def create_relationships(element_type: str, element_id: int, popped_attrib
                     try:
                         exists = await get_element_by_name(relation_config['name'], item[item_name])
                     except ResourceNotFound:
-                        logger.error(f"{relation_config['name'].capitalize()} '{item[item_name]}' not recognized")
+                        logger.error(f"{relation_config['name']} '{item[item_name]}' not recognized")
                         continue
 
                     related_item = {**exists}

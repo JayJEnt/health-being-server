@@ -25,7 +25,7 @@ async def update_element_by_id(element_type: str, element_id: int, element_data:
         )
         logger.debug(f"Element: {element_data} in table {config['table']} got updated.")
     except ResourceNotFound:
-        logger.info(f"{element_type.capitalize()} with id={element_id} not found in database")
+        logger.info(f"{element_type} with id={element_id} not found in database")
         raise
 
     attributes_to_add = await update_relationships(element_type, element_id, popped_attributes)
@@ -58,7 +58,7 @@ async def update_relationships(element_type: str, element_id: int, popped_attrib
                     try:
                         exists = await get_element_by_name(relation['name'], item[item_name])
                     except ResourceNotFound:
-                        logger.error(f"{relation['name'].capitalize()} '{item[item_name]}' not recognized")
+                        logger.error(f"{relation['name']} '{item[item_name]}' not recognized")
                         continue
 
                     related_item = {**exists}

@@ -1,12 +1,21 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
-from api.crud.entity_mapping import ENTITY_MAPPING
+from api.crud.utils import get_main_config
 
 
-"""CREATE ELEMENT"""
-async def create_element(element_type: str, element_data: dict):
-    """Function creates a record in element table."""
-    config = ENTITY_MAPPING[element_type]
+async def create_element(element_type: str, element_data: dict) -> dict:
+    """
+    Create a record in element table.
+
+    Args:
+        element_type (str): The type of the element (e.g., "recipes").
+        element_data (dict): The element item data
+        (e.g., {"username": "test_user", "email": "test_user@example.com", "password": "123"}).
+
+    Returns:
+        dict: Element item response data from database.
+    """
+    config = get_main_config(element_type)
 
     element_data = supabase_connection.insert(
         config["table"],
