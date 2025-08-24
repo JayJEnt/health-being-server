@@ -1,6 +1,6 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
-from api.crud.utils import get_main_config
+from api.crud.utils import get_main_config, pydantic_to_dict
 
 
 async def create_element(element_type: str, element_data: dict) -> dict:
@@ -16,6 +16,7 @@ async def create_element(element_type: str, element_data: dict) -> dict:
         dict: Element item response data from database.
     """
     config = get_main_config(element_type)
+    element_data = pydantic_to_dict(element_data)
 
     element_data = supabase_connection.insert(
         config["table"],

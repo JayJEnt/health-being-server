@@ -20,7 +20,7 @@ async def delete_element_by_id(element_type: str, element_id: int) -> dict:
     try:
         element = supabase_connection.delete_by(
             config["table"],
-            "id",
+            config["id"],
             element_id
         )
     except ResourceNotFound:

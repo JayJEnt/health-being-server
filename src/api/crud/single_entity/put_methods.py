@@ -1,6 +1,6 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
-from api.crud.utils import get_main_config
+from api.crud.utils import get_main_config, pydantic_to_dict
 from api.handlers.exceptions import ResourceNotFound
 
 
@@ -18,11 +18,12 @@ async def update_element_by_id(element_type: str, element_id: int, element_data:
         dict: Element item response data from database.
     """
     config = get_main_config(element_type)
+    element_data = pydantic_to_dict(element_data)
 
     try:
         element_data = supabase_connection.update_by(
             config["table"],
-            "id",
+            config["id"],
             element_id,
             element_data,
         )

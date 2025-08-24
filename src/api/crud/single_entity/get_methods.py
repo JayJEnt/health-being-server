@@ -24,7 +24,11 @@ async def get_elements(element_type: str, restrict: bool=False) -> dict:
     return elements_response
 
 
-async def get_element_by_name(element_type: str, element_name: str, alternative_name: bool=False) -> dict:
+async def get_element_by_name(
+    element_type: str,
+    element_name: str,
+    alternative_name: bool=False
+) -> dict:
     """
     Get a record in element table by element's name.
 
@@ -69,7 +73,7 @@ async def get_element_by_id(element_type: str, element_id: int) -> dict:
 
     element_data = supabase_connection.find_by(
         config["table"],
-        "id",
+        config["id"],
         element_id,
     )
     if not element_data:

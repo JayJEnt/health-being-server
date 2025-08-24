@@ -8,7 +8,7 @@ from api.authentication.allowed_roles import admin_only
 from api.crud.single_entity.get_methods import get_elements, get_element_by_id, get_element_by_name
 from api.crud.single_entity.post_methods import create_element
 from api.crud.single_entity.delete_methods import delete_element_by_id
-from api.crud.entity_with_relations.put_methods import update_element_by_id
+from api.crud.single_entity.put_methods import update_element_by_id
 
 
 router = APIRouter(prefix="/diet_types", tags=["diet_types"])

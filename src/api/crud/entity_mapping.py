@@ -19,6 +19,7 @@ entity_name: {
     entity restricted attributes
 }
 """
+# TODO: FIX DOC
 from config import settings
 
 
@@ -27,6 +28,7 @@ ENTITY_MAPPING = {
         "table": settings.RECIPE_TABLE,
         "search_columns": ["title", "description"],
         "column_name": "title",
+        "id": "id",
         "relation": [
             {
                 "name": "diet_type",
@@ -52,6 +54,7 @@ ENTITY_MAPPING = {
         "table": settings.INGREDIENT_TABLE,
         "search_columns": [],
         "column_name": "name",
+        "id": "id",
         "relation": [
             {
                 "name": "vitamins",
@@ -77,6 +80,7 @@ ENTITY_MAPPING = {
         "table": settings.VITAMIN_TABLE,
         "search_columns": [],
         "column_name": "name",
+        "id": "id",
         "relation": [],
         "nested": [],
         "restricted": [],
@@ -85,6 +89,7 @@ ENTITY_MAPPING = {
         "table": settings.DIET_TYPE_TABLE,
         "search_columns": [],
         "column_name": "diet_name",
+        "id": "id",
         "relation": [
             {
                 "name": "user",
@@ -99,6 +104,7 @@ ENTITY_MAPPING = {
         "table": settings.USER_TABLE,
         "search_columns": [],
         "column_name": "username",
+        "id": "id",
         "alternative_column_name": "email",
         "relation": [
             {
@@ -135,6 +141,7 @@ ENTITY_MAPPING = {
         "table": settings.USER_DATA_TABLE,
         "search_columns": [],
         "column_name": "user_id",
+        "id": "user_id",
         "relation": [],
         "nested": [],
         "restricted": [],
@@ -142,7 +149,8 @@ ENTITY_MAPPING = {
     "ingredients_data": {
         "table": settings.INGREDIENT_DATA_TABLE,
         "search_columns": [],
-        "column_name": "user_id",
+        "column_name": "ingredient_id",
+        "id": "ingredient_id",
         "relation": [],
         "nested": [],
         "restricted": [],
@@ -151,6 +159,7 @@ ENTITY_MAPPING = {
         "table": settings.INGREDIENT_TABLE,
         "search_columns": [],
         "column_name": "name",
+        "id": "id",
         "relation": [
             {
                 "name": "user_refrigerator",
@@ -171,6 +180,7 @@ ENTITY_MAPPING = {
         "table": settings.USER_TABLE,
         "search_columns": [],
         "column_name": "username",
+        "id": "id",
         "alternative_column_name": "email",
         "relation": [
             {

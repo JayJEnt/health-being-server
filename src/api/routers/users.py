@@ -6,9 +6,9 @@ from typing import List
 from api.schemas.user import User, UserUpdate, UserUpdateAdmin, UserPostCreate
 from api.authentication.allowed_roles import admin_only, logged_only, owner_only
 from api.crud.single_entity.get_methods import get_elements, get_element_by_name
-from api.crud.entity_all_attached.get_methods import get_element_by_id
-from api.crud.entity_all_attached.delete_methods import delete_element_by_id
-from api.crud.entity_with_relations.put_methods import update_element_by_id
+from api.crud.single_entity.put_methods import update_element_by_id
+from api.crud.many_entites.get_methods import get_all
+from api.crud.many_entites.delete_methods import delete_all
 from api.authentication.token import validate_token
 from api.authentication.oauth2_our import hash_pass_for_user, hash_pass_for_admin
 
@@ -19,7 +19,7 @@ router = APIRouter(prefix="/users", tags=["users"])
 """/users/{user_id} endpoint"""
 @router.get("/{user_id}", response_model=UserPostCreate, dependencies=[Depends(logged_only)])
 async def get_owner(requesting_user: User = Depends(validate_token)):
-    return await get_element_by_id("user", requesting_user.id)
+    return await get_all("user", requesting_user.id)
 
 
 @router.put("/{user_id}", response_model=User, dependencies=[Depends(logged_only)])
@@ -30,7 +30,7 @@ async def update_owner(user: UserUpdate, requesting_user: User = Depends(validat
 
 @router.delete("/{user_id}", dependencies=[Depends(logged_only)])
 async def delete_owner(requesting_user: User = Depends(validate_token)):
-    return await delete_element_by_id("user", requesting_user.id)
+    return await delete_all("user", requesting_user.id)
 
 
 
@@ -49,7 +49,7 @@ async def get_users():
 """/admin/users/{user_id} endpoint"""
 @admin_router.get("/{user_id}", response_model=UserPostCreate, dependencies=[Depends(admin_only)])
 async def get_user(user_id: int):
-    return await get_element_by_id("user", user_id)
+    return await get_all("user", user_id)
 
 
 @admin_router.put("/{user_id}", response_model=User, dependencies=[Depends(admin_only)])
@@ -60,7 +60,7 @@ async def update_user(user_id: int, user: UserUpdateAdmin):
 
 @admin_router.delete("/{user_id}", dependencies=[Depends(admin_only)])
 async def delete_user(user_id: int):
-    return await delete_element_by_id("user", user_id)
+    return await delete_all("user", user_id)
 
 
 

@@ -2,8 +2,8 @@
 from fastapi import APIRouter, Depends
 
 from api.schemas.user import User
-from api.crud.relations_nm.post_methods import create_relationship
-from api.crud.relations_nm.delete_methods import delete_relationship
+from api.crud.relation.post_methods import create_relationship
+from api.crud.relation.delete_methods import delete_relationship
 from api.authentication.allowed_roles import logged_only
 from api.authentication.token import validate_token
 

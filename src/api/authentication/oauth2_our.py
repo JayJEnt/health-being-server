@@ -9,7 +9,7 @@ from api.authentication.token import create_access_token
 from api.handlers.exceptions import ResourceAlreadyTaken, ResourceNotFound, InvalidCredentials
 from api.schemas.user import UserOurAuth, UserCreate, UserUpdateAdmin
 from api.crud.single_entity.get_methods import get_element_by_name
-from api.crud.entity_all_attached.post_methods import create_element
+from api.crud.single_entity.post_methods import create_element
 from api.crud.utils import pop_attributes, add_attributes
 from config import settings
 from logger import logger
@@ -76,11 +76,11 @@ async def register(user: UserCreate, other_provider: bool=False):
 
 async def hash_pass_for_user(user: UserCreate):
     user, password = pop_attributes(user, ["password"])
-    hashed_password = hash_password(password[0])
+    hashed_password = hash_password(password.get("password", ""))
     return add_attributes(user, [{"hashed_password": hashed_password},{"role": "user"}])
 
 
 async def hash_pass_for_admin(user: UserUpdateAdmin):
     user, password = pop_attributes(user, ["password"])
-    hashed_password = hash_password(password[0])
+    hashed_password = hash_password(password.get("password", ""))
     return add_attributes(user, [{"hashed_password": hashed_password}])
