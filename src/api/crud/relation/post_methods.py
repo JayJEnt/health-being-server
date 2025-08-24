@@ -24,10 +24,6 @@ async def create_relationship(
         dict: Related item data (with extra fields if any).
     """
     related_data = pydantic_to_dict(related_data)
-    if element_type == relation_name and element_id == related_data["id"]:
-        logger.error(f"Element {element_type} with id={element_id} tries to reference to itself.")
-        raise ReferencesToItself
-
     relation_config = get_relation_config(element_type, relation_name)
     related_config = get_related_config(element_type, relation_name)
 
@@ -36,6 +32,10 @@ async def create_relationship(
     except ResourceNotFound:
         logger.error(f"{relation_config['name']} '{related_data[related_config['column_name']]}' not recognized")
         return None
+
+    if element_type == relation_name and element_id == exists["id"]:
+        logger.error(f"Element {element_type} with id={element_id} tries to reference to itself.")
+        raise ReferencesToItself
 
     related_item = {**exists}
     join_data = {

@@ -1,24 +1,34 @@
 """/prefered_ingredients router"""
 from fastapi import APIRouter, Depends
 
-from api.schemas.user import User
-from api.crud.relation.post_methods import create_relationship
-from api.crud.relation.delete_methods import delete_relationship
-from api.crud.utils import add_attributes
+from api.crud.crud_operations import CrudOperations
 from api.authentication.allowed_roles import logged_only
 from api.authentication.token import validate_token
+from api.schemas.prefered_ingredients import CreatePreferedIngredients
+from api.schemas.user import User
 
 
-router = APIRouter(prefix="/prefered_ingredients/{ingredient_id}", tags=["prefered_ingredients"])
+router = APIRouter(prefix="/prefered_ingredients", tags=["prefered_ingredients"])
+crud = CrudOperations("user")
+
+
+"""/prefered_ingredients endpoint"""
+@router.get("", dependencies=[Depends(logged_only)])
+async def get_all_relations_prefered_ingredients(requesting_user: User = Depends(validate_token)):
+    return await crud.get_relationships("ingredients", requesting_user.id)
+
+
+@router.post("", dependencies=[Depends(logged_only)])
+async def create_relation_prefered_ingredients(prefered_ingredient: CreatePreferedIngredients, requesting_user: User = Depends(validate_token)):
+    return await crud.post_relationship(requesting_user.id, "ingredients", prefered_ingredient)
 
 
 """/prefered_ingredients/{ingredient_id} endpoint"""
-@router.post("", dependencies=[Depends(logged_only)])
-async def create_relation_prefered_ingredients(ingredient_id: int, preference: str, requesting_user: User = Depends(validate_token)):
-    requesting_user = add_attributes(requesting_user, [{"preference": preference}])
-    return await create_relationship("ingredients", ingredient_id, "user", requesting_user)
+@router.get("/{ingredient_id}", dependencies=[Depends(logged_only)])
+async def get_relation_prefered_ingredients(ingredient_id: int, requesting_user: User = Depends(validate_token)):
+    return await crud.get_relationship(requesting_user.id, "ingredients", ingredient_id)
 
 
-@router.delete("", dependencies=[Depends(logged_only)])
+@router.delete("/{ingredient_id}", dependencies=[Depends(logged_only)])
 async def delete_relation_prefered_ingredients(ingredient_id: int, requesting_user: User = Depends(validate_token)):
-    return await delete_relationship("ingredients", ingredient_id, "user", requesting_user.id)
+    return await crud.delete_relationship(requesting_user.id, "ingredients", ingredient_id)

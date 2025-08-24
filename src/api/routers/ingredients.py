@@ -5,9 +5,9 @@ from typing import List
 
 from api.schemas.ingredient import IngredientCreate, Ingredient, IngredientResponse, IngredientUpdate, IngredientUpdateResponse
 from api.crud.single_entity.get_methods import get_elements, get_element_by_name, get_element_by_id
-from api.crud.many_entites.post_methods import create_all
-from api.crud.many_entites.delete_methods import delete_all
-from api.crud.many_entites.put_methods import update_all
+from api.crud.many_entities.post_methods import create_all
+from api.crud.many_entities.delete_methods import delete_all
+from api.crud.many_entities.put_methods import update_all
 from api.authentication.allowed_roles import admin_only
 
 

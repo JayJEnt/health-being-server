@@ -41,8 +41,8 @@ async def get_relationship(
 
 async def get_relationships(
     element_type: str,
+    relation_name: str,
     element_id: int,
-    relations: list,
 ) -> list:
     """
     Get relationships between an element and one related item by relation item id's.
@@ -55,17 +55,16 @@ async def get_relationships(
     Returns:
         list: List of relationship items data.
     """
-    for relation_name in relations:
-        relation_config = get_relation_config(element_type, relation_name)
-        try:
-            element = supabase_connection.find_by(
-                relation_config["join_table"],
-                relation_config["join_keys"][1],
-                element_id,
-            )
-        except ResourceNotFound:
-            logger.info(f"No {relation_config['name']} entries found for {relation_config['join_keys'][1]}={element_id}")
-            raise
+    relation_config = get_relation_config(element_type, relation_name)
+    try:
+        element = supabase_connection.find_by(
+            relation_config["join_table"],
+            relation_config["join_keys"][0],
+            element_id,
+        )
+    except ResourceNotFound:
+        logger.info(f"No {relation_config['name']} entries found for {relation_config['join_keys'][0]}={element_id}")
+        raise
 
     return element
 
