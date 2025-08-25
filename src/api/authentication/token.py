@@ -28,14 +28,13 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 async def validate_token(token: Annotated[str, Depends(oauth2_scheme)]):
-    logger.info("Validate token")
+    logger.info("Validating token...")
     try:
         logger.debug(f"Token: {token}")
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         logger.debug(f"Got payload: {payload}")
         email: str = payload.get("sub")
         if email is None:
-            logger.debug(f"Email: {email}")
             raise InvalidToken
     except JWTError:
         raise InvalidToken
