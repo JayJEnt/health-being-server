@@ -19,6 +19,7 @@ entity_name: {
     entity restricted attributes
 }
 """
+# TODO: FIX DOC
 from config import settings
 
 
@@ -27,6 +28,7 @@ ENTITY_MAPPING = {
         "table": settings.RECIPE_TABLE,
         "search_columns": ["title", "description"],
         "column_name": "title",
+        "id": "id",
         "relation": [
             {
                 "name": "diet_type",
@@ -38,6 +40,11 @@ ENTITY_MAPPING = {
                 "join_table": settings.INGREDIENTS_INCLUDED_TABLE,
                 "join_keys": ("recipe_id", "ingredient_id"),
                 "extra_fields": ["amount", "measure_unit"],
+            },
+            {
+                "name": "user",
+                "join_table": settings.RECIPE_FAVOURITE,
+                "join_keys": ("recipe_id", "user_id"),
             }
         ],
         "nested": [],
@@ -47,12 +54,19 @@ ENTITY_MAPPING = {
         "table": settings.INGREDIENT_TABLE,
         "search_columns": [],
         "column_name": "name",
+        "id": "id",
         "relation": [
             {
                 "name": "vitamins",
                 "join_table": settings.VITAMINS_INCLUDED_TABLE,
                 "join_keys": ("ingredient_id", "vitamin_id"),
-            }
+            },
+            {
+                "name": "user",
+                "join_table": settings.PREFERED_INGREDIENTS_TABLE,
+                "join_keys": ("ingredient_id", "user_id"),
+                "extra_fields": ["preference"],
+            },
         ],
         "nested": [
             {
@@ -66,6 +80,7 @@ ENTITY_MAPPING = {
         "table": settings.VITAMIN_TABLE,
         "search_columns": [],
         "column_name": "name",
+        "id": "id",
         "relation": [],
         "nested": [],
         "restricted": [],
@@ -74,7 +89,14 @@ ENTITY_MAPPING = {
         "table": settings.DIET_TYPE_TABLE,
         "search_columns": [],
         "column_name": "diet_name",
-        "relation": [],
+        "id": "id",
+        "relation": [
+            {
+                "name": "user",
+                "join_table": settings.PREFERED_RECIPE_TYPE_TABLE,
+                "join_keys": ("type_id", "user_id"),
+            },
+        ],
         "nested": [],
         "restricted": [],
     },
@@ -82,13 +104,42 @@ ENTITY_MAPPING = {
         "table": settings.USER_TABLE,
         "search_columns": [],
         "column_name": "username",
+        "id": "id",
         "alternative_column_name": "email",
-        "relation": [],
+        "relation": [
+            {
+                "name": "recipes",
+                "join_table": settings.RECIPE_FAVOURITE,
+                "join_keys": ("user_id", "recipe_id"),
+            },
+            {
+                "name": "user",
+                "join_table": settings.FOLLOW_TABLE,
+                "join_keys": ("user_id", "followed_user_id"),
+            },
+            {
+                "name": "ingredients",
+                "join_table": settings.PREFERED_INGREDIENTS_TABLE,
+                "join_keys": ("user_id", "ingredient_id"),
+                "extra_fields": ["preference"],
+            },
+            {
+                "name": "refrigerator",
+                "join_table": settings.REFRIGERATOR_TABLE,
+                "join_keys": ("user_id", "ingredient_id"),
+                "extra_fields": ["amount"],
+            },
+            {
+                "name": "diet_type",
+                "join_table": settings.PREFERED_RECIPE_TYPE_TABLE,
+                "join_keys": ("user_id", "type_id"),
+            },
+        ],
         "nested": [
             {
                 "name": "user_data",
                 "join_key": "user_id",
-            }
+            },
         ],
         "restricted": [],
     },
@@ -96,6 +147,7 @@ ENTITY_MAPPING = {
         "table": settings.USER_DATA_TABLE,
         "search_columns": [],
         "column_name": "user_id",
+        "id": "user_id",
         "relation": [],
         "nested": [],
         "restricted": [],
@@ -103,9 +155,31 @@ ENTITY_MAPPING = {
     "ingredients_data": {
         "table": settings.INGREDIENT_DATA_TABLE,
         "search_columns": [],
-        "column_name": "user_id",
+        "column_name": "ingredient_id",
+        "id": "ingredient_id",
         "relation": [],
         "nested": [],
         "restricted": [],
     },
+    "refrigerator": {
+        "table": settings.INGREDIENT_TABLE,
+        "search_columns": [],
+        "column_name": "name",
+        "id": "id",
+        "relation": [
+            {
+                "name": "user",
+                "join_table": settings.REFRIGERATOR_TABLE,
+                "join_keys": ("ingredient_id", "user_id"),
+                "extra_fields": ["amount"],
+            },
+        ],
+        "nested": [
+            {
+                "name": "ingredients_data",
+                "join_key": "ingredient_id",
+            }
+        ],
+        "restricted": [],
+    }
 }

@@ -5,7 +5,7 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from typing import Optional, Annotated
 
-from api.crud.get_methods import get_element_by_name
+from api.crud.single_entity.get_methods import get_element_by_name
 from api.handlers.exceptions import InvalidToken
 from api.schemas.user import User
 from config import settings

@@ -5,28 +5,25 @@ from typing import List
 
 from api.schemas.recipe import RecipeCreate, RecipeOverview, RecipeResponse
 from api.schemas.user import User
-from api.crud.get_methods import get_elements, get_element_by_id
-from api.crud.post_methods import create_element
-from api.crud.delete_methods import delete_element_by_id
-from api.crud.put_methods import update_element_by_id
-from api.crud.search_methods import search_elements
+from api.crud.crud_operations import CrudOperations
 from api.crud.utils import add_attributes
-from api.authentication.allowed_roles import logged_only
+from api.authentication.allowed_roles import logged_only, owner_only
 from api.authentication.token import validate_token
 
 
 router = APIRouter(prefix="/recipes", tags=["recipes"])
+crud = CrudOperations("recipes")
 
 
 """/recipes endpoint"""
 @router.get("", response_model=List[RecipeOverview])
 async def get_recipes():
-    return await get_elements("recipes", True)
+    return await crud.get(True)
 
-@router.post("", response_model=RecipeResponse)
-async def create_recipe(recipe: RecipeCreate, author: User = Depends(validate_token)):
-    recipe = add_attributes(recipe, [{"owner_id": author.id}])
-    return await create_element("recipes", recipe)
+@router.post("", response_model=RecipeResponse, dependencies=[Depends(logged_only)])
+async def create_recipe(recipe: RecipeCreate, requesting_user: User = Depends(validate_token)):
+    recipe = add_attributes(recipe, [{"owner_id": requesting_user.id}])
+    return await crud.post_all(recipe, related_attributes=["ingredients", "diet_type"])
 
 
 
@@ -34,16 +31,19 @@ async def create_recipe(recipe: RecipeCreate, author: User = Depends(validate_to
 """/recipes/{recipe_id} endpoint"""
 @router.get("/{recipe_id}", response_model=RecipeResponse)
 async def get_recipe(recipe_id: int):
-    return await get_element_by_id("recipes", recipe_id)
+    return await crud.get_all(recipe_id, related_attributes=["ingredients", "diet_type"])
 
 @router.put("/{recipe_id}", response_model=RecipeResponse, dependencies=[Depends(logged_only)])
-async def update_recipe(recipe_id: int, recipe: RecipeCreate, author: User = Depends(validate_token)):
-    recipe = add_attributes(recipe, [{"owner_id": author.id}])
-    return await update_element_by_id("recipes", recipe_id, recipe)
+async def update_recipe(recipe_id: int, recipe: RecipeCreate, requesting_user: User = Depends(validate_token)):
+    await owner_only(recipe_id, requesting_user)
 
-@router.delete("/{recipe_id}")
-async def delete_recipe(recipe_id: int):
-    return await delete_element_by_id("recipes", recipe_id)
+    return await crud.put_all(recipe_id, recipe, related_attributes=["ingredients", "diet_type"])
+
+@router.delete("/{recipe_id}", dependencies=[Depends(logged_only)])
+async def delete_recipe(recipe_id: int, requesting_user: User = Depends(validate_token)):
+    await owner_only(recipe_id, requesting_user)
+
+    return await crud.delete_all(recipe_id, related_attributes=["ingredients", "diet_type"])
 
 
 
@@ -51,4 +51,12 @@ async def delete_recipe(recipe_id: int):
 """/recipes/search/{phrase} endpoint"""
 @router.get("/search/{phrase}", response_model=List[RecipeOverview])
 async def search_recipes(phrase: str):
-    return await search_elements("recipes", phrase, True)
+    return await crud.search(phrase, True)
+
+
+
+
+admin_router = APIRouter(prefix="/admin/recipes", tags=["admin: recipes"])
+
+
+# TODO: Add admin routers

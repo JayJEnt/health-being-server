@@ -7,11 +7,10 @@ from typing import Annotated
 from api.authentication.hash_methods import verify_password, hash_password
 from api.authentication.token import create_access_token
 from api.handlers.exceptions import ResourceAlreadyTaken, ResourceNotFound, InvalidCredentials
-from api.schemas.user import UserOurAuth, UserCreate
-from api.crud.get_methods import get_element_by_name
-from api.crud.post_methods import create_element
+from api.schemas.user import UserOurAuth, UserCreate, UserUpdateAdmin
+from api.crud.single_entity.get_methods import get_element_by_name
+from api.crud.single_entity.post_methods import create_element
 from api.crud.utils import pop_attributes, add_attributes
-from database.supabase_connection import supabase_connection
 from config import settings
 from logger import logger
 
@@ -62,12 +61,9 @@ async def register(user: UserCreate, other_provider: bool=False):
 
     except ResourceNotFound:
         if not other_provider:
-            user, password = pop_attributes(user, ["password"])
-            hashed_password = hash_password(password[0])
-            user = add_attributes(user, [{"hashed_password": hashed_password},{"role": "user"}])
+            user = await hash_pass_for_user(user)
         else:
             user = add_attributes(user, [{"role": "user"}])
-        
 
         user_response = await create_element("user", user)
         logger.info(
@@ -76,3 +72,15 @@ async def register(user: UserCreate, other_provider: bool=False):
         )
 
     return user_response
+
+
+async def hash_pass_for_user(user: UserCreate):
+    user, password = pop_attributes(user, ["password"])
+    hashed_password = hash_password(password.get("password", ""))
+    return add_attributes(user, [{"hashed_password": hashed_password},{"role": "user"}])
+
+
+async def hash_pass_for_admin(user: UserUpdateAdmin):
+    user, password = pop_attributes(user, ["password"])
+    hashed_password = hash_password(password.get("password", ""))
+    return add_attributes(user, [{"hashed_password": hashed_password}])

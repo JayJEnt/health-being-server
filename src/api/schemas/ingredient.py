@@ -42,6 +42,13 @@ class IngredientResponse(Ingredient):
     vitamins: Optional[List[Vitamin]] = None
     ingredients_data: Optional[IngredientDataResponse]
 
+class IngredientUpdate(IngredientName):
+    vitamins: Optional[List[VitaminCreate]] = None
+
+class IngredientUpdateResponse(Ingredient):
+    vitamins: Optional[List[Vitamin]] = None
+
+
 
 
 """Ingredient included models"""

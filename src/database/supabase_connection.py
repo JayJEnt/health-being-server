@@ -76,6 +76,19 @@ class SupabaseConnection:
         return response.data
     
     @error_handler
+    def find_join_record(self, table: str, first_column: str, first_value: Any, second_column: str, second_value: Any) -> Optional[Dict[str, Any]]:
+        response = (
+            self._client.table(table)
+            .select("*")
+            .eq(first_column, first_value)
+            .eq(second_column, second_value)
+            .execute()
+        )
+        if not response.data:
+            return None
+        return response.data[0]
+    
+    @error_handler
     def find_ilike(self, table: str, column: str, value: Any) -> Optional[list[Dict[str, Any]]]:
         response = (
             self._client.table(table)
@@ -93,6 +106,19 @@ class SupabaseConnection:
             self._client.table(table)
             .delete()
             .eq(column, value)
+            .execute()
+        )
+        if not response.data:
+            return None
+        return response.data[0]
+    
+    @error_handler
+    def delete_join_record(self, table: str, first_column: str, first_value: Any, second_column: str, second_value: Any) -> Optional[Dict[str, Any]]:
+        response = (
+            self._client.table(table)
+            .delete()
+            .eq(first_column, first_value)
+            .eq(second_column, second_value)
             .execute()
         )
         if not response.data:

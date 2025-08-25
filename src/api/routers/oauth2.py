@@ -6,57 +6,45 @@ from typing import Annotated
 
 from api.authentication.oauth2_google import google_login, google_auth_callback
 from api.authentication.oauth2_our import our_login, register
-from api.handlers.exceptions import UnknownProvider, InvalidMethod
+from api.handlers.exceptions import UnknownProvider
 from api.schemas.user import UserCreate, User
 from api.schemas.token import Token
-from config import settings
 
 
 router = APIRouter(prefix="/oauth2", tags=["oauth2"])
 
 
-"""/oauth2/{external_provider}/login endpoint"""
-@router.get("/{provider}/login")
-async def login(provider: str):
-    if provider == "google":
+"""/oauth2_{external_provider}/login endpoint"""
+@router.get("_{external_provider}/login")               #TODO CHANGE URL AFTER UPDATE
+async def login(external_provider: str):
+    if external_provider == "google":
         return await google_login()
-    elif provider == "our":
-        raise InvalidMethod
     else:
         raise UnknownProvider
 
 
 
 
-"""/oauth2/{external_provider}/callback endpoint"""
-@router.get("/{provider}/callback", response_model=Token)
-async def auth_callback(provider: str, request: Request):
-    if provider == "google":
-        return await google_auth_callback(request)
-    else:
-        raise UnknownProvider
+"""/oauth2_{external_provider}/callback endpoint"""
+@router.get("_google/callback", response_model=Token)   #TODO CHANGE URL AFTER UPDATE
+async def auth_callback(request: Request):
+    return await google_auth_callback(request)
 
 
 
 
-"""/oauth2/our/login endpoint"""
-@router.post("/our/login", response_model=Token)
+"""/oauth2_our/login endpoint"""
+@router.post("_our/login", response_model=Token)        #TODO CHANGE URL AFTER UPDATE
 async def login_with_form(
-    provider: str,
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ):
-    if provider == "our":
-        return await our_login(form_data)
-    elif provider in settings.EXTERNAL_PROVIDERS:
-        raise InvalidMethod
-    else:
-        raise UnknownProvider
+    return await our_login(form_data)
     
 
 
 
 
-"""/oauth2/our/register endpoint"""
-@router.post("/our/register", response_model=User)
+"""/oauth2_our/register endpoint"""
+@router.post("/our_register", response_model=User)
 async def our_register(user: UserCreate):
     return await register(user) 
