@@ -3,7 +3,7 @@ from api.crud.many_entities.get_methods import get_all
 from api.crud.many_entities.post_methods import create_all
 from api.crud.many_entities.put_methods import update_all
 
-from api.crud.relation.delete_methods import delete_relationship
+from api.crud.relation.delete_methods import delete_relationship, delete_relationships
 from api.crud.relation.get_methods import get_relationships, get_relationship
 from api.crud.relation.post_methods import create_relationship
 
@@ -85,6 +85,13 @@ class CrudOperations():
     ) -> dict:
         return delete_relationship(self.element_type, element_id, relation_name, relation_id)
     
+    def delete_relationships(
+        self,
+        element_id: int,
+        relation_name: str,
+    ) -> dict:
+        return delete_relationships(self.element_type, element_id, relation_name)
+
     """Just entity"""
 
     def get(

@@ -3,21 +3,19 @@ from fastapi import APIRouter, Depends
 
 from typing import List
 
-from api.schemas.ingredient import IngredientCreate, Ingredient, IngredientResponse, IngredientUpdate, IngredientUpdateResponse
-from api.crud.single_entity.get_methods import get_elements, get_element_by_name, get_element_by_id
-from api.crud.many_entities.post_methods import create_all
-from api.crud.many_entities.delete_methods import delete_all
-from api.crud.many_entities.put_methods import update_all
 from api.authentication.allowed_roles import admin_only
+from api.crud.crud_operations import CrudOperations
+from api.schemas.ingredient import IngredientCreate, Ingredient, IngredientResponse
 
 
 router = APIRouter(prefix="/ingredients", tags=["ingredients"])
+crud = CrudOperations("ingredients")
 
 
 """/ingredients endpoint"""
 @router.get("", response_model=List[Ingredient])
 async def get_ingredients():
-    return await get_elements("ingredients")
+    return await crud.get()
 
 
 
@@ -25,7 +23,11 @@ async def get_ingredients():
 """/ingredients/{ingredient_id} endpoint"""
 @router.get("/{ingredient_id}", response_model=IngredientResponse)
 async def get_ingredient(ingredient_id: int):
-    return await get_element_by_id("ingredients", ingredient_id) # TODO: Use get_all instead
+    return await crud.get_all(
+        ingredient_id,
+        related_attributes=["vitamins"],
+        nested_attributes=["ingredients_data"]
+    )
 
 
 
@@ -33,7 +35,7 @@ async def get_ingredient(ingredient_id: int):
 """/ingredients/name/{ingredient_name} endpoint"""
 @router.get("/name/{ingredient_name}", response_model=Ingredient)
 async def get_ingredient_by_name(ingredient_name: str):
-    return await get_element_by_name("ingredients", ingredient_name)
+    return await crud.get_by_name(ingredient_name)
 
 
 
@@ -44,8 +46,7 @@ admin_router = APIRouter(prefix="/admin/ingredients", tags=["admin: ingredients"
 """/admin/ingredients endpoint"""
 @admin_router.post("", response_model=IngredientResponse, dependencies=[Depends(admin_only)])
 async def create_ingredient(ingredient: IngredientCreate):
-    return await create_all(
-        "ingredients",
+    return await crud.post_all(
         ingredient,
         related_attributes=["vitamins"],
         nested_attributes=["ingredients_data"]
@@ -57,8 +58,7 @@ async def create_ingredient(ingredient: IngredientCreate):
 """/admin/ingredients/{ingredient_id} endpoint"""
 @admin_router.put("/{ingredient_id}", response_model=IngredientResponse, dependencies=[Depends(admin_only)])
 async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
-    return await update_all(
-        "ingredients",
+    return await crud.put_all(
         ingredient_id,
         ingredient,
         related_attributes=["vitamins"],
@@ -66,11 +66,15 @@ async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
     )
 
 
+# TEMP FIX 25/08/2025
+crud2 = CrudOperations("refrigerator")
+
+
 @admin_router.delete("/{ingredient_id}", dependencies=[Depends(admin_only)])
 async def delete_ingredient(ingredient_id: int):
-    return await delete_all(
-        "ingredients",
+    await crud2.delete_relationships(ingredient_id, "user")     # TEMP FIX 25/08/2025
+    return await crud.delete_all(
         ingredient_id,
-        related_attributes=["vitamins", "user"],
+        related_attributes=["vitamins", "user"],                # TODO: FIX misses refrigerator table
         nested_attributes=["ingredients_data"]
     )

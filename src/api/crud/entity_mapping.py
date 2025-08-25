@@ -124,6 +124,12 @@ ENTITY_MAPPING = {
                 "extra_fields": ["preference"],
             },
             {
+                "name": "refrigerator",
+                "join_table": settings.REFRIGERATOR_TABLE,
+                "join_keys": ("user_id", "ingredient_id"),
+                "extra_fields": ["amount"],
+            },
+            {
                 "name": "diet_type",
                 "join_table": settings.PREFERED_RECIPE_TYPE_TABLE,
                 "join_keys": ("user_id", "type_id"),
@@ -155,14 +161,14 @@ ENTITY_MAPPING = {
         "nested": [],
         "restricted": [],
     },
-    "ingredients_refrigerator": {
+    "refrigerator": {
         "table": settings.INGREDIENT_TABLE,
         "search_columns": [],
         "column_name": "name",
         "id": "id",
         "relation": [
             {
-                "name": "user_refrigerator",
+                "name": "user",
                 "join_table": settings.REFRIGERATOR_TABLE,
                 "join_keys": ("ingredient_id", "user_id"),
                 "extra_fields": ["amount"],
@@ -175,27 +181,5 @@ ENTITY_MAPPING = {
             }
         ],
         "restricted": [],
-    },
-    "user_refrigerator": {
-        "table": settings.USER_TABLE,
-        "search_columns": [],
-        "column_name": "username",
-        "id": "id",
-        "alternative_column_name": "email",
-        "relation": [
-            {
-                "name": "ingredients_refrigerator",
-                "join_table": settings.REFRIGERATOR_TABLE,
-                "join_keys": ("user_id", "ingredient_id"),
-                "extra_fields": ["amount"],
-            },
-        ],
-        "nested": [
-            {
-                "name": "user_data",
-                "join_key": "user_id",
-            },
-        ],
-        "restricted": [],
-    },
+    }
 }

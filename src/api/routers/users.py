@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from typing import List
 
 from api.schemas.user import User, UserUpdate, UserUpdateAdmin, UserPostCreate
-from api.authentication.allowed_roles import admin_only, logged_only, owner_only
+from api.authentication.allowed_roles import admin_only, logged_only
 from api.crud.crud_operations import CrudOperations
 from api.authentication.token import validate_token
 from api.authentication.oauth2_our import hash_pass_for_user, hash_pass_for_admin
@@ -30,7 +30,13 @@ async def update_owner(user: UserUpdate, requesting_user: User = Depends(validat
 async def delete_owner(requesting_user: User = Depends(validate_token)):
     return await crud.delete_all(
         requesting_user.id,
-        related_attributes=[],
+        related_attributes=[
+            "follows",
+            "prefered_ingredients",
+            "prefered_recipe_type",
+            "recipe_favourite",
+            "refrigerator"
+        ],
         nested_attributes=["user_data"]
     )
 
@@ -51,7 +57,7 @@ async def get_users():
 """/admin/users/{user_id} endpoint"""
 @admin_router.get("/{user_id}", response_model=UserPostCreate, dependencies=[Depends(admin_only)])
 async def get_user(user_id: int):
-    return await crud.get_all(user_id)
+    return await crud.get_all(user_id, nested_attributes=["user_data"])
 
 
 @admin_router.put("/{user_id}", response_model=User, dependencies=[Depends(admin_only)])
