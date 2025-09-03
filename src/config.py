@@ -12,7 +12,6 @@ class Settings(BaseSettings):
     """DATABASE"""
     # SUPABASE SECRETS
     SUPABASE_URL: str = ""
-    SUPABASE_KEY: str = ""
 
     # TABLES
     RECIPE_TABLE: str = "recipes"

@@ -1,6 +1,7 @@
-from supabase import create_client, Client
+from sqlalchemy import Table, MetaData, select, insert, update, delete, and_, create_engine
+from sqlalchemy.orm import declarative_base
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
 from functools import wraps
 
 from api.handlers.exceptions import ResourceNotFound, InternalServerError
@@ -8,15 +9,17 @@ from config import settings
 from logger import logger
 
 
+Base = declarative_base()
+
+
 class SupabaseConnection:
     def __init__(self):
-        self._url = settings.SUPABASE_URL
-        self._key = settings.SUPABASE_KEY
-        try:
-            self._client: Client = create_client(self._url, self._key)
-        except Exception as ex:
-            logger.error(f"Supabase connection error: {ex}")
-            raise ConnectionRefusedError
+        self.engine = create_engine(
+            settings.SUPABASE_URL,
+            pool_size=1,
+            max_overflow=0,
+            future=True
+        )
 
     @staticmethod
     def error_handler(func):
@@ -32,7 +35,7 @@ class SupabaseConnection:
                         f"Args: {func_args}"
                     )
                     raise ResourceNotFound
-                logger.info(f"Sucesfully processed.")
+                logger.info(f"Successfully processed.")
                 return result
             except ResourceNotFound:
                 raise ResourceNotFound
@@ -41,100 +44,109 @@ class SupabaseConnection:
                 raise InternalServerError
         return wrapper
 
-    @error_handler
-    def fetch_all(self, table: str) -> Optional[list[Dict[str, Any]]]:
-        response = (
-            self._client.table(table)
-            .select("*")
-            .execute()
-        )
-        if not response.data:
-            return None
-        return response.data
-
-    @error_handler
-    def insert(self, table: str, data: dict) -> Optional[Dict[str, Any]]:
-        response = (
-            self._client.table(table)
-            .insert(data)
-            .execute()
-        )
-        if not response.data:
-            return None
-        return response.data[0]
-
-    @error_handler
-    def find_by(self, table: str, column: str, value: Any) -> Optional[list[Dict[str, Any]]]:
-        response = (
-            self._client.table(table)
-            .select("*")
-            .eq(column, value)
-            .execute()
-        )
-        if not response.data:
-            return None
-        return response.data
+    def execute_query(self, query: Any) -> Optional[List[Dict[str, Any]]]:
+        with self.engine.begin() as conn:
+            result = conn.execute(query)
+            rows = [dict(row._mapping) for row in result]
+        return rows or None
     
+    """CRUD"""
     @error_handler
-    def find_join_record(self, table: str, first_column: str, first_value: Any, second_column: str, second_value: Any) -> Optional[Dict[str, Any]]:
-        response = (
-            self._client.table(table)
-            .select("*")
-            .eq(first_column, first_value)
-            .eq(second_column, second_value)
-            .execute()
-        )
-        if not response.data:
-            return None
-        return response.data[0]
-    
-    @error_handler
-    def find_ilike(self, table: str, column: str, value: Any) -> Optional[list[Dict[str, Any]]]:
-        response = (
-            self._client.table(table)
-            .select("*")
-            .ilike(column, f"%{value}%")
-            .execute()
-        )
-        if not response.data:
-            return None
-        return response.data
+    def fetch_all(self, table_name: str) -> Optional[List[Dict[str, Any]]]:
+        table = Table(table_name, MetaData(), autoload_with=self.engine)
+        query = select(table)
+
+        return self.execute_query(query)
 
     @error_handler
-    def delete_by(self, table: str, column: str, value: Any) -> Optional[Dict[str, Any]]:
-        response = (
-            self._client.table(table)
-            .delete()
-            .eq(column, value)
-            .execute()
-        )
-        if not response.data:
-            return None
-        return response.data[0]
-    
-    @error_handler
-    def delete_join_record(self, table: str, first_column: str, first_value: Any, second_column: str, second_value: Any) -> Optional[Dict[str, Any]]:
-        response = (
-            self._client.table(table)
-            .delete()
-            .eq(first_column, first_value)
-            .eq(second_column, second_value)
-            .execute()
-        )
-        if not response.data:
-            return None
-        return response.data[0]
+    def insert(self, table_name: str, data: dict) -> Optional[Dict[str, Any]]:
+        table = Table(table_name, MetaData(), autoload_with=self.engine)
+        query = insert(table).values(data).returning(table)
+
+        rows = self.execute_query(query)
+        return rows[0] if rows else None
 
     @error_handler
-    def update_by(self, table: str, column: str, value: Any, updates: dict) -> Optional[Dict[str, Any]]:
-        response = (
-            self._client.table(table)
-            .update(updates)
-            .eq(column, value)
-            .execute()
+    def find_by(self, table_name: str, column: str, value: Any) -> Optional[List[Dict[str, Any]]]:
+        table = Table(table_name, MetaData(), autoload_with=self.engine)
+        query = (
+            select(table)
+            .where(table.c[column] == value)
         )
-        if not response.data:
-            return None
-        return response.data[0]
+
+        return self.execute_query(query)
+
+    @error_handler
+    def find_join_record(
+        self, table_name: str, first_column: str, first_value: Any, second_column: str, second_value: Any
+    ) -> Optional[Dict[str, Any]]:
+        table = Table(table_name, MetaData(), autoload_with=self.engine)
+        query = (
+            select(table)
+            .where(
+                and_(
+                    table.c[first_column] == first_value,
+                    table.c[second_column] == second_value
+                )
+            )
+        )
+        
+        rows = self.execute_query(query)
+        return rows[0] if rows else None
+
+    @error_handler
+    def find_ilike(self, table_name: str, column: str, value: str) -> Optional[List[Dict[str, Any]]]:
+        table = Table(table_name, MetaData(), autoload_with=self.engine)
+        query = (
+            select(table)
+            .where(table.c[column].ilike(f"%{value}%"))
+        )
+
+        return self.execute_query(query)
+
+    @error_handler
+    def delete_by(self, table_name: str, column: str, value: Any) -> Optional[Dict[str, Any]]:
+        table = Table(table_name, MetaData(), autoload_with=self.engine)
+        query = (
+            delete(table)
+            .where(table.c[column] == value)
+            .returning(table)
+        )
+
+        rows = self.execute_query(query)
+        return rows[0] if rows else None
+
+    @error_handler
+    def delete_join_record(
+        self, table_name: str, first_column: str, first_value: Any, second_column: str, second_value: Any
+    ) -> Optional[Dict[str, Any]]:
+        table = Table(table_name, MetaData(), autoload_with=self.engine)
+        query = (
+            delete(table)
+            .where(
+                and_(
+                    table.c[first_column] == first_value,
+                    table.c[second_column] == second_value
+                )
+            )
+            .returning(table)
+        )
+
+        rows = self.execute_query(query)
+        return rows[0] if rows else None
+
+    @error_handler
+    def update_by(self, table_name: str, column: str, value: Any, updates: dict) -> Optional[Dict[str, Any]]:
+        table = Table(table_name, MetaData(), autoload_with=self.engine)
+        query = (
+            update(table)
+            .where(table.c[column] == value)
+            .values(updates)
+            .returning(table)
+        )
+
+        rows = self.execute_query(query)
+        return rows[0] if rows else None
+
 
 supabase_connection = SupabaseConnection()
