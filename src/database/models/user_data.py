@@ -1,0 +1,18 @@
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
+from database.supabase_connection import Base
+from config import settings
+
+
+class UserData(Base):
+    __tablename__ = settings.USER_DATA_TABLE
+
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    height = Column(String, nullable=True)
+    weight = Column(String, nullable=True)
+    age = Column(Integer, nullable=True)
+    activity_level = Column(String, nullable=True)
+    silhouette = Column(String, nullable=True)
+
+    # 1:1
+    user = relationship("User", back_populates="user_data", uselist=False)
