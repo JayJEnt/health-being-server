@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     # SUPABASE SECRETS
     SUPABASE_URL: str = ""
 
+    # TEST DATABASE
+    TEST_DATABASE_URL: str = "sqlite:///:memory:"
+
     # TABLES
     RECIPE_TABLE: str = "recipes"
     RECIPE_FAVOURITE: str = "recipe_favourite"
