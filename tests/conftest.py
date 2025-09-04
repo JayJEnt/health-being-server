@@ -3,7 +3,5 @@ pytest_plugins = [
     "tests.fixtures.database",
     "tests.fixtures.models.user",
     "tests.fixtures.models.user_data",
-    "tests.fixtures.models.ingredients",
-    "tests.fixtures.models.vitamins",
     "tests.fixtures.models.vitamins_included",
 ]
