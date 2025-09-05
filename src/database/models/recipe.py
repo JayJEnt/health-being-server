@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, JSON
 from sqlalchemy.orm import relationship
 from database.supabase_connection import Base
 from config import settings
@@ -11,7 +11,7 @@ class Recipe(Base):
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     title = Column(String, nullable=False)
     description = Column(Text, nullable=True)
-    instructions = Column(Text, nullable=True)
+    instructions = Column(JSON, nullable=True)
 
     # N:M
     diet_types = relationship("DietTypeIncluded", back_populates="recipe")

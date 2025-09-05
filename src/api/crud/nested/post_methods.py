@@ -10,10 +10,10 @@ async def create_nested(element_type: str, element_id: int, nested_data_list: li
     Args:
         element_type (str): The type of the main element (e.g., "recipes").
         element_id (int): The ID of the main element.
-        nested_data_list (dict): List of nested elements (e.g., {"ingredients": ["carrot", "ananas"]})
+        nested_data_list (list): List of nested elements
 
     Returns:
-        dict: Related item data (with extra fields if any).
+        list: Related item data (with extra fields if any).
     """
     nested_attributes = []
     for nested_data in nested_data_list:

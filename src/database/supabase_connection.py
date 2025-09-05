@@ -5,7 +5,6 @@ from typing import Any, Dict, Optional, List
 from functools import wraps
 
 from api.handlers.exceptions import ResourceNotFound, InternalServerError
-from config import settings
 from logger import logger
 
 
@@ -14,12 +13,16 @@ Base = declarative_base()
 
 class SupabaseConnection:
     def __init__(self):
-        self.engine = create_engine(
-            settings.SUPABASE_URL,
-            pool_size=1,
-            max_overflow=0,
-            future=True
-        )
+        from config import settings
+        if settings.SUPABASE_URL == "sqlite:///:memory:":
+            self.engine = create_engine(settings.SUPABASE_URL)
+        else:
+            self.engine = create_engine(
+                settings.SUPABASE_URL,
+                pool_size=1,
+                max_overflow=0,
+                future=True
+            )
 
     @staticmethod
     def error_handler(func):

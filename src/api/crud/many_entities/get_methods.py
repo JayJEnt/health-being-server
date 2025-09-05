@@ -6,14 +6,24 @@ from database.supabase_connection import supabase_connection
 from logger import logger
 
 
-# TODO: FIX DOCS
 async def get_all(
     element_type: str,
     element_id: int,
     related_attributes: list = [],
     nested_attributes: list = [],
 ) -> dict:
-    """Function get element by id from element table."""
+    """
+    Get all (entity, relationships, nested) data for an element by its id and specified related and nested attributes.
+
+    Args:
+        element_type (str): The type of the main element (e.g., "recipes").
+        element_id (int): The ID of the main element.
+        related_attributes (list, optional): List of related attributes to include. Defaults to [].
+        nested_attributes (list, optional): List of nested attributes to include. Defaults to [].
+
+    Returns:
+        dict: Relationship item data.
+    """
     config = get_main_config(element_type)
 
     element_data = supabase_connection.find_by(

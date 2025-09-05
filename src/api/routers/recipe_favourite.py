@@ -15,7 +15,7 @@ crud = CrudOperations("user")
 """/recipe_favourite endpoint"""
 @router.get("", dependencies=[Depends(logged_only)])
 async def get_all_relations_recipe_favourite(requesting_user: User = Depends(validate_token)):
-    return await crud.get_relationships("recipes", requesting_user.id)
+    return await crud.get_relationships(requesting_user.id, "recipes")
 
 
 @router.post("", dependencies=[Depends(logged_only)])

@@ -4,7 +4,7 @@ from api.crud.utils import restrict_data, get_main_config
 from logger import logger
 
 
-async def get_elements(element_type: str, restrict: bool=False) -> dict:
+async def get_elements(element_type: str, restrict: bool=False) -> list:
     """
     Get all records in element table.
 
@@ -13,7 +13,7 @@ async def get_elements(element_type: str, restrict: bool=False) -> dict:
         restrict (bool): The optional argument, that allows to drop some of the attributes.
 
     Returns:
-        dict: Element item response data from database.
+        list: Element item response data from database.
     """
     config = get_main_config(element_type)
 

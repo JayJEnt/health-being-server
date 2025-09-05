@@ -41,8 +41,8 @@ async def get_relationship(
 
 async def get_relationships(
     element_type: str,
-    relation_name: str,
     element_id: int,
+    relation_name: str,
 ) -> list:
     """
     Get relationships between an element and one related item by relation item id's.

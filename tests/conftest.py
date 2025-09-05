@@ -4,4 +4,5 @@ pytest_plugins = [
     "tests.fixtures.models.user",
     "tests.fixtures.models.user_data",
     "tests.fixtures.models.vitamins_included",
+    "tests.fixtures.crud.supabase_connection",
 ]
