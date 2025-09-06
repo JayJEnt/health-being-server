@@ -15,7 +15,7 @@ crud = CrudOperations("user")
 """/follows endpoint"""
 @router.get("", dependencies=[Depends(logged_only)])
 async def get_all_relations_follows(requesting_user: User = Depends(validate_token)):
-    return await crud.get_relationships("user", requesting_user.id)
+    return await crud.get_relationships(requesting_user.id, "user")
 
 
 @router.post("", dependencies=[Depends(logged_only)])

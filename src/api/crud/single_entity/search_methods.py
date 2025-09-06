@@ -21,6 +21,7 @@ async def search_elements(element_type: str, phrase: str, restrict: bool=False) 
     found_elements = []
     
     for search_column in config["search_columns"]:
+        actual_founds = []
         try:
             actual_founds = supabase_connection.find_ilike(
                 config["table"],
@@ -38,7 +39,7 @@ async def search_elements(element_type: str, phrase: str, restrict: bool=False) 
                         duplicated = True
                         break
                 if not duplicated:
-                    found_elements += actual_found
+                    found_elements.append(actual_found)
     
     if not found_elements:
         raise ResourceNotFound

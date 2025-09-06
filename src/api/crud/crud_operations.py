@@ -14,8 +14,10 @@ from api.crud.single_entity.put_methods import update_element_by_id
 from api.crud.single_entity.search_methods import search_elements
 
 
-# TODO: FIX DOCS
 class CrudOperations():
+    """
+    A class to handle CRUD operations for a specific element type.
+    """
     def __init__(self, element_type: str):
         self.element_type = element_type
 
@@ -26,6 +28,9 @@ class CrudOperations():
         related_attributes: list = [],
         nested_attributes: list = [],
     ) -> dict:
+        """
+        Get all (entity, relationships, nested) data for an element by its id and specified related and nested attributes.
+        """
         return get_all(self.element_type, element_id, related_attributes, nested_attributes)
     
     def post_all(
@@ -34,6 +39,9 @@ class CrudOperations():
         related_attributes: list = [],
         nested_attributes: list = [],
     ) -> dict:
+        """
+        Create all (entity, relationships, nested) data for an element by its id and specified related and nested attributes, which are required.
+        """
         return create_all(self.element_type, element_data, related_attributes, nested_attributes)
     
     def put_all(
@@ -43,6 +51,9 @@ class CrudOperations():
         related_attributes: list = [],
         nested_attributes: list = [],
     ) -> dict:
+        """
+        Update all (entity, relationships, nested) data for an element by its id and specified related and nested attributes, which are required.
+        """
         return update_all(self.element_type, element_id, element_data, related_attributes, nested_attributes)
     
     def delete_all(
@@ -51,6 +62,9 @@ class CrudOperations():
         related_attributes: list = [],
         nested_attributes: list = [],
     ) -> dict:
+        """
+        Delete all (entity, relationships, nested) data for an element by its id and specified related and nested attributes, that are attached.
+        """
         return delete_all(self.element_type, element_id, related_attributes, nested_attributes)
 
     """Relations"""
@@ -60,14 +74,20 @@ class CrudOperations():
         relation_name: str,
         relation_id: int
     ) -> dict:
+        """
+        Get a specific relationship for an element.
+        """
         return get_relationship(self.element_type, element_id, relation_name, relation_id)
         
     def get_relationships(
         self,
+        element_id: int,
         relation_name: str,
-        relation_id: int,
     ) -> list:
-        return get_relationships(self.element_type, relation_name, relation_id)
+        """
+        Get all relationships for an element.
+        """
+        return get_relationships(self.element_type, element_id, relation_name)
 
     def post_relationship(
         self,
@@ -75,6 +95,9 @@ class CrudOperations():
         relation_name: str,
         related_data: dict
     ) -> dict:
+        """
+        Create a new relationship for an element.
+        """
         return create_relationship(self.element_type, element_id, relation_name, related_data)
         
     def delete_relationship(
@@ -83,6 +106,9 @@ class CrudOperations():
         relation_name: str,
         relation_id: int
     ) -> dict:
+        """
+        Delete a specific relationship for an element.
+        """
         return delete_relationship(self.element_type, element_id, relation_name, relation_id)
     
     def delete_relationships(
@@ -90,14 +116,19 @@ class CrudOperations():
         element_id: int,
         relation_name: str,
     ) -> dict:
+        """
+        Delete all relationships for an element.
+        """
         return delete_relationships(self.element_type, element_id, relation_name)
 
     """Just entity"""
-
     def get(
         self,
         restrict: bool=False
     ) -> list:
+        """
+        Get all elements.
+        """
         return get_elements(self.element_type, restrict)
     
     def get_by_name(
@@ -105,18 +136,27 @@ class CrudOperations():
         element_name: str,
         alternative_name: bool=False
     ) -> dict:
+        """
+        Get an element by its name.
+        """
         return get_element_by_name(self.element_type, element_name, alternative_name)
     
     def get_by_id(
         self,
         element_id: int,
     ) -> dict:
+        """
+        Get an element by its ID.
+        """
         return get_element_by_id(self.element_type, element_id)
     
     def post(
         self,
         element_data: dict
     ) -> dict:
+        """
+        Create a new element.
+        """
         return create_element(self.element_type, element_data)
     
     def put(
@@ -124,12 +164,18 @@ class CrudOperations():
         element_id: int,
         element_data: dict,
     ) -> dict:
+        """
+        Update an element by its ID.
+        """
         return update_element_by_id(self.element_type, element_id, element_data)
     
     def delete(
         self,
         element_id: int,
     ) -> dict:
+        """
+        Delete an element by its ID.
+        """
         return delete_element_by_id(self.element_type, element_id)
     
     def search(
@@ -137,4 +183,7 @@ class CrudOperations():
         phrase: str,
         restrict: bool=False,
     ) -> list:
+        """
+        Search for elements by a phrase.
+        """
         return search_elements(self.element_type, phrase, restrict)

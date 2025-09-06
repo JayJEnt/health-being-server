@@ -15,12 +15,12 @@ crud = CrudOperations("user")
 """/refrigerator endpoint"""
 @router.get("", dependencies=[Depends(logged_only)])
 async def get_all_relations_refrigerator(requesting_user: User = Depends(validate_token)):
-    return await crud.get_relationships("refrigerator", requesting_user.id)
+    return await crud.get_relationships(requesting_user.id, "refrigerator")
 
 
 @router.post("", dependencies=[Depends(logged_only)])
-async def create_relation_refrigerator(recipe: AddToRefrigerator, requesting_user: User = Depends(validate_token)):
-    return await crud.post_relationship(requesting_user.id, "refrigerator", recipe)
+async def create_relation_refrigerator(ingredient: AddToRefrigerator, requesting_user: User = Depends(validate_token)):
+    return await crud.post_relationship(requesting_user.id, "refrigerator", ingredient)
 
 
 """/refrigerator/{ingredient_id} endpoint"""

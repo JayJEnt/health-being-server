@@ -2,7 +2,7 @@ import pytest
 
 
 @pytest.fixture()
-def inject_example_users_data(mocked_supabase_connection):
+def inject_example_users_data(mocked_supabase_connection_create):
     users_data = [
         {
             "user_id": "1",
@@ -20,4 +20,7 @@ def inject_example_users_data(mocked_supabase_connection):
         },
     ]
 
-    return [mocked_supabase_connection.insert("user_data", user_data) for user_data in users_data]
+    return [
+        mocked_supabase_connection_create.insert("user_data", user_data)
+        for user_data in users_data
+    ]

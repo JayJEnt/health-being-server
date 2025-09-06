@@ -66,7 +66,7 @@ async def create_relationships(
         element_type (str): The type of the main element (e.g., "recipes").
         element_id (int): The ID of the main element.
         related_data (list): The list of all lists of all elements that are related to the element table.
-        (e.g., ["ingredients": ["marchewka", "pomidor"], "diet_type": ["vege", "vegan"]])
+        (e.g., [{"ingredients": ["marchewka", "pomidor"]}, {"diet_type": ["vege", "vegan"]}])
 
     Returns:
         list[dict]: List of related items data (with extra fields if any).

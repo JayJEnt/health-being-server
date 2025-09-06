@@ -7,6 +7,8 @@ entity_name: {
     entity table name
     entity search columns (used in search endpoints)
     entity column name (used in search by name)
+    entity id column name (used in get, put, delete by id)
+    entity alternative column name (used in search by name, e.g. email for user)
     relation (N:M) entities: [
         {
             relation_entity_name (the one from other entity)
@@ -14,6 +16,12 @@ entity_name: {
             join_keys_names (the column names that are forein keys from joined entities - main and relation one)
             NOTE: important! The position of join_keys matter. First one should be main entity key, then the relation one
             extra_fields (the fields that are stored in join table e.g: amount, measure)
+        }
+    ]
+    nested entities (1:N) entities: [
+        {
+            entity_name: "ingredients_data",
+            join_key: "ingredient_id",
         }
     ]
     entity restricted attributes

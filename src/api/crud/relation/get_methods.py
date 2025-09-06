@@ -5,10 +5,7 @@ from logger import logger
 
 
 async def get_relationship(
-    element_type: str,
-    element_id: int,
-    relation_name: str,
-    relation_id: int
+    element_type: str, element_id: int, relation_name: str, relation_id: int
 ) -> dict:
     """
     Get single relationship between an element and one related item by their's id
@@ -23,7 +20,7 @@ async def get_relationship(
         dict: Relationship item data.
     """
     relation_config = get_relation_config(element_type, relation_name)
-    
+
     try:
         element = supabase_connection.find_join_record(
             relation_config["join_table"],
@@ -33,7 +30,9 @@ async def get_relationship(
             relation_id,
         )
     except ResourceNotFound:
-        logger.info(f"No {relation_config['name']} entries found for {relation_config['join_keys'][0]}={element_id}")
+        logger.info(
+            f"No {relation_config['name']} entries found for {relation_config['join_keys'][0]}={element_id}"
+        )
         raise
 
     return element
@@ -41,8 +40,8 @@ async def get_relationship(
 
 async def get_relationships(
     element_type: str,
-    relation_name: str,
     element_id: int,
+    relation_name: str,
 ) -> list:
     """
     Get relationships between an element and one related item by relation item id's.
@@ -63,13 +62,14 @@ async def get_relationships(
             element_id,
         )
     except ResourceNotFound:
-        logger.info(f"No {relation_config['name']} entries found for {relation_config['join_keys'][0]}={element_id}")
+        logger.info(
+            f"No {relation_config['name']} entries found for {relation_config['join_keys'][0]}={element_id}"
+        )
         raise
 
     return element
 
 
-# TODO: FIX DOCS
 async def get_relationships_and_related_tables(
     element_type: str,
     element_id: int,
@@ -77,7 +77,14 @@ async def get_relationships_and_related_tables(
 ) -> list:
     """
     Function get a data from relationships/join tables (N:M) to get element with it's relation attributes.
-        Returns: list of attributes from foreign tables
+
+    Args:
+        element_type (str): The type of the main element (e.g., "recipes").
+        element_id (int): The ID of the main element.
+        relations (list): The list of all elements that are related to the element table. (e.g., ["ingredients", "diet_type"])
+
+    Returns:
+        list: List of attributes from foreign tables
     """
     attributes_to_add = []
     for relation_name in relations:
@@ -89,25 +96,33 @@ async def get_relationships_and_related_tables(
                 element_id,
             )
         except ResourceNotFound:
-            logger.info(f"No {relation_config['name']} entries found for {relation_config['join_keys'][0]}={element_id}")
+            logger.info(
+                f"No {relation_config['name']} entries found for {relation_config['join_keys'][0]}={element_id}"
+            )
             raise
 
         logger.debug(element)
-        related_items = await get_related_tables_items(element_type, relation_name, element)
+        related_items = await get_related_tables_items(
+            element_type, relation_name, element
+        )
         attributes_to_add.append({relation_config["name"]: related_items})
 
     return attributes_to_add
 
 
-# TODO: FIX DOCS
 async def get_related_tables_items(
-    element_type: str,
-    relation_name: str,
-    join_table_items: list
+    element_type: str, relation_name: str, join_table_items: list
 ) -> list:
     """
     Function get a items from foreign table and merge them with relationships/join table items
-        Returns: list of items of 1 foreign table
+
+    Args:
+        element_type (str): The type of the main element (e.g., "recipes").
+        element_id (int): The ID of the main element.
+        join_table_items (list): The list of element attributes retrived from join table
+
+    Returns:
+        list: List of items of 1 foreign table
     """
     items_to_add = []
     for join_table_item in join_table_items:
@@ -136,5 +151,5 @@ async def get_related_tables_items(
                 item_data[field] = join_table_item[field]
 
         items_to_add.append(item_data)
-    
+
     return items_to_add
