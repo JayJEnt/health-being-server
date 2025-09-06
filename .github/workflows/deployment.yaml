@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Read version
         id: read-version
         run: |
@@ -56,7 +56,7 @@ jobs:
       - name: Upload to S3
         run: |
           aws s3 cp python-${{ needs.update-version.outputs.version }}.zip s3://${{ secrets.S3_BUCKET_NAME }}/lambda-layer-${{ needs.update-version.outputs.version }}.zip
-  
+
   update-lambda-source-code:
     needs: update-version
     runs-on: ubuntu-latest
@@ -69,7 +69,6 @@ jobs:
         run: |
           EXCLUDE_LIST=(
             "**/__pycache__/**"
-            "example.env"
           )
           cd src
           zip -r ../lambda-${{ needs.update-version.outputs.version }}.zip . -x "${EXCLUDE_LIST[@]}"
@@ -93,7 +92,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
