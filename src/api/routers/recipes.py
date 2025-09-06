@@ -35,13 +35,13 @@ async def get_recipe(recipe_id: int):
 
 @router.put("/{recipe_id}", response_model=RecipeResponse, dependencies=[Depends(logged_only)])
 async def update_recipe(recipe_id: int, recipe: RecipeCreate, requesting_user: User = Depends(validate_token)):
-    await owner_only(recipe_id, requesting_user)
+    await owner_only("recipes", recipe_id, requesting_user)
 
     return await crud.put_all(recipe_id, recipe, related_attributes=["ingredients", "diet_type"])
 
 @router.delete("/{recipe_id}", dependencies=[Depends(logged_only)])
 async def delete_recipe(recipe_id: int, requesting_user: User = Depends(validate_token)):
-    await owner_only(recipe_id, requesting_user)
+    await owner_only("recipes", recipe_id, requesting_user)
 
     return await crud.delete_all(recipe_id, related_attributes=["ingredients", "diet_type"])
 
