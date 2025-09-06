@@ -26,16 +26,19 @@ async def get_all(
     """
     config = get_main_config(element_type)
 
-    element_data = supabase_connection.find_by(
-        config["table"],
-        config["id"],
-        element_id,
-    )[0]
-    if not element_data:
+    try:
+        element_data = supabase_connection.find_by(
+            config["table"],
+            config["id"],
+            element_id,
+        )[0]
+    except ResourceNotFound:
         logger.error(f"{element_type} with id={element_id} not found")
-        raise ResourceNotFound
+        raise
 
-    attributes_to_add = await get_relationships_and_related_tables(element_type, element_id, related_attributes)
+    attributes_to_add = await get_relationships_and_related_tables(
+        element_type, element_id, related_attributes
+    )
     attributes_to_add += await get_nested(element_type, element_id, nested_attributes)
 
     element_data = add_attributes(element_data, attributes_to_add)

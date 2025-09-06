@@ -62,6 +62,7 @@ open and Fullfill .env with given settings
 ```bash
 # General case
 python src/main.py
+
 # Turn on just one router
 uvicorn src/api.routers.[router_name]:router --reload
 ```
@@ -95,7 +96,23 @@ After each time u merge code to the main branch, there will be auto deployment r
 
 
 ## 🧪 Testing
+
+### Manual testing
+
+#### Run all tests
 ```bash
-# Not yet implemented!
 pytest tests/
 ```
+
+#### Check coverage
+```bash
+pytest --cov=src
+```
+
+#### Check lacking coverage
+```bash
+pytest --cov=src --cov-report=term-missing
+```
+
+### Auto testing
+After each time u try to commit changes, it will run all tests.

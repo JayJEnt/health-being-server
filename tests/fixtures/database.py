@@ -4,12 +4,11 @@ import pytest
 
 from api.handlers.exceptions import InternalServerError
 from database.supabase_connection import SupabaseConnection, Base
-from database import models
 from config import settings
 
 
 @pytest.fixture()
-def mocked_supabase_connection():
+def mocked_supabase_connection_create():
     class MockSupabaseConnection(SupabaseConnection):
         def __init__(self):
             self.engine = create_engine(settings.TEST_DATABASE_URL)
@@ -33,4 +32,3 @@ def mocked_supabase_connection_error():
     conn = MockSupabaseConnection()
     yield conn
     conn.engine.dispose()
-

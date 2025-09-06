@@ -4,7 +4,9 @@ from database.supabase_connection import supabase_connection
 from logger import logger
 
 
-async def update_nested(element_type: str, element_id: int, nested_data_list: list) -> list:
+async def update_nested(
+    element_type: str, element_id: int, nested_data_list: list
+) -> list:
     """
     Update records in nested.
 
@@ -19,17 +21,22 @@ async def update_nested(element_type: str, element_id: int, nested_data_list: li
     nested_attributes = []
     for nested_data in nested_data_list:
         nested_name, nested_item = next(iter(nested_data.items()))
-        nested_config = get_relation_config(element_type, nested_name, relation_type="nested")
-        related_config = get_related_config(element_type, nested_name, relation_type="nested")
+        nested_config = get_relation_config(
+            element_type, nested_name, relation_type="nested"
+        )
+        related_config = get_related_config(
+            element_type, nested_name, relation_type="nested"
+        )
 
         try:
             supabase_connection.delete_by(
-                related_config["table"],
-                nested_config["join_key"],
-                element_id
+                related_config["table"], nested_config["join_key"], element_id
             )
         except ResourceNotFound:
-            logger.info(f"No {nested_config["name"]} entries found for {nested_config["join_key"]}={element_id}")
+            logger.info(
+                f"No {nested_config["name"]} entries found for {nested_config["join_key"]}={element_id}"
+            )
+            continue
 
         nested_item[nested_config["join_key"]] = element_id
 

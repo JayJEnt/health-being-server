@@ -4,7 +4,7 @@ from api.crud.utils import restrict_data, get_main_config
 from logger import logger
 
 
-async def get_elements(element_type: str, restrict: bool=False) -> list:
+async def get_elements(element_type: str, restrict: bool = False) -> list:
     """
     Get all records in element table.
 
@@ -25,9 +25,7 @@ async def get_elements(element_type: str, restrict: bool=False) -> list:
 
 
 async def get_element_by_name(
-    element_type: str,
-    element_name: str,
-    alternative_name: bool=False
+    element_type: str, element_name: str, alternative_name: bool = False
 ) -> dict:
     """
     Get a record in element table by element's name.
@@ -52,7 +50,7 @@ async def get_element_by_name(
         column_name,
         element_name,
     )
-    if not elements or elements[0][column_name].lower()!=element_name.lower():
+    if not elements or elements[0][column_name].lower() != element_name.lower():
         logger.error(f"{element_type} with name={element_name} not found")
         raise ResourceNotFound
     return elements[0]
@@ -71,13 +69,14 @@ async def get_element_by_id(element_type: str, element_id: int) -> dict:
     """
     config = get_main_config(element_type)
 
-    element_data = supabase_connection.find_by(
-        config["table"],
-        config["id"],
-        element_id,
-    )
-    if not element_data:
+    try:
+        element_data = supabase_connection.find_by(
+            config["table"],
+            config["id"],
+            element_id,
+        )
+    except ResourceNotFound:
         logger.error(f"{element_type} with id={element_id} not found")
-        raise ResourceNotFound
+        raise
 
     return element_data[0]

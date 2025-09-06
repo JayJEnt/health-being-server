@@ -10,7 +10,7 @@ from api.crud.single_entity import (
     search_methods,
 )
 from api.crud.relation import (
-    delete_methods as delete_relation, 
+    delete_methods as delete_relation,
     get_methods as get_relation,
     post_methods as post_relation,
     put_methods as put_relation,
@@ -24,12 +24,11 @@ from api.crud.nested import (
 from api.crud.many_entities import get_methods as get_all_methods
 from database import supabase_connection
 from database.supabase_connection import Base
-from database import models
 from config import settings
 
 
 @pytest.fixture
-def mocked_supabase_connection_init(monkeypatch):
+def mocked_supabase_connection(monkeypatch):
     def mock_init(self):
         self.engine = create_engine(settings.TEST_DATABASE_URL)
         Base.metadata.create_all(self.engine)
@@ -40,23 +39,19 @@ def mocked_supabase_connection_init(monkeypatch):
 
     files_to_patch = [
         supabase_connection,
-
         post_methods,
         get_methods,
         delete_methods,
         put_methods,
         search_methods,
-
         post_relation,
         get_relation,
         delete_relation,
         put_relation,
-
         post_nested,
         get_nested,
         delete_nested,
         put_nested,
-
         get_all_methods,
     ]
     for file in files_to_patch:

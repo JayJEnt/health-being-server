@@ -21,14 +21,11 @@ related_create = [
 ]
 
 
-relation_response = {
-    'amount': 50.0,
-    'ingredient_id': 1,
-    'user_id': 1
-}
+relation_response = {"amount": 50.0, "ingredient_id": 1, "user_id": 1}
+
 
 @pytest.mark.asyncio
-async def test_get_relationship(mocked_supabase_connection_init):
+async def test_get_relationship(mocked_supabase_connection):
     await create_element("ingredients", ingredient_create)
     await create_relationship("user", 1, "refrigerator", refrigerator_create)
     response = await get_relationship("user", 1, "refrigerator", 1)
@@ -37,9 +34,25 @@ async def test_get_relationship(mocked_supabase_connection_init):
 
 
 @pytest.mark.asyncio
-async def test_get_relationships(mocked_supabase_connection_init):
+async def test_get_relationship_error(mocked_supabase_connection):
+    with pytest.raises(Exception) as excinfo:
+        await get_relationship("user", 1, "refrigerator", 1)
+
+    assert str(excinfo.value) == "404: Requested resource not found"
+
+
+@pytest.mark.asyncio
+async def test_get_relationships(mocked_supabase_connection):
     await create_element("ingredients", ingredient_create)
     await create_relationships("user", 1, related_create)
     response = await get_relationships("user", 1, "refrigerator")
 
     assert response == [relation_response]
+
+
+@pytest.mark.asyncio
+async def test_get_relationships_error(mocked_supabase_connection):
+    with pytest.raises(Exception) as excinfo:
+        await get_relationships("user", 1, "refrigerator")
+
+    assert str(excinfo.value) == "404: Requested resource not found"
