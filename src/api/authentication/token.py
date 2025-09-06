@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from typing import Optional, Annotated
 
 from api.crud.single_entity.get_methods import get_element_by_name
-from api.handlers.exceptions import InvalidToken
+from api.handlers.exceptions import InvalidToken, ResourceNotFound
 from api.schemas.user import User
 from config import settings
 from logger import logger
@@ -24,23 +24,29 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
     to_encode.update({"exp": expire})
     logger.debug(f"Data: {to_encode}")
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    encoded_jwt = jwt.encode(
+        to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
+    )
     return encoded_jwt
+
 
 async def validate_token(token: Annotated[str, Depends(oauth2_scheme)]):
     logger.info("Validating token...")
     try:
         logger.debug(f"Token: {token}")
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
         logger.debug(f"Got payload: {payload}")
-        email: str = payload.get("sub")
+        email: str = payload.get("sub", None)
         if email is None:
             raise InvalidToken
     except JWTError:
         raise InvalidToken
-    
-    user = await get_element_by_name("user", email, alternative_name=True)
-    if user is None:
+
+    try:
+        user = await get_element_by_name("user", email, alternative_name=True)
+    except ResourceNotFound:
         raise InvalidToken
     user = User(**user)
     return user
