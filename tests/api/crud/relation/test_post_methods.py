@@ -1,61 +1,52 @@
 import pytest
 
-
-from api.crud.single_entity.post_methods import create_element
 from api.crud.relation.post_methods import create_relationship, create_relationships
 
 
-# TODO: move it to fixtures
-ingredient_create = {
-    "name": "Carrot",
-}
+@pytest.mark.asyncio
+async def test_create_relationship(
+    mock_supabase_connection,
+    example_ingredients_injection,
+    example_refrigerator_create,
+    example_refrigerator_create_response,
+):
+    response = await create_relationship(
+        "user", 1, "refrigerator", example_refrigerator_create[0]
+    )
 
-refrigerator_create = {
-    "name": "Carrot",
-    "amount": 50,
-}
-
-user_create = {
-    "username": "testuser",
-    "email": "test@example.com",
-    "hashed_password": "hashedpassword",
-    "role": "user",
-}
-
-related_create = [
-    {"refrigerator": [refrigerator_create]},
-]
+    assert response == example_refrigerator_create_response[0]
 
 
 @pytest.mark.asyncio
-async def test_create_relationship(mock_supabase_connection):
-    await create_element("ingredients", ingredient_create)
-    response = await create_relationship("user", 1, "refrigerator", refrigerator_create)
-
-    assert response == {"id": 1, "name": "Carrot", "amount": 50}
-
-
-@pytest.mark.asyncio
-async def test_create_relationship_error_not_found(mock_supabase_connection):
-    response = await create_relationship("user", 1, "refrigerator", refrigerator_create)
+async def test_create_relationship_error_not_found(
+    mock_supabase_connection, example_refrigerator_create
+):
+    response = await create_relationship(
+        "user", 1, "refrigerator", example_refrigerator_create[0]
+    )
 
     assert response is None
 
 
 @pytest.mark.asyncio
 async def test_create_relationship_error_reference_to_itself(
-    mock_supabase_connection,
+    mock_supabase_connection, example_users_injection, example_users_create
 ):
-    await create_element("user", user_create)
     with pytest.raises(Exception) as e_info:
-        await create_relationship("user", 1, "user", user_create)
+        await create_relationship("user", 1, "user", example_users_create[0])
 
     assert str(e_info.value) == "405: Referencing to itself is not allowed"
 
 
 @pytest.mark.asyncio
-async def test_create_relationships(mock_supabase_connection):
-    await create_element("ingredients", ingredient_create)
-    response = await create_relationships("user", 1, related_create)
+async def test_create_relationships(
+    mock_supabase_connection,
+    example_ingredients_injection,
+    example_refrigerator_create,
+    example_refrigerator_create_response,
+):
+    response = await create_relationships(
+        "user", 1, [{"refrigerator": example_refrigerator_create}]
+    )
 
-    assert response == [{"refrigerator": [{"id": 1, "name": "Carrot", "amount": 50}]}]
+    assert response == [{"refrigerator": example_refrigerator_create_response}]

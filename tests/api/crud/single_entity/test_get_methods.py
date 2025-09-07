@@ -1,6 +1,5 @@
 import pytest
 
-from api.crud.single_entity.post_methods import create_element
 from api.crud.single_entity.get_methods import (
     get_elements,
     get_element_by_name,
@@ -8,78 +7,44 @@ from api.crud.single_entity.get_methods import (
 )
 
 
-# TODO: move to fixture file
-user_create = {
-    "username": "New User",
-    "email": "newuser@example.com",
-    "hashed_password": "securepassword123",
-    "role": "user",
-}
-
-
-user_create2 = {
-    "username": "New Admin",
-    "email": "newadmin@example.com",
-    "hashed_password": "securepassword123",
-    "role": "admin",
-}
-
-
-user_response = {
-    "id": 1,
-    "username": "New User",
-    "email": "newuser@example.com",
-    "hashed_password": "securepassword123",
-    "role": "user",
-}
-
-recipe_create = {
-    "title": "Healthy Salad",
-    "description": "A fresh and nutritious salad.",
-    "instructions": ["Mix all ingredients in a bowl and serve fresh."],
-    "owner_id": 1,
-}
-
-
-recipe_restricted_response = {
-    "id": 1,
-    "owner_id": 1,
-    "title": "Healthy Salad",
-}
-
-
 @pytest.mark.asyncio
-async def test_get_elements(mock_supabase_connection):
-    await create_element("user", user_create)
+async def test_get_elements(
+    mock_supabase_connection, example_users_injection, example_users_response
+):
     response = await get_elements("user")
 
-    assert response == [user_response]
+    assert response == example_users_response
 
 
 @pytest.mark.asyncio
-async def test_get_elements_restricted(mock_supabase_connection):
-    await create_element("recipes", recipe_create)
+async def test_get_elements_restricted(
+    mock_supabase_connection,
+    example_recipes_injection,
+    example_recipes_restricted_response,
+):
     response = await get_elements("recipes", restrict=True)
 
-    assert response == [recipe_restricted_response]
+    assert response == example_recipes_restricted_response
 
 
 @pytest.mark.asyncio
-async def test_get_element_by_name(mock_supabase_connection):
-    await create_element("user", user_create)
+async def test_get_element_by_name(
+    mock_supabase_connection, example_users_injection, example_users_response
+):
     response = await get_element_by_name("user", "New User")
 
-    assert response == user_response
+    assert response == example_users_response[1]
 
 
 @pytest.mark.asyncio
-async def test_get_element_by_alternative_name(mock_supabase_connection):
-    await create_element("user", user_create)
+async def test_get_element_by_alternative_name(
+    mock_supabase_connection, example_users_injection, example_users_response
+):
     response = await get_element_by_name(
         "user", "newuser@example.com", alternative_name=True
     )
 
-    assert response == user_response
+    assert response == example_users_response[1]
 
 
 @pytest.mark.asyncio
@@ -91,8 +56,9 @@ async def test_get_element_by_name_error(mock_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_element_by_name_error_2(mock_supabase_connection):
-    await create_element("user", user_create2)
+async def test_get_element_by_name_error_2(
+    mock_supabase_connection, example_users_injection
+):
     with pytest.raises(Exception) as excinfo:
         await get_element_by_name("user", "New")
 
@@ -100,11 +66,12 @@ async def test_get_element_by_name_error_2(mock_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_element_by_id(mock_supabase_connection):
-    await create_element("user", user_create)
+async def test_get_element_by_id(
+    mock_supabase_connection, example_users_injection, example_users_response
+):
     response = await get_element_by_id("user", 1)
 
-    assert response == user_response
+    assert response == example_users_response[0]
 
 
 @pytest.mark.asyncio

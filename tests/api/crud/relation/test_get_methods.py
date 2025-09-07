@@ -1,8 +1,5 @@
 import pytest
 
-
-from api.crud.single_entity.post_methods import create_element
-from api.crud.relation.post_methods import create_relationship, create_relationships
 from api.crud.relation.get_methods import (
     get_relationship,
     get_relationships,
@@ -11,35 +8,21 @@ from api.crud.relation.get_methods import (
 )
 
 
-# TODO: move it to fixtures
-ingredient_create = {
-    "name": "Carrot",
-}
+@pytest.mark.asyncio
+async def test_get_relationship(
+    mocked_supabase_connection,
+    example_refrigerator_injection,
+    example_refrigerator_response,
+):
+    response = await get_relationship("user", 1, "refrigerator", 2)
 
-refrigerator_create = {
-    "name": "Carrot",
-    "amount": 50,
-}
-
-related_create = [
-    {"refrigerator": [refrigerator_create]},
-]
-
-
-relation_response = {"amount": 50.0, "ingredient_id": 1, "user_id": 1}
+    assert response == example_refrigerator_response[0]
 
 
 @pytest.mark.asyncio
-async def test_get_relationship(mock_supabase_connection):
-    await create_element("ingredients", ingredient_create)
-    await create_relationship("user", 1, "refrigerator", refrigerator_create)
-    response = await get_relationship("user", 1, "refrigerator", 1)
-
-    assert response == relation_response
-
-
-@pytest.mark.asyncio
-async def test_get_relationship_error(mock_supabase_connection):
+async def test_get_relationship_error(
+    mocked_supabase_connection, example_users_injection
+):
     with pytest.raises(Exception) as excinfo:
         await get_relationship("user", 1, "refrigerator", 1)
 
@@ -47,16 +30,20 @@ async def test_get_relationship_error(mock_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_relationships(mock_supabase_connection):
-    await create_element("ingredients", ingredient_create)
-    await create_relationships("user", 1, related_create)
+async def test_get_relationships(
+    mocked_supabase_connection,
+    example_refrigerator_injection,
+    example_refrigerator_response,
+):
     response = await get_relationships("user", 1, "refrigerator")
 
-    assert response == [relation_response]
+    assert response == example_refrigerator_response
 
 
 @pytest.mark.asyncio
-async def test_get_relationships_error(mock_supabase_connection):
+async def test_get_relationships_error(
+    mocked_supabase_connection, example_users_injection
+):
     with pytest.raises(Exception) as excinfo:
         await get_relationships("user", 1, "refrigerator")
 
@@ -64,15 +51,18 @@ async def test_get_relationships_error(mock_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_relationships_and_related_tables_error(mock_supabase_connection):
+async def test_get_relationships_and_related_tables_error(
+    mocked_supabase_connection, example_users_injection
+):
     with pytest.raises(Exception) as excinfo:
         await get_relationships_and_related_tables("user", 1, ["refrigerator"])
 
     assert str(excinfo.value) == "404: Requested resource not found"
 
 
+# TODO: why so long?
 @pytest.mark.asyncio
-async def test_get_related_tables_items(mock_supabase_connection):
+async def test_get_related_tables_items(mocked_supabase_connection):
     join_table_items = [
         {"user_id": 1, "ingredient_id": 1, "amount": 50},
     ]

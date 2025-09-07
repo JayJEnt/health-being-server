@@ -1,18 +1,12 @@
 import pytest
 
-from api.schemas.vitamin import VitaminCreate
 from api.crud.utils import pydantic_to_dict, get_main_config, get_relation_config
 
 
-vitamin_dict = {"name": "C12"}
+def test_pydantic_to_dict(example_pydantic_model, example_dict_response):
+    result = pydantic_to_dict(example_pydantic_model)
 
-vitamin_pydantic = VitaminCreate(**vitamin_dict)
-
-
-def test_pydantic_to_dict():
-    result = pydantic_to_dict(vitamin_pydantic)
-
-    assert result == vitamin_dict
+    assert result == example_dict_response
 
 
 def test_pydantic_to_dict_error():
