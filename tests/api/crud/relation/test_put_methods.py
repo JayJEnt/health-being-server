@@ -45,7 +45,7 @@ related_update = [
 
 
 @pytest.mark.asyncio
-async def test_update_relationships(mocked_supabase_connection):
+async def test_update_relationships(mock_supabase_connection):
     await create_element("ingredients", ingredient_create)
     await create_element("ingredients", ingredient_create2)
     await create_relationships("user", 1, related_create)
@@ -62,7 +62,7 @@ async def test_update_relationships(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_update_relationships_error(mocked_supabase_connection):
+async def test_update_relationships_error(mock_supabase_connection):
     response = await update_relationships("user", 999, related_update)
 
     assert response == [{"refrigerator": [None, None]}]

@@ -39,7 +39,7 @@ ingredient_data_update = [
 
 
 @pytest.mark.asyncio
-async def test_put_nested_elements(mocked_supabase_connection):
+async def test_put_nested_elements(mock_supabase_connection):
     await create_element("ingredients", ingredient_create)
     await create_nested("ingredients", 1, ingredient_data_create)
     response = await update_nested("ingredients", 1, ingredient_data_update)
@@ -48,7 +48,7 @@ async def test_put_nested_elements(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_put_nested_elements_error(mocked_supabase_connection):
+async def test_put_nested_elements_error(mock_supabase_connection):
     response = await update_nested("ingredients", 999, ingredient_data_update)
 
     assert response == []

@@ -28,7 +28,7 @@ from config import settings
 
 
 @pytest.fixture
-def mocked_supabase_connection(monkeypatch):
+def mock_supabase_connection(monkeypatch):
     def mock_init(self):
         self.engine = create_engine(settings.TEST_DATABASE_URL)
         Base.metadata.create_all(self.engine)

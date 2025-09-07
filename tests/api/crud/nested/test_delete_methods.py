@@ -26,7 +26,7 @@ ingredient_data_create = [
 
 
 @pytest.mark.asyncio
-async def test_delete_nested_elements(mocked_supabase_connection):
+async def test_delete_nested_elements(mock_supabase_connection):
     await create_element("ingredients", ingredient_create)
     await create_nested("ingredients", 1, ingredient_data_create)
     await delete_nested("ingredients", 1, ["ingredients_data"])
@@ -36,7 +36,7 @@ async def test_delete_nested_elements(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_delete_nested_elements_error(mocked_supabase_connection):
+async def test_delete_nested_elements_error(mock_supabase_connection):
     await delete_nested("ingredients", 999, ["ingredients_data"])
 
     assert True  # No error raised (works as expected)

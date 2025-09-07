@@ -46,7 +46,7 @@ recipe_response = {
 
 
 @pytest.mark.asyncio
-async def test_get_all_elements(mocked_supabase_connection):
+async def test_get_all_elements(mock_supabase_connection):
     await create_element("diet_type", diet_type_create)
     await create_element("ingredients", ingredient_create)
     await create_all(
@@ -60,7 +60,7 @@ async def test_get_all_elements(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_all_elements_error_resource_not_found(mocked_supabase_connection):
+async def test_get_all_elements_error_resource_not_found(mock_supabase_connection):
     with pytest.raises(Exception) as e_info:
         await get_all("recipes", 1, related_attributes=["ingredients", "diet_type"])
 

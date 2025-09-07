@@ -5,7 +5,7 @@ from api.crud.single_entity.put_methods import update_element_by_id
 
 
 @pytest.mark.asyncio
-async def test_update_element(mocked_supabase_connection):
+async def test_update_element(mock_supabase_connection):
     await create_element("vitamins", {"name": "New Vitamin"})
     response = await update_element_by_id("vitamins", 1, {"name": "Updated Vitamin"})
 
@@ -13,7 +13,7 @@ async def test_update_element(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_update_nonexistent_element(mocked_supabase_connection):
+async def test_update_nonexistent_element(mock_supabase_connection):
     with pytest.raises(Exception) as excinfo:
         await update_element_by_id("vitamins", 999, {"name": "Nonexistent Vitamin"})
 

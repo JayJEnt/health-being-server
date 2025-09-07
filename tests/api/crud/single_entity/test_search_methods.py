@@ -27,7 +27,7 @@ recipe_restricted_response = {
 
 
 @pytest.mark.asyncio
-async def test_search_elements(mocked_supabase_connection):
+async def test_search_elements(mock_supabase_connection):
     await create_element("recipes", recipe_create)
     response = await search_elements("recipes", "HealThy")
 
@@ -35,7 +35,7 @@ async def test_search_elements(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_search_elements_restricted(mocked_supabase_connection):
+async def test_search_elements_restricted(mock_supabase_connection):
     await create_element("recipes", recipe_create)
     response = await search_elements("recipes", "HealThy", restrict=True)
 
@@ -43,7 +43,7 @@ async def test_search_elements_restricted(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_update_nonexistent_element(mocked_supabase_connection):
+async def test_update_nonexistent_element(mock_supabase_connection):
     with pytest.raises(Exception) as e_info:
         await search_elements("recipes", "Nonexistent")
 

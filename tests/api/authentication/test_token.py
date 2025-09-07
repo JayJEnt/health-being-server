@@ -19,7 +19,7 @@ def test_create_access_token_with_time_delta(
 
 @pytest.mark.asyncio
 async def test_validate_correct_token(
-    mock_datetime_utcnow, mocked_supabase_connection, user_create, expected_token
+    mock_datetime_utcnow, mock_supabase_connection, user_create, expected_token
 ):
     await create_element("user", user_create)
     user = await validate_token(expected_token)
@@ -49,7 +49,7 @@ async def test_validate_correct_token_invalid_token(
 
 @pytest.mark.asyncio
 async def test_validate_correct_token_no_user(
-    mock_datetime_utcnow, mocked_supabase_connection, expected_token
+    mock_datetime_utcnow, mock_supabase_connection, expected_token
 ):
     with pytest.raises(Exception) as excinfo:
         await validate_token(expected_token)
