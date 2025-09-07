@@ -1,9 +1,10 @@
 import pytest
+import pytest_asyncio
 
 
 @pytest.fixture()
-def inject_example_users(mocked_supabase_connection):
-    users = [
+def example_users_create():
+    return [
         {
             "username": "testuser",
             "email": "test@example.com",
@@ -11,17 +12,50 @@ def inject_example_users(mocked_supabase_connection):
             "role": "user",
         },
         {
-            "username": "testuser2",
-            "email": "test2@example.com",
-            "hashed_password": "password",
+            "username": "New User",
+            "email": "newuser@example.com",
+            "hashed_password": "securepassword123",
             "role": "user",
         },
         {
-            "username": "testuser3",
-            "email": "test3@example.com",
-            "hashed_password": "password",
+            "username": "New Admin",
+            "email": "newadmin@example.com",
+            "hashed_password": "securepassword123",
             "role": "admin",
         },
     ]
 
-    return [mocked_supabase_connection.insert("users", user) for user in users]
+
+@pytest_asyncio.fixture
+async def example_users_injection(mock_supabase_connection, example_users_create):
+    from api.crud.single_entity.post_methods import create_element
+
+    for user in example_users_create:
+        await create_element("user", user)
+
+
+@pytest.fixture()
+def example_users_response():
+    return [
+        {
+            "id": 1,
+            "username": "testuser",
+            "email": "test@example.com",
+            "hashed_password": "password",
+            "role": "user",
+        },
+        {
+            "id": 2,
+            "username": "New User",
+            "email": "newuser@example.com",
+            "hashed_password": "securepassword123",
+            "role": "user",
+        },
+        {
+            "id": 3,
+            "username": "New Admin",
+            "email": "newadmin@example.com",
+            "hashed_password": "securepassword123",
+            "role": "admin",
+        },
+    ]

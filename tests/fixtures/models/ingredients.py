@@ -1,29 +1,32 @@
 import pytest
+import pytest_asyncio
 
 
 @pytest.fixture()
 def example_ingredients_create():
-    ingredients_create = [
+    return [
         {"name": "Bread"},
-        {"name": "Lemon"},
-        {"name": "Milk"},
+        {"name": "Carrot"},
+        {"name": "Mushroom"},
         {"name": "Rice"},
     ]
-    return ingredients_create
 
 
-@pytest.fixture()
-def inject_example_ingredients(mocked_supabase_connection, example_ingredients_create):
+@pytest_asyncio.fixture
+async def example_ingredients_injection(
+    mock_supabase_connection, example_ingredients_create
+):
+    from api.crud.single_entity.post_methods import create_element
+
     for ingredient in example_ingredients_create:
-        mocked_supabase_connection.insert("ingredients", ingredient)
+        await create_element("ingredients", ingredient)
 
 
 @pytest.fixture()
 def example_ingredients_response():
-    ingredients_response = [
+    return [
         {"id": 1, "name": "Bread"},
-        {"id": 2, "name": "Lemon"},
-        {"id": 3, "name": "Milk"},
+        {"id": 2, "name": "Carrot"},
+        {"id": 3, "name": "Mushroom"},
         {"id": 4, "name": "Rice"},
     ]
-    return ingredients_response
