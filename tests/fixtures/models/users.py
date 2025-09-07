@@ -1,6 +1,8 @@
 import pytest
 import pytest_asyncio
 
+from api.crud.single_entity.post_methods import create_element
+
 
 @pytest.fixture()
 def example_users_create():
@@ -28,8 +30,6 @@ def example_users_create():
 
 @pytest_asyncio.fixture
 async def example_users_injection(mock_supabase_connection, example_users_create):
-    from api.crud.single_entity.post_methods import create_element
-
     for user in example_users_create:
         await create_element("user", user)
 
