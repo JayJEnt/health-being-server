@@ -30,7 +30,7 @@ relation_response = {"amount": 50.0, "ingredient_id": 1, "user_id": 1}
 
 
 @pytest.mark.asyncio
-async def test_get_relationship(mocked_supabase_connection):
+async def test_get_relationship(mock_supabase_connection):
     await create_element("ingredients", ingredient_create)
     await create_relationship("user", 1, "refrigerator", refrigerator_create)
     response = await get_relationship("user", 1, "refrigerator", 1)
@@ -39,7 +39,7 @@ async def test_get_relationship(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_relationship_error(mocked_supabase_connection):
+async def test_get_relationship_error(mock_supabase_connection):
     with pytest.raises(Exception) as excinfo:
         await get_relationship("user", 1, "refrigerator", 1)
 
@@ -47,7 +47,7 @@ async def test_get_relationship_error(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_relationships(mocked_supabase_connection):
+async def test_get_relationships(mock_supabase_connection):
     await create_element("ingredients", ingredient_create)
     await create_relationships("user", 1, related_create)
     response = await get_relationships("user", 1, "refrigerator")
@@ -56,7 +56,7 @@ async def test_get_relationships(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_relationships_error(mocked_supabase_connection):
+async def test_get_relationships_error(mock_supabase_connection):
     with pytest.raises(Exception) as excinfo:
         await get_relationships("user", 1, "refrigerator")
 
@@ -64,7 +64,7 @@ async def test_get_relationships_error(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_relationships_and_related_tables_error(mocked_supabase_connection):
+async def test_get_relationships_and_related_tables_error(mock_supabase_connection):
     with pytest.raises(Exception) as excinfo:
         await get_relationships_and_related_tables("user", 1, ["refrigerator"])
 
@@ -72,7 +72,7 @@ async def test_get_relationships_and_related_tables_error(mocked_supabase_connec
 
 
 @pytest.mark.asyncio
-async def test_get_related_tables_items(mocked_supabase_connection):
+async def test_get_related_tables_items(mock_supabase_connection):
     join_table_items = [
         {"user_id": 1, "ingredient_id": 1, "amount": 50},
     ]

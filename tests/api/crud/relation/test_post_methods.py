@@ -28,7 +28,7 @@ related_create = [
 
 
 @pytest.mark.asyncio
-async def test_create_relationship(mocked_supabase_connection):
+async def test_create_relationship(mock_supabase_connection):
     await create_element("ingredients", ingredient_create)
     response = await create_relationship("user", 1, "refrigerator", refrigerator_create)
 
@@ -36,7 +36,7 @@ async def test_create_relationship(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_create_relationship_error_not_found(mocked_supabase_connection):
+async def test_create_relationship_error_not_found(mock_supabase_connection):
     response = await create_relationship("user", 1, "refrigerator", refrigerator_create)
 
     assert response is None
@@ -44,7 +44,7 @@ async def test_create_relationship_error_not_found(mocked_supabase_connection):
 
 @pytest.mark.asyncio
 async def test_create_relationship_error_reference_to_itself(
-    mocked_supabase_connection,
+    mock_supabase_connection,
 ):
     await create_element("user", user_create)
     with pytest.raises(Exception) as e_info:
@@ -54,7 +54,7 @@ async def test_create_relationship_error_reference_to_itself(
 
 
 @pytest.mark.asyncio
-async def test_create_relationships(mocked_supabase_connection):
+async def test_create_relationships(mock_supabase_connection):
     await create_element("ingredients", ingredient_create)
     response = await create_relationships("user", 1, related_create)
 

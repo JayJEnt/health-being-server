@@ -28,7 +28,7 @@ related_create = [
 
 
 @pytest.mark.asyncio
-async def test_delete_relationship(mocked_supabase_connection):
+async def test_delete_relationship(mock_supabase_connection):
     await create_element("ingredients", ingredient_create)
     await create_relationship("user", 1, "refrigerator", refrigerator_create)
     response = await delete_relationship("user", 1, "refrigerator", 1)
@@ -37,7 +37,7 @@ async def test_delete_relationship(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_delete_relationship_error_not_found(mocked_supabase_connection):
+async def test_delete_relationship_error_not_found(mock_supabase_connection):
     with pytest.raises(Exception) as e_info:
         await delete_relationship("user", 1, "refrigerator", 1)
 
@@ -45,7 +45,7 @@ async def test_delete_relationship_error_not_found(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_create_relationships(mocked_supabase_connection):
+async def test_create_relationships(mock_supabase_connection):
     await create_element("ingredients", ingredient_create)
     await create_relationships("user", 1, related_create)
     await delete_relationships("user", 1, ["refrigerator"])
@@ -54,7 +54,7 @@ async def test_create_relationships(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_delete_relationships_error_not_found(mocked_supabase_connection):
+async def test_delete_relationships_error_not_found(mock_supabase_connection):
     await delete_relationships("user", 1, ["refrigerator"])
 
     assert True  # delete_relationships does not return anything and does not raise an error

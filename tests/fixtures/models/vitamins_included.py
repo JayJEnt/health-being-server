@@ -2,7 +2,7 @@ import pytest
 
 
 @pytest.fixture()
-def inject_example_vitamins_included(mocked_supabase_connection_create):
+def inject_example_vitamins_included(mocked_supabase_connection):
     vitamins_included = [
         {
             "ingredient_id": "1",
@@ -15,6 +15,6 @@ def inject_example_vitamins_included(mocked_supabase_connection_create):
     ]
 
     return [
-        mocked_supabase_connection_create.insert("vitamins_included", vitamin)
+        mocked_supabase_connection.insert("vitamins_included", vitamin)
         for vitamin in vitamins_included
     ]

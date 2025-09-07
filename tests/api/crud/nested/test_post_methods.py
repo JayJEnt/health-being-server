@@ -24,7 +24,7 @@ ingredient_data_create = [
 
 
 @pytest.mark.asyncio
-async def test_post_nested_elements(mocked_supabase_connection):
+async def test_post_nested_elements(mock_supabase_connection):
     await create_element("ingredients", ingredient_create)
     response = await create_nested("ingredients", 1, ingredient_data_create)
     assert response == ingredient_data_create

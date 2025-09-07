@@ -1,8 +1,8 @@
 import pytest
 
 
-def test_connection(mocked_supabase_connection_create, inject_example_users):
-    retrieved_users = mocked_supabase_connection_create.fetch_all("users")
+def test_connection(mocked_supabase_connection, inject_example_users):
+    retrieved_users = mocked_supabase_connection.fetch_all("users")
 
     assert retrieved_users == inject_example_users
 

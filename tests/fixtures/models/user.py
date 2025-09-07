@@ -2,7 +2,7 @@ import pytest
 
 
 @pytest.fixture()
-def inject_example_users(mocked_supabase_connection_create):
+def inject_example_users(mocked_supabase_connection):
     users = [
         {
             "username": "testuser",
@@ -24,4 +24,4 @@ def inject_example_users(mocked_supabase_connection_create):
         },
     ]
 
-    return [mocked_supabase_connection_create.insert("users", user) for user in users]
+    return [mocked_supabase_connection.insert("users", user) for user in users]

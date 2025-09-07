@@ -8,7 +8,7 @@ from config import settings
 
 
 @pytest.fixture()
-def mocked_supabase_connection_create():
+def mocked_supabase_connection():
     class MockSupabaseConnection(SupabaseConnection):
         def __init__(self):
             self.engine = create_engine(settings.TEST_DATABASE_URL)

@@ -49,7 +49,7 @@ recipe_restricted_response = {
 
 
 @pytest.mark.asyncio
-async def test_get_elements(mocked_supabase_connection):
+async def test_get_elements(mock_supabase_connection):
     await create_element("user", user_create)
     response = await get_elements("user")
 
@@ -57,7 +57,7 @@ async def test_get_elements(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_elements_restricted(mocked_supabase_connection):
+async def test_get_elements_restricted(mock_supabase_connection):
     await create_element("recipes", recipe_create)
     response = await get_elements("recipes", restrict=True)
 
@@ -65,7 +65,7 @@ async def test_get_elements_restricted(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_element_by_name(mocked_supabase_connection):
+async def test_get_element_by_name(mock_supabase_connection):
     await create_element("user", user_create)
     response = await get_element_by_name("user", "New User")
 
@@ -73,7 +73,7 @@ async def test_get_element_by_name(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_element_by_alternative_name(mocked_supabase_connection):
+async def test_get_element_by_alternative_name(mock_supabase_connection):
     await create_element("user", user_create)
     response = await get_element_by_name(
         "user", "newuser@example.com", alternative_name=True
@@ -83,7 +83,7 @@ async def test_get_element_by_alternative_name(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_element_by_name_error(mocked_supabase_connection):
+async def test_get_element_by_name_error(mock_supabase_connection):
     with pytest.raises(Exception) as excinfo:
         await get_element_by_name("user", "New User")
 
@@ -91,7 +91,7 @@ async def test_get_element_by_name_error(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_element_by_name_error_2(mocked_supabase_connection):
+async def test_get_element_by_name_error_2(mock_supabase_connection):
     await create_element("user", user_create2)
     with pytest.raises(Exception) as excinfo:
         await get_element_by_name("user", "New")
@@ -100,7 +100,7 @@ async def test_get_element_by_name_error_2(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_element_by_id(mocked_supabase_connection):
+async def test_get_element_by_id(mock_supabase_connection):
     await create_element("user", user_create)
     response = await get_element_by_id("user", 1)
 
@@ -108,7 +108,7 @@ async def test_get_element_by_id(mocked_supabase_connection):
 
 
 @pytest.mark.asyncio
-async def test_get_element_by_id_error(mocked_supabase_connection):
+async def test_get_element_by_id_error(mock_supabase_connection):
     with pytest.raises(Exception) as excinfo:
         await get_element_by_id("user", 999)
 
