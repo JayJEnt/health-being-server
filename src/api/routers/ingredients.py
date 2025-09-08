@@ -79,7 +79,11 @@ async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
 crud2 = CrudOperations("refrigerator")
 
 
-@admin_router.delete("/{ingredient_id}", dependencies=[Depends(admin_only)])
+@admin_router.delete(
+    "/{ingredient_id}",
+    response_model=IngredientResponse,
+    dependencies=[Depends(admin_only)],
+)
 async def delete_ingredient(ingredient_id: int):
     await crud2.delete_relationships(ingredient_id, ["user"])  # TEMP FIX 25/08/2025
     return await crud.delete_all(

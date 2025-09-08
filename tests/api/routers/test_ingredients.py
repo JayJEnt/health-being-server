@@ -103,6 +103,6 @@ async def test_delete_ingredient(
 
     assert response == example_ingredients_response[0]
 
-    parsed = Ingredient(**response)
+    parsed = IngredientResponse(**response)
 
-    assert isinstance(parsed, Ingredient)
+    assert isinstance(parsed, IngredientResponse)
