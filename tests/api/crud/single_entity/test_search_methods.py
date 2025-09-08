@@ -16,11 +16,11 @@ async def test_search_elements(
 async def test_search_elements_restricted(
     mock_supabase_connection,
     example_recipes_injection,
-    example_recipes_restricted_response,
+    example_recipes_overview_response,
 ):
     response = await search_elements("recipes", "HealThy", restrict=True)
 
-    assert response == example_recipes_restricted_response
+    assert response == example_recipes_overview_response
 
 
 @pytest.mark.asyncio
