@@ -1,13 +1,16 @@
 from pydantic import BaseModel
-from typing import List
 
-from api.schemas.ingredient import IngredientQuantity
 
-# NOT IN USE TODO: maybe delete?
+class CreateRefrigerator(BaseModel):
+    name: str
+    amount: int
+
+
+class PostCreateRefrigerator(CreateRefrigerator):
+    id: int
+
+
 class Refrigerator(BaseModel):
     user_id: int
-    ingredients: List[IngredientQuantity]
-
-class AddToRefrigerator(BaseModel):
-    name: str
-    amount: str
+    ingredient_id: int
+    amount: int

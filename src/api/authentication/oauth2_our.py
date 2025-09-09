@@ -6,7 +6,11 @@ from typing import Annotated
 
 from api.authentication.hash_methods import verify_password, hash_password
 from api.authentication.token import create_access_token
-from api.handlers.exceptions import ResourceAlreadyTaken, ResourceNotFound, InvalidCredentials
+from api.handlers.exceptions import (
+    ResourceAlreadyTaken,
+    ResourceNotFound,
+    InvalidCredentials,
+)
 from api.schemas.user import UserOurAuth, UserCreate, UserUpdateAdmin
 from api.crud.single_entity.get_methods import get_element_by_name
 from api.crud.single_entity.post_methods import create_element
@@ -37,7 +41,7 @@ async def our_login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
         "id": user.id,
         "username": user.username,
         "sub": user.email,
-        "provider": "health-being-server"
+        "provider": "health-being-server",
     }
 
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE)
@@ -48,11 +52,13 @@ async def our_login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-async def register(user: UserCreate, other_provider: bool=False):
+async def register(user: UserCreate, other_provider: bool = False):
     try:
-        user_response = await get_element_by_name("user", user.email, alternative_name=True)
+        user_response = await get_element_by_name(
+            "user", user.email, alternative_name=True
+        )
         raise ResourceAlreadyTaken
-    
+
     except ResourceAlreadyTaken:
         logger.info(
             f"Email: {user.email} is already registered in our base."
@@ -76,11 +82,13 @@ async def register(user: UserCreate, other_provider: bool=False):
 
 async def hash_pass_for_user(user: UserCreate):
     user, password = pop_attributes(user, ["password"])
-    hashed_password = hash_password(password.get("password", ""))
-    return add_attributes(user, [{"hashed_password": hashed_password},{"role": "user"}])
+    hashed_password = hash_password(password[0].get("password", ""))
+    return add_attributes(
+        user, [{"hashed_password": hashed_password}, {"role": "user"}]
+    )
 
 
 async def hash_pass_for_admin(user: UserUpdateAdmin):
     user, password = pop_attributes(user, ["password"])
-    hashed_password = hash_password(password.get("password", ""))
+    hashed_password = hash_password(password[0].get("password", ""))
     return add_attributes(user, [{"hashed_password": hashed_password}])

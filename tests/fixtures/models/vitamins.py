@@ -24,3 +24,19 @@ def example_vitamins_response():
         {"id": 1, "name": "C"},
         {"id": 2, "name": "D"},
     ]
+
+
+@pytest.fixture()
+def example_vitamins_update():
+    return [
+        {"name": "C12"},
+        {"name": "D6"},
+    ]
+
+
+@pytest.fixture()
+def example_vitamins_update_response():
+    return [
+        {"id": 1, "name": "C12"},
+        {"id": 2, "name": "D6"},
+    ]

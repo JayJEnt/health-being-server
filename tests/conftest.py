@@ -15,7 +15,6 @@ pytest_plugins = [
     "tests.fixtures.models.recipe_favourite",
     "tests.fixtures.models.recipes",
     "tests.fixtures.models.refrigerator",
-    "tests.fixtures.models.token_data",
     "tests.fixtures.models.user_data",
     "tests.fixtures.models.users",
     "tests.fixtures.models.vitamins_included",
