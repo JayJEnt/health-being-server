@@ -22,23 +22,28 @@ class S3Connection:
                 logger.info(f"Processing request: {func.__name__}")
                 result = await func(*args, **kwargs)
                 if func.__name__ == "download" and result is None:
-                    func_args = args[1:] if args and args[0].__class__.__name__ == "S3Connection" else args
+                    func_args = (
+                        args[1:]
+                        if args and args[0].__class__.__name__ == "S3Connection"
+                        else args
+                    )
                     logger.info(
                         f"Resource not found - Operation: {func.__name__}, "
                         f"Args: {func_args}"
                     )
                     raise ResourceNotFound
-                logger.info(f"Sucesfully processed.")
+                logger.info("Sucesfully processed.")
                 return result
             except ClientError as e:
-                if e.response['Error']['Code'] == 'NoSuchKey':
+                if e.response["Error"]["Code"] == "NoSuchKey":
                     raise ResourceNotFound
                 logger.error(f"S3 client error: {e}")
             except Exception as ex:
                 logger.error(f"S3 error: {ex}")
                 raise InternalServerError
+
         return wrapper
-    
+
     @error_handler
     async def upload(self, recipe_id: int, file: UploadFile):
         file_content = await file.read()
@@ -46,18 +51,20 @@ class S3Connection:
             Bucket=settings.BUCKET_NAME,
             Key=f"img_{recipe_id}",
             Body=file_content,
-            ContentType=file.content_type
+            ContentType=file.content_type or "application/octet-stream",
         )
 
     @error_handler
     async def download(self, recipe_id: int):
-        response = self._client.get_object(Bucket=settings.BUCKET_NAME, Key=f"img_{recipe_id}")
-        file_content = response['Body'].read()
+        response = self._client.get_object(
+            Bucket=settings.BUCKET_NAME, Key=f"img_{recipe_id}"
+        )
+        file_content = response["Body"].read()
         return Response(
             content=file_content,
-            media_type=response['ContentType'],
-            headers={"Content-Disposition": f"attachment; filename=img_{recipe_id}"}
+            media_type=response["ContentType"],
+            headers={"Content-Disposition": f"attachment; filename=img_{recipe_id}"},
         )
-    
+
 
 s3 = S3Connection()
