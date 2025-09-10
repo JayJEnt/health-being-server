@@ -1,5 +1,7 @@
 import pytest
 
+from api.authentication.hash_methods import bcrypt
+
 
 @pytest.fixture
 def password():
@@ -18,8 +20,6 @@ def hashed_password():
 
 @pytest.fixture
 def mock_bcrypt(monkeypatch):
-    from api.authentication.hash_methods import bcrypt
-
     def mock_gensalt():
         return b"$2b$12$9VpQw6INCOS9B98cgHSVse"
 

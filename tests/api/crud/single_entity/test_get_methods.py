@@ -20,11 +20,11 @@ async def test_get_elements(
 async def test_get_elements_restricted(
     mock_supabase_connection,
     example_recipes_injection,
-    example_recipes_restricted_response,
+    example_recipes_overview_response,
 ):
     response = await get_elements("recipes", restrict=True)
 
-    assert response == example_recipes_restricted_response
+    assert response == example_recipes_overview_response
 
 
 @pytest.mark.asyncio

@@ -45,6 +45,10 @@ async def update_ingredient_data(ingredient_id: int, ingredient: IngredientDataC
     return await crud.put(ingredient_id, ingredient)
 
 
-@admin_router.delete("/{ingredient_id}", dependencies=[Depends(admin_only)])
+@admin_router.delete(
+    "/{ingredient_id}",
+    response_model=IngredientDataResponse,
+    dependencies=[Depends(admin_only)],
+)
 async def delete_ingredient_data(ingredient_id: int):
     return await crud.delete(ingredient_id)

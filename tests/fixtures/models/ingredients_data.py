@@ -1,6 +1,8 @@
 import pytest
 import pytest_asyncio
 
+from api.crud.nested.post_methods import create_nested
+
 
 @pytest.fixture()
 def example_ingredients_data_create():
@@ -32,8 +34,6 @@ async def example_ingredients_data_injection(
     example_ingredients_injection,
     example_ingredients_data_create,
 ):
-    from api.crud.nested.post_methods import create_nested
-
     for index in range(len(example_ingredients_data_create)):
         await create_nested(
             "ingredients",
@@ -44,6 +44,20 @@ async def example_ingredients_data_injection(
 
 @pytest.fixture()
 def example_ingredients_data_response():
+    return {
+        "ingredient_id": 1,
+        "calories_per_100": 41.6,
+        "protein_per_100": 0.9,
+        "fat_per_100": 21.2,
+        "carbon_per_100": 9.6,
+        "fiber_per_100": 2.8,
+        "sugar_per_100": 6.8,
+        "salt_per_100": 0.1,
+    }
+
+
+@pytest.fixture()
+def example_ingredients_data_get_response():
     return [
         {"ingredient_id": 1},
         {"calories_per_100": 41.6},
@@ -57,7 +71,7 @@ def example_ingredients_data_response():
 
 
 @pytest.fixture()
-def example_ingredients_data_create_response(example_ingredients_data_create):
+def example_ingredients_data_nested_create_response(example_ingredients_data_create):
     return [
         {"ingredients_data": ingredients_data}
         for ingredients_data in example_ingredients_data_create
@@ -89,7 +103,21 @@ def example_ingredients_data_update():
 
 
 @pytest.fixture()
-def example_ingredients_data_update_response(example_ingredients_data_update):
+def example_ingredients_data_update_response():
+    return {
+        "ingredient_id": 1,
+        "calories_per_100": 0.6,
+        "protein_per_100": 0.9,
+        "fat_per_100": 1.2,
+        "carbon_per_100": 9.6,
+        "fiber_per_100": 2.8,
+        "sugar_per_100": 6.8,
+        "salt_per_100": 0.1,
+    }
+
+
+@pytest.fixture()
+def example_ingredients_data_nested_update_response(example_ingredients_data_update):
     return [
         {"ingredients_data": ingredients_data}
         for ingredients_data in example_ingredients_data_update

@@ -1,6 +1,8 @@
 import pytest
 import pytest_asyncio
 
+from api.crud.relation.post_methods import create_relationship
+
 
 @pytest.fixture()
 def example_refrigerator_create():
@@ -23,8 +25,6 @@ async def example_refrigerator_injection(
     example_ingredients_injection,
     example_users_injection,
 ):
-    from api.crud.relation.post_methods import create_relationship
-
     for ingredient in example_refrigerator_create:
         await create_relationship("user", 1, "refrigerator", ingredient)
 

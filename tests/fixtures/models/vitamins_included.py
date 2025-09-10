@@ -1,6 +1,8 @@
 import pytest
 import pytest_asyncio
 
+from api.crud.single_entity.post_methods import create_element
+
 
 @pytest.fixture()
 def example_vitamins_included_create():
@@ -20,8 +22,6 @@ def example_vitamins_included_create():
 async def example_vitamins_included_injection(
     mock_supabase_connection, example_vitamins_included_create
 ):
-    from api.crud.single_entity.post_methods import create_element
-
     for vitamin in example_vitamins_included_create:
         await create_element("vitamins_included", vitamin)
 

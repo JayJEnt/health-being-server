@@ -14,7 +14,13 @@ from logger import logger
 
 
 async def google_login():
-    if not all([settings.GOOGLE_CLIENT_ID, settings.GOOGLE_CLIENT_SECRET, settings.GOOGLE_REDIRECT_URI]):
+    if not all(
+        [
+            settings.GOOGLE_CLIENT_ID,
+            settings.GOOGLE_CLIENT_SECRET,
+            settings.GOOGLE_REDIRECT_URI,
+        ]
+    ):
         raise RuntimeError("Missing required Google OAuth environment variables")
     url = (
         f"{settings.GOOGLE_AUTH_ENDPOINT}?"
@@ -48,36 +54,37 @@ async def google_auth_callback(request: Request):
         access_token = token_data.get("access_token", "")
 
         if not access_token:
-            raise HTTPException(status_code=400, detail="Failed to retrieve access token")
+            raise HTTPException(
+                status_code=400, detail="Failed to retrieve access token"
+            )
 
         user_response = await client.get(
             settings.GOOGLE_USERINFO_ENDPOINT,
-            headers={"Authorization": f"Bearer {access_token}"}
+            headers={"Authorization": f"Bearer {access_token}"},
         )
 
         user = user_response.json()
 
         try:
-            user_found_dict = await get_element_by_name("user", user["email"], alternative_name=True)
+            user_found_dict = await get_element_by_name(
+                "user", user["email"], alternative_name=True
+            )
             user = User(**user_found_dict)
-            logger.info(f'Successfully loged {user.email} in.')
+            logger.info(f"Successfully loged {user.email} in.")
         except ResourceNotFound:
             logger.info(
                 f"Email: {user['email']} is not registered."
                 f"Starting registeration process..."
             )
-            user_creat_dict = {
-                "username": user["name"],
-                "email": user["email"]
-            }
+            user_creat_dict = {"username": user["name"], "email": user["email"]}
             user_create = UserBaseModel(**user_creat_dict)
-            user: User = await register(user_create, other_provider=True)
+            user = User(**await register(user_create, other_provider=True))
 
         user_data = {
             "id": user.id,
             "username": user.username,
             "email": user.email,
-            "provider": "google"
+            "provider": "google",
         }
 
         access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE)
