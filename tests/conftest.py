@@ -1,6 +1,8 @@
 pytest_plugins = [
     "tests.fixtures.authentication.hash_methods",
     "tests.fixtures.authentication.token",
+    "tests.fixtures.authentication.oauth2_our",
+    "tests.fixtures.authentication.oauth2_google",
     "tests.fixtures.crud.supabase_connection",
     "tests.fixtures.crud.utils",
     "tests.fixtures.database.supabase_connection",
