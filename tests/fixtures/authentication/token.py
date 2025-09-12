@@ -1,35 +1,36 @@
 import pytest
 from datetime import datetime, timezone
 
-
-@pytest.fixture
-def mock_datetime_utcnow(monkeypatch):
-    from jose import jwt
-
-    fixed_time = datetime(2023, 1, 15, 12, 0, 0, tzinfo=timezone.utc)
-
-    class FixedDatetime(datetime):
-        @classmethod
-        def now(cls, tz=None):
-            return fixed_time.astimezone(tz)
-
-    monkeypatch.setattr(jwt, "datetime", FixedDatetime)
+from api.authentication import token
+from jose import jwt
 
 
 @pytest.fixture
 def mock_datetime_now(monkeypatch):
-    from api.authentication import token
-
-    fixed_time = datetime(2023, 1, 15, 12, 0, 0)
+    fixed_time = datetime(2023, 1, 15, 12, 20, 0, tzinfo=timezone.utc)
 
     class FixedDatetime(datetime):
         @classmethod
-        def utcnow(cls):
+        def now(cls, tz=None):
+            if tz:
+                return fixed_time.astimezone(tz)
             return fixed_time
 
     monkeypatch.setattr(token, "datetime", FixedDatetime)
 
-    return fixed_time
+
+@pytest.fixture
+def mock_datetime_now_jwt(monkeypatch):
+    fixed_time = datetime(2023, 1, 15, 12, 20, 0, tzinfo=timezone.utc)
+
+    class FixedDatetime(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            if tz:
+                return fixed_time.astimezone(tz)
+            return fixed_time
+
+    monkeypatch.setattr(jwt, "datetime", FixedDatetime)
 
 
 @pytest.fixture
@@ -54,9 +55,29 @@ def user_create():
 
 @pytest.fixture
 def expected_token():
-    return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0X3VzZXIiLCJzdWIiOiJ0ZXN0LnVzZXJAZXhhbXBsZS5jb20iLCJwcm92aWRlciI6ImhlYWx0aC1iZWluZy1zZXJ2ZXIiLCJleHAiOjE2NzM3ODQ5MDB9.tBtGtawkSB1jferHVl9MmSp7UDj161KP29iicq6Gums"
+    return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0X3VzZXIiLCJzdWIiOiJ0ZXN0LnVzZXJAZXhhbXBsZS5jb20iLCJwcm92aWRlciI6ImhlYWx0aC1iZWluZy1zZXJ2ZXIiLCJleHAiOjE2NzM3ODYxMDB9.OHo3h13hgBzPMU3cWIiqCO-pg-8eNcl93oKbfswtqik"
 
 
 @pytest.fixture
 def invalid_token():
     return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0X3VzZXIiLCJwcm92aWRlciI6ImhlYWx0aC1iZWluZy1zZXJ2ZXIiLCJleHAiOjE2NzM3ODQ5MDB9.ilyfBuDrBoZbBSUYPCMItsy8tHTqJVywxiA1bK3dvCk"
+
+
+@pytest.fixture
+def expected_payload():
+    return {
+        "exp": 1673786100,
+        "id": 1,
+        "provider": "health-being-server",
+        "sub": "test.user@example.com",
+        "username": "test_user",
+    }
+
+
+@pytest.fixture
+def invalid_payload():
+    return {
+        "id": 1,
+        "provider": "health-being-server",
+        "username": "test_user",
+    }

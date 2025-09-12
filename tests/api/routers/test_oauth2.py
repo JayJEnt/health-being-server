@@ -6,7 +6,7 @@ from api.routers.oauth2 import (
     login_with_form,
     our_register,
 )
-from api.schemas.user import UserUpdate
+from api.schemas.user import UserCreate
 
 
 @pytest.mark.asyncio
@@ -53,7 +53,7 @@ async def test_our_register(
     example_users_register,
     example_users_hashed_response,
 ):
-    requesting_user = UserUpdate(**example_users_register[0])
+    requesting_user = UserCreate(**example_users_register[0])
 
     response = await our_register(requesting_user)
 
