@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 
 from typing import List
 
-from api.schemas.user import User, UserUpdate, UserUpdateAdmin, UserPostCreate
+from api.schemas.user import User, UserCreate, UserUpdateAdmin, UserPostCreate
 from api.authentication.allowed_roles import admin_only, logged_only
 from api.crud.crud_operations import CrudOperations
 from api.authentication.token import validate_token
@@ -27,7 +27,7 @@ async def get_owner(requesting_user: User = Depends(validate_token)):
 
 @router.put("/{user_id}", response_model=User, dependencies=[Depends(logged_only)])
 async def update_owner(
-    user: UserUpdate, requesting_user: User = Depends(validate_token)
+    user: UserCreate, requesting_user: User = Depends(validate_token)
 ):
     user = await hash_pass_for_user(user)
     return await crud.put_all(requesting_user.id, user)

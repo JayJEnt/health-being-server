@@ -1,7 +1,7 @@
 import pytest
 
 from api.authentication.oauth2_our import authenticate_user, our_login, register
-from api.schemas.user import UserOurAuth, UserUpdate
+from api.schemas.user import UserOurAuth, UserCreate
 
 
 @pytest.mark.asyncio
@@ -77,7 +77,7 @@ async def test_register(
     example_users_register,
     example_users_hashed_response,
 ):
-    requesting_user = UserUpdate(**example_users_register[0])
+    requesting_user = UserCreate(**example_users_register[0])
 
     response = await register(requesting_user)
 
@@ -91,7 +91,7 @@ async def test_register_already_exists(
     example_users_register,
     example_users_hashed_response,
 ):
-    requesting_user = UserUpdate(**example_users_register[0])
+    requesting_user = UserCreate(**example_users_register[0])
 
     response = await register(requesting_user)
 

@@ -82,7 +82,7 @@ def example_form_data_error():
 @pytest.fixture()
 def expected_token_our_login():
     return {
-        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsInN1YiI6InRlc3RAZXhhbXBsZS5jb20iLCJwcm92aWRlciI6ImhlYWx0aC1iZWluZy1zZXJ2ZXIiLCJleHAiOjE2NzM3ODU4MDB9.lRHf9444fVL98zBvPfPEGSsr9x2VC0wzdg_8L0NryPY",
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsInN1YiI6InRlc3RAZXhhbXBsZS5jb20iLCJwcm92aWRlciI6ImhlYWx0aC1iZWluZy1zZXJ2ZXIiLCJleHAiOjE2NzM3ODcwMDB9.AscOu7pvqnjspW-Rde_hKbbBJes93CyLVKp9uKI9m3Y",
         "token_type": "bearer",
     }
 
