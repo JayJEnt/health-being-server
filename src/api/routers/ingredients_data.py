@@ -26,12 +26,14 @@ async def get_ingredient_data(ingredient_id: int):
     return await crud.get_by_id(ingredient_id)
 
 
+# TODO: Move these endpoints to admin router and add proper validation
 @admin_router.post(
     "/{ingredient_id}",
     response_model=IngredientDataResponse,
     dependencies=[Depends(admin_only)],
 )
 async def create_ingredient_data(ingredient_id: int, ingredient: IngredientDataCreate):
+    await crud.is_duplicated(ingredient_id)
     ingredient = add_attributes(ingredient, [{"ingredient_id": ingredient_id}])
     return await crud.post(ingredient)
 

@@ -1,29 +1,9 @@
 from pydantic import BaseModel, EmailStr
 
-from typing import Optional
+from api.schemas.user_data import UserDataCreate
 
 
-"""UserData models"""
-
-
-class UserDataCreate(BaseModel):
-    weight: Optional[float] = None
-    height: Optional[float] = None
-    age: Optional[int] = None
-    activity_level: Optional[str] = (
-        None  # e.g. sedentary, lightly active, moderately active, very active
-    )
-    silhouette: Optional[str] = None  # e.g. ectomorph, mesomorph, endomorph
-
-
-"""UserData response models"""
-
-
-class UserData(UserDataCreate):
-    user_id: int
-
-
-"""User models"""
+"""User Create models"""
 
 
 class UserBaseModel(BaseModel):
@@ -51,8 +31,8 @@ class UserOurAuth(User):
     hashed_password: str
 
 
-"""User postcreate models"""
+"""User with UserData models"""
 
 
-class UserPostCreate(User):
-    user_data: Optional[UserData]
+class UserCreateAll(User, UserDataCreate):
+    pass

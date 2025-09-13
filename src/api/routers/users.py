@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 
 from typing import List
 
-from api.schemas.user import User, UserCreate, UserUpdateAdmin, UserPostCreate
+from api.schemas.user import User, UserCreate, UserUpdateAdmin, UserCreateAll
 from api.authentication.allowed_roles import admin_only, logged_only
 from api.crud.crud_operations import CrudOperations
 from api.authentication.token import validate_token
@@ -19,7 +19,7 @@ crud = CrudOperations("user")
 
 
 @router.get(
-    "/{user_id}", response_model=UserPostCreate, dependencies=[Depends(logged_only)]
+    "/{user_id}", response_model=UserCreateAll, dependencies=[Depends(logged_only)]
 )
 async def get_owner(requesting_user: User = Depends(validate_token)):
     return await crud.get_all(requesting_user.id, nested_attributes=["user_data"])
@@ -63,7 +63,7 @@ async def get_users():
 
 
 @admin_router.get(
-    "/{user_id}", response_model=UserPostCreate, dependencies=[Depends(admin_only)]
+    "/{user_id}", response_model=UserCreateAll, dependencies=[Depends(admin_only)]
 )
 async def get_user(user_id: int):
     return await crud.get_all(user_id, nested_attributes=["user_data"])
@@ -72,7 +72,7 @@ async def get_user(user_id: int):
 @admin_router.put("/{user_id}", response_model=User, dependencies=[Depends(admin_only)])
 async def update_user(user_id: int, user: UserUpdateAdmin):
     user = await hash_pass_for_admin(user)
-    return await crud.put_all(user_id, user)
+    return await crud.put(user_id, user)
 
 
 @admin_router.delete("/{user_id}", dependencies=[Depends(admin_only)])

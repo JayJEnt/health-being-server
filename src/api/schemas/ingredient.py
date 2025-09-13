@@ -44,9 +44,8 @@ class IngredientCreate(IngredientName):
     ingredients_data: Optional[IngredientDataCreate]
 
 
-class IngredientResponse(Ingredient):
+class IngredientResponse(Ingredient, IngredientDataCreate):
     vitamins: Optional[List[Vitamin]] = None
-    ingredients_data: Optional[IngredientDataResponse] = None
 
 
 class IngredientUpdate(IngredientName):
