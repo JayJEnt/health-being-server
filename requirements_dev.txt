@@ -1,0 +1,32 @@
+# api
+fastapi>=0.109.1
+mangum==0.17.0
+pydantic>=2.6.4
+email-validator==2.2.0
+httpx==0.28.1
+
+# logger
+loguru==0.7.2
+
+# config
+pydantic-settings==2.2.1
+dotenv==0.9.9
+
+# database
+sqlalchemy==2.0.43
+psycopg2==2.9.10
+boto3==1.40.7
+
+# authentication
+python-multipart==0.0.20
+python-jose==3.5.0
+bcrypt==4.3.0
+
+# local running
+uvicorn==0.35.0
+pre-commit==4.3.0
+
+# tests
+pytest==8.4.1
+pytest-asyncio==1.1.0
+pytest-cov==6.2.1
