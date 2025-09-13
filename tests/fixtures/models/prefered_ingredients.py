@@ -9,7 +9,7 @@ def example_prefered_ingredients_create():
     return [
         {
             "name": "Carrot",
-            "preference": "alergic",
+            "preference": "alergic to",
         },
     ]
 
@@ -28,14 +28,14 @@ async def example_prefered_ingredients_injection(
 @pytest.fixture()
 def example_prefered_ingredients_create_response():
     return [
-        {"id": 2, "name": "Carrot", "preference": "alergic"},
+        {"id": 2, "name": "Carrot", "preference": "alergic to"},
     ]
 
 
 @pytest.fixture()
 def example_prefered_ingredients_response():
     return [
-        {"user_id": 1, "ingredient_id": 2, "preference": "alergic"},
+        {"user_id": 1, "ingredient_id": 2, "preference": "alergic to"},
     ]
 
 

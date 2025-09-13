@@ -70,11 +70,11 @@ def example_users_response_all():
         "hashed_password": "Password",
         "role": "user",
         "user_id": 1,
-        "height": "180",
-        "weight": "75",
+        "height": 180.0,
+        "weight": 75.0,
         "age": 25,
         "activity_level": "moderate",
-        "silhouette": "mesomorph",
+        "silhouette": "ectomorph",
     }
 
 

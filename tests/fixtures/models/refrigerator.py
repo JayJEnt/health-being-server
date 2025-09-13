@@ -7,14 +7,8 @@ from api.crud.relation.post_methods import create_relationship
 @pytest.fixture()
 def example_refrigerator_create():
     return [
-        {
-            "name": "Carrot",
-            "amount": 50,
-        },
-        {
-            "name": "Mushroom",
-            "amount": 18,
-        },
+        {"name": "Carrot", "amount": 50, "measure_unit": "g."},
+        {"name": "Mushroom", "amount": 18, "measure_unit": "g."},
     ]
 
 
@@ -32,36 +26,30 @@ async def example_refrigerator_injection(
 @pytest.fixture()
 def example_refrigerator_create_response():
     return [
-        {"id": 2, "name": "Carrot", "amount": 50},
-        {"id": 3, "name": "Mushroom", "amount": 18},
+        {"id": 2, "name": "Carrot", "amount": 50, "measure_unit": "g."},
+        {"id": 3, "name": "Mushroom", "amount": 18, "measure_unit": "g."},
     ]
 
 
 @pytest.fixture()
 def example_refrigerator_response():
     return [
-        {"user_id": 1, "ingredient_id": 2, "amount": 50},
-        {"user_id": 1, "ingredient_id": 3, "amount": 18},
+        {"user_id": 1, "ingredient_id": 2, "amount": 50, "measure_unit": "g."},
+        {"user_id": 1, "ingredient_id": 3, "amount": 18, "measure_unit": "g."},
     ]
 
 
 @pytest.fixture()
 def example_refrigerator_update():
     return [
-        {
-            "name": "Carrot",
-            "amount": 10,
-        },
-        {
-            "name": "Bread",
-            "amount": 1,
-        },
+        {"name": "Carrot", "amount": 10, "measure_unit": "g."},
+        {"name": "Bread", "amount": 1, "measure_unit": ""},
     ]
 
 
 @pytest.fixture()
 def example_refrigerator_update_response():
     return [
-        {"id": 2, "name": "Carrot", "amount": 10},
-        {"id": 1, "name": "Bread", "amount": 1},
+        {"id": 2, "name": "Carrot", "amount": 10, "measure_unit": "g."},
+        {"id": 1, "name": "Bread", "amount": 1, "measure_unit": ""},
     ]

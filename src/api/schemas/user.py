@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr
 
 from api.schemas.user_data import UserDataCreate
+from api.schemas.enum_utils import Role
 
 
 """User Create models"""
@@ -24,7 +25,7 @@ class UserUpdateAdmin(UserCreate):
 
 class User(UserBaseModel):
     id: int
-    role: str = "user"
+    role: Role = Role.user.value
 
 
 class UserOurAuth(User):

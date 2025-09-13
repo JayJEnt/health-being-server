@@ -1,12 +1,14 @@
 from pydantic import BaseModel
 
+from api.schemas.enum_utils import Preference
+
 
 """Prefered ingredients models"""
 
 
 class CreatePreferedIngredients(BaseModel):
     name: str
-    preference: str
+    preference: Preference
 
 
 class PostCreatePreferedIngredients(CreatePreferedIngredients):
@@ -16,4 +18,4 @@ class PostCreatePreferedIngredients(CreatePreferedIngredients):
 class PreferedIngredients(BaseModel):
     user_id: int
     ingredient_id: int
-    preference: str
+    preference: Preference

@@ -55,7 +55,7 @@ def example_recipes_create_all():
             "description": "A fresh and healthy salad.",
             "instructions": ["Mix all ingredients in a bowl and serve fresh."],
             "diet_type": [{"diet_name": "vege"}],
-            "ingredients": [{"name": "Carrot", "amount": 5, "measure_unit": "szt."}],
+            "ingredients": [{"name": "Carrot", "amount": 5, "measure_unit": ""}],
             "owner_id": 1,
         }
     ]
@@ -84,9 +84,7 @@ def example_recipes_response_all():
         "title": "Healthy Salad",
         "description": "A fresh and healthy salad.",
         "instructions": ["Mix all ingredients in a bowl and serve fresh."],
-        "ingredients": [
-            {"id": 2, "name": "Carrot", "amount": 5.0, "measure_unit": "szt."}
-        ],
+        "ingredients": [{"id": 2, "name": "Carrot", "amount": 5.0, "measure_unit": ""}],
         "diet_type": [{"id": 1, "diet_name": "vege"}],
     }
 
@@ -99,9 +97,7 @@ def example_recipes_response_create_all():
         "title": "Healthy Salad",
         "description": "A fresh and healthy salad.",
         "instructions": ["Mix all ingredients in a bowl and serve fresh."],
-        "ingredients": [
-            {"id": 2, "name": "Carrot", "amount": 5, "measure_unit": "szt."}
-        ],
+        "ingredients": [{"id": 2, "name": "Carrot", "amount": 5, "measure_unit": ""}],
         "diet_type": [{"id": 1, "diet_name": "vege"}],
     }
 
@@ -139,7 +135,7 @@ def example_recipes_update_all():
             "description": "A fresh and healthy salad.",
             "instructions": ["Also Changed"],
             "diet_type": [{"diet_name": "Vege"}],
-            "ingredients": [{"name": "Carrot", "amount": 1, "measure_unit": "szt."}],
+            "ingredients": [{"name": "Carrot", "amount": 1, "measure_unit": ""}],
             "owner_id": 1,
         }
     ]
@@ -153,8 +149,6 @@ def example_recipes_response_update_all():
         "title": "Changed",
         "description": "A fresh and healthy salad.",
         "instructions": ["Also Changed"],
-        "ingredients": [
-            {"id": 2, "name": "Carrot", "amount": 1, "measure_unit": "szt."}
-        ],
+        "ingredients": [{"id": 2, "name": "Carrot", "amount": 1, "measure_unit": ""}],
         "diet_type": [{"id": 1, "diet_name": "vege"}],
     }

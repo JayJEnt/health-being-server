@@ -1,9 +1,12 @@
 from pydantic import BaseModel
 
+from api.schemas.enum_utils import MeasureUnit
+
 
 class CreateRefrigerator(BaseModel):
     name: str
-    amount: int
+    amount: float
+    measure_unit: MeasureUnit
 
 
 class PostCreateRefrigerator(CreateRefrigerator):
@@ -13,4 +16,5 @@ class PostCreateRefrigerator(CreateRefrigerator):
 class Refrigerator(BaseModel):
     user_id: int
     ingredient_id: int
-    amount: int
+    amount: float
+    measure_unit: MeasureUnit

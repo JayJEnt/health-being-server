@@ -27,6 +27,7 @@ entity_name: {
     entity restricted attributes
 }
 """
+
 # TODO: FIX DOC
 from config import settings
 
@@ -53,7 +54,7 @@ ENTITY_MAPPING = {
                 "name": "user",
                 "join_table": settings.RECIPE_FAVOURITE,
                 "join_keys": ("recipe_id", "user_id"),
-            }
+            },
         ],
         "nested": [],
         "restricted": ["description", "instructions"],
@@ -135,7 +136,7 @@ ENTITY_MAPPING = {
                 "name": "refrigerator",
                 "join_table": settings.REFRIGERATOR_TABLE,
                 "join_keys": ("user_id", "ingredient_id"),
-                "extra_fields": ["amount"],
+                "extra_fields": ["amount", "measure_unit"],
             },
             {
                 "name": "diet_type",
@@ -179,7 +180,7 @@ ENTITY_MAPPING = {
                 "name": "user",
                 "join_table": settings.REFRIGERATOR_TABLE,
                 "join_keys": ("ingredient_id", "user_id"),
-                "extra_fields": ["amount"],
+                "extra_fields": ["amount", "measure_unit"],
             },
         ],
         "nested": [
@@ -189,5 +190,5 @@ ENTITY_MAPPING = {
             }
         ],
         "restricted": [],
-    }
+    },
 }

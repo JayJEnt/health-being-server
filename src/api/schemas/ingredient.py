@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
+from api.schemas.enum_utils import MeasureUnit
 from api.schemas.vitamin import VitaminCreate, Vitamin
 
 
@@ -60,5 +61,5 @@ class IngredientUpdateResponse(Ingredient):
 
 
 class IngredientQuantity(IngredientName):
-    amount: float  # ex. 100g, 1l, 2szt.
-    measure_unit: str  # ex. "g", "ml", "szt."
+    amount: float
+    measure_unit: MeasureUnit
