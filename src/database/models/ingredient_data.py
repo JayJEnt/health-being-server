@@ -16,4 +16,6 @@ class IngredientData(Base):
     sugar_per_100 = Column(Float, default=0.0)
     salt_per_100 = Column(Float, default=0.0)
 
-    ingredient = relationship("Ingredient", back_populates="ingredient_data", uselist=False)
+    ingredient = relationship(
+        "Ingredient", back_populates="ingredient_data", uselist=False
+    )

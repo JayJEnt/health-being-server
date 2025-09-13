@@ -6,9 +6,10 @@ import os
 
 class Settings(BaseSettings):
     """AWS"""
+
     AWS_REGION: str = "eu-north-1"
     BUCKET_NAME: str = "health-being-server-api"
-    
+
     """DATABASE"""
     # SUPABASE SECRETS
     SUPABASE_URL: str = ""
@@ -55,18 +56,24 @@ class Settings(BaseSettings):
 
 class LocalSettings(Settings):
     """ENVIORNMENT CONFIG"""
+
     ENVIRONMENT: str = "local"
     LOG_LEVEL: str = "DEBUG"
-    
+
 
 class RemoteSettings(Settings):
     """ENVIORNMENT CONFIG"""
+
     ENVIRONMENT: str = "remote"
     LOG_LEVEL: str = "INFO"
 
 
 def get_settings() -> Settings:
-    return RemoteSettings() if os.getenv("ENVIRONMENT", "").lower() == "remote" else LocalSettings()
+    return (
+        RemoteSettings()
+        if os.getenv("ENVIRONMENT", "").lower() == "remote"
+        else LocalSettings()
+    )
 
 
 settings = get_settings()

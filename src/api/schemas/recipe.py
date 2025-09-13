@@ -6,6 +6,8 @@ from api.schemas.diet_type import DietTypeCreate
 
 
 """Recipe models"""
+
+
 class RecipeCreate(BaseModel):
     title: str
     description: str
@@ -13,9 +15,11 @@ class RecipeCreate(BaseModel):
     diet_type: Optional[List[DietTypeCreate]] = None
     ingredients: List[IngredientQuantity]
 
+
 class RecipeOverview(BaseModel):
     id: int
     title: str
+
 
 class RecipeResponse(RecipeOverview):
     owner_id: int

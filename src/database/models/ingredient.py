@@ -11,7 +11,9 @@ class Ingredient(Base):
     name = Column(String, unique=True, nullable=False)
 
     # 1:1
-    ingredient_data = relationship("IngredientData", back_populates="ingredient", uselist=False)
+    ingredient_data = relationship(
+        "IngredientData", back_populates="ingredient", uselist=False
+    )
 
     # N:M
     vitamins = relationship("VitaminsIncluded", back_populates="ingredient")

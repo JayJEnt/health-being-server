@@ -24,7 +24,6 @@ Metadata:
           default: "Supabase Configuration"
         Parameters:
           - SupabaseUrl
-          - SupabaseKey
       - Label:
           default: "Authentication"
         Parameters:
@@ -83,13 +82,7 @@ Parameters:
   SupabaseUrl:
     Type: String
     Description: Supabase project URL
-    Default: https://psyqjmzmwspxbszmxavb.supabase.co
-    NoEcho: true
-
-  SupabaseKey:
-    Type: String
-    Description: Supabase API key
-    Default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzeXFqbXptd3NweGJzem14YXZiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0ODc5OTg5NCwiZXhwIjoyMDY0Mzc1ODk0fQ.oQjNDjWSAxy1j2hEERugJsL4EPP0ucD6ab4VhvCTVF0
+    Default: postgresql://postgres.psyqjmzmwspxbszmxavb:ZFhBkD39x0uQjNjw@aws-0-eu-north-1.pooler.supabase.com:6543/postgres
     NoEcho: true
 
   # Authentication
@@ -166,7 +159,6 @@ Resources:
           ENVIRONMENT: !Ref Environment
           # Supabase Configuration
           SUPABASE_URL: !Ref SupabaseUrl
-          SUPABASE_KEY: !Ref SupabaseKey
           # Authentication
           SECRET_KEY: !Ref SecretKey
           ALGORITHM: !Ref Algorithm
@@ -205,7 +197,7 @@ Resources:
                 Resource:
                   - !Sub arn:aws:s3:::${BucketName}
                   - !Sub arn:aws:s3:::${BucketName}/*
- 
+
   ApiGateway:
     Type: AWS::ApiGatewayV2::Api
     Properties:
@@ -257,7 +249,7 @@ Resources:
       - ApiGatewayMethod
       - ApiGatewayResourceRoot
     Properties:
-      Description: "Lambda API Deployment ${DeploymentVersion}"
+      Description: !Sub "Lambda API Deployment ${DeploymentVersion}"
       ApiId: !Ref ApiGateway
 
 Outputs:

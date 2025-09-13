@@ -18,13 +18,17 @@ async def delete_nested(
         nested_data (list): The list of names of elements that from nested tables. (e.g., ["ingredients_data"])
     """
     for nested_name in nested_data:
-        nested_config = get_relation_config(element_type, nested_name, relation_type="nested")
-        related_config = get_related_config(element_type, nested_name, relation_type="nested")
+        nested_config = get_relation_config(
+            element_type, nested_name, relation_type="nested"
+        )
+        related_config = get_related_config(
+            element_type, nested_name, relation_type="nested"
+        )
         try:
             supabase_connection.delete_by(
-                related_config["table"],
-                nested_config["join_key"],
-                element_id
+                related_config["table"], nested_config["join_key"], element_id
             )
         except ResourceNotFound:
-            logger.info(f"No {nested_config["name"]} entries found for {nested_config["join_key"]}={element_id}")
+            logger.info(
+                f"No {nested_config["name"]} entries found for {nested_config["join_key"]}={element_id}"
+            )

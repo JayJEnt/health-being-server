@@ -22,8 +22,12 @@ async def get_nested(
     """
     attributes_to_add = []
     for nested_name in nested_data:
-        nested_config = get_relation_config(element_type, nested_name, relation_type="nested")
-        related_config = get_related_config(element_type, nested_name, relation_type="nested")
+        nested_config = get_relation_config(
+            element_type, nested_name, relation_type="nested"
+        )
+        related_config = get_related_config(
+            element_type, nested_name, relation_type="nested"
+        )
 
         try:
             nested_table_items = supabase_connection.find_by(
@@ -32,7 +36,9 @@ async def get_nested(
                 element_id,
             )[0]
         except ResourceNotFound:
-            logger.info(f"No {nested_config["name"]} found for {element_type} id={element_id}")
+            logger.info(
+                f"No {nested_config["name"]} found for {element_type} id={element_id}"
+            )
             attributes_to_add.append({nested_config["name"]: []})
             continue
 

@@ -11,4 +11,6 @@ class Follow(Base):
     followed_user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
 
     user = relationship("User", foreign_keys=[user_id], back_populates="follows")
-    followed_user = relationship("User", foreign_keys=[followed_user_id], back_populates="followers")
+    followed_user = relationship(
+        "User", foreign_keys=[followed_user_id], back_populates="followers"
+    )

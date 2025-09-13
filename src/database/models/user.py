@@ -21,5 +21,11 @@ class User(Base):
     ingredients = relationship("PreferedIngredients", back_populates="user")
     diet_types = relationship("PreferedRecipeType", back_populates="user")
     refrigerator = relationship("Refrigerator", back_populates="user")
-    follows = relationship("Follow", foreign_keys="[Follow.user_id]", back_populates="user")
-    followers = relationship("Follow", foreign_keys="[Follow.followed_user_id]", back_populates="followed_user")
+    follows = relationship(
+        "Follow", foreign_keys="[Follow.user_id]", back_populates="user"
+    )
+    followers = relationship(
+        "Follow",
+        foreign_keys="[Follow.followed_user_id]",
+        back_populates="followed_user",
+    )

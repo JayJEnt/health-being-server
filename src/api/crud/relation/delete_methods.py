@@ -4,12 +4,8 @@ from api.crud.utils import get_relation_config
 from api.handlers.exceptions import ResourceNotFound
 
 
-
 async def delete_relationship(
-    element_type: str,
-    element_id: int,
-    relation_name: str,
-    relation_id: int
+    element_type: str, element_id: int, relation_name: str, relation_id: int
 ) -> dict:
     """
     Delete relationship between an element and one related item.
@@ -24,7 +20,7 @@ async def delete_relationship(
         dict: Relationship item data.
     """
     relation_config = get_relation_config(element_type, relation_name)
-    
+
     try:
         element = supabase_connection.delete_join_record(
             relation_config["join_table"],
@@ -34,7 +30,9 @@ async def delete_relationship(
             relation_id,
         )
     except ResourceNotFound:
-        logger.info(f"No {relation_config['name']} entries found for {relation_config['join_keys'][0]}={element_id}")
+        logger.info(
+            f"No {relation_config['name']} entries found for {relation_config['join_keys'][0]}={element_id}"
+        )
         raise
 
     return element
@@ -65,4 +63,6 @@ async def delete_relationships(
                 element_id,
             )
         except ResourceNotFound:
-            logger.info(f"No {relation_config['name']} entries found for {relation_config['join_keys'][0]}={element_id}")
+            logger.info(
+                f"No {relation_config['name']} entries found for {relation_config['join_keys'][0]}={element_id}"
+            )

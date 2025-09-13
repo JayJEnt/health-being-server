@@ -6,9 +6,7 @@ from api.handlers.exceptions import ResourceNotFound
 
 
 async def update_relationships(
-    element_type: str,
-    element_id: int,
-    related_data: list
+    element_type: str, element_id: int, related_data: list
 ) -> list:
     """
     Update relationships between an element and one related items.
@@ -36,10 +34,14 @@ async def update_relationships(
                 element_id,
             )
         except ResourceNotFound:
-            logger.info(f"No {relation_config['name']} entries found for {relation_config['join_keys'][0]}={element_id}")
+            logger.info(
+                f"No {relation_config['name']} entries found for {relation_config['join_keys'][0]}={element_id}"
+            )
 
         for item in related_data:
-            related_item = await create_relationship(element_type, element_id, relation_name, item)
+            related_item = await create_relationship(
+                element_type, element_id, relation_name, item
+            )
             related_items.append(related_item)
 
         attributes_to_add.append({relation_config["name"]: related_items})
