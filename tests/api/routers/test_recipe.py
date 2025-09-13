@@ -66,7 +66,7 @@ async def test_search_recipes(
 async def test_create_recipe(
     mock_supabase_connection,
     example_ingredients_injection,
-    example_recipes_injection_all,
+    example_diet_types_injection,
     example_users_response,
     example_recipes_create_all,
     example_recipes_response_create_all,

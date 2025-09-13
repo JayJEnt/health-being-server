@@ -9,8 +9,8 @@ class IngredientsIncluded(Base):
 
     recipe_id = Column(Integer, ForeignKey("recipes.id"), primary_key=True)
     ingredient_id = Column(Integer, ForeignKey("ingredients.id"), primary_key=True)
-    amount = Column(Float, nullable=True)
-    measure_unit = Column(String, nullable=True)
+    amount = Column(Float, nullable=False)
+    measure_unit = Column(String, nullable=False)
 
     recipe = relationship("Recipe", back_populates="ingredients")
     ingredient = relationship("Ingredient", back_populates="recipes")

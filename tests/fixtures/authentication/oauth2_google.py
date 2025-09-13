@@ -108,7 +108,7 @@ def dummy_request_no_code():
 @pytest.fixture
 def google_oauth2_expected_token():
     return {
-        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjksInVzZXJuYW1lIjoidGVzdHVzZXIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJwcm92aWRlciI6Imdvb2dsZSIsImV4cCI6MTY3Mzc4NzAwMH0.BNMsAWQARk77M5yMGaz1tr0FHBqGGWqnv0EeMUr3o4s",
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsInByb3ZpZGVyIjoiZ29vZ2xlIiwiZXhwIjoxNjczNzg3MDAwfQ.cot6ZKL0aWmhKgwoj1H4xVeo_EPhhyLLBSmr6x6XPSg",
         "token_type": "bearer",
     }
 

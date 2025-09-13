@@ -10,7 +10,7 @@ from api.crud.relation.get_methods import (
 
 @pytest.mark.asyncio
 async def test_get_relationship(
-    mocked_supabase_connection,
+    mock_supabase_connection,
     example_refrigerator_injection,
     example_refrigerator_response,
 ):
@@ -21,7 +21,7 @@ async def test_get_relationship(
 
 @pytest.mark.asyncio
 async def test_get_relationship_error(
-    mocked_supabase_connection, example_users_injection
+    mock_supabase_connection, example_users_injection
 ):
     with pytest.raises(Exception) as excinfo:
         await get_relationship("user", 1, "refrigerator", 1)
@@ -31,7 +31,7 @@ async def test_get_relationship_error(
 
 @pytest.mark.asyncio
 async def test_get_relationships(
-    mocked_supabase_connection,
+    mock_supabase_connection,
     example_refrigerator_injection,
     example_refrigerator_response,
 ):
@@ -42,7 +42,7 @@ async def test_get_relationships(
 
 @pytest.mark.asyncio
 async def test_get_relationships_error(
-    mocked_supabase_connection, example_users_injection
+    mock_supabase_connection, example_users_injection
 ):
     with pytest.raises(Exception) as excinfo:
         await get_relationships("user", 1, "refrigerator")
@@ -52,7 +52,7 @@ async def test_get_relationships_error(
 
 @pytest.mark.asyncio
 async def test_get_relationships_and_related_tables_error(
-    mocked_supabase_connection, example_users_injection
+    mock_supabase_connection, example_users_injection
 ):
     with pytest.raises(Exception) as excinfo:
         await get_relationships_and_related_tables("user", 1, ["refrigerator"])
@@ -62,7 +62,7 @@ async def test_get_relationships_and_related_tables_error(
 
 # TODO: why so long?
 @pytest.mark.asyncio
-async def test_get_related_tables_items(mocked_supabase_connection):
+async def test_get_related_tables_items(mock_supabase_connection):
     join_table_items = [
         {"user_id": 1, "ingredient_id": 1, "amount": 50},
     ]

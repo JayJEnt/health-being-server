@@ -82,7 +82,9 @@ async def get_element_by_id(element_type: str, element_id: int) -> dict:
     return element_data[0]
 
 
-async def is_duplicated(element_type: str, element_id: int) -> None:
+async def is_duplicated(
+    element_type: str, element_id: int | None = None, element_name: str | None = None
+) -> None:
     """
     Raise an error if rescource already exists in selected table
 
@@ -97,12 +99,18 @@ async def is_duplicated(element_type: str, element_id: int) -> None:
         ResourceAlreadyTaken
     """
     try:
-        await get_element_by_id(element_type, element_id)
-        raise ResourceAlreadyTaken
+        if element_id:
+            await get_element_by_id(element_type, element_id)
+            error_msg = (
+                f"Element with id: {element_id} already exists in table {element_type}."
+            )
+            raise ResourceAlreadyTaken
+        elif element_name:
+            await get_element_by_name(element_type, element_name)
+            error_msg = f"Element with name: {element_name} already exists in table {element_type}."
+            raise ResourceAlreadyTaken
     except ResourceAlreadyTaken:
-        logger.error(
-            f"Element with id: {element_id} already exists in table {element_type}."
-        )
+        logger.error(error_msg)
         raise
     except ResourceNotFound:
         pass

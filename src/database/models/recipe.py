@@ -10,8 +10,8 @@ class Recipe(Base):
     id = Column(Integer, primary_key=True, index=True)
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     title = Column(String, nullable=False)
-    description = Column(Text, nullable=True)
-    instructions = Column(JSON, nullable=True)
+    description = Column(Text, nullable=False)
+    instructions = Column(JSON, nullable=False)
 
     # N:M
     diet_types = relationship("DietTypeIncluded", back_populates="recipe")

@@ -9,7 +9,7 @@ class PreferedIngredients(Base):
 
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
     ingredient_id = Column(Integer, ForeignKey("ingredients.id"), primary_key=True)
-    preference = Column(String, nullable=True)
+    preference = Column(String, nullable=False)
 
     user = relationship("User", back_populates="ingredients")
     ingredient = relationship("Ingredient", back_populates="users")

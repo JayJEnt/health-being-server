@@ -94,7 +94,7 @@ def example_recipes_response_all():
 @pytest.fixture()
 def example_recipes_response_create_all():
     return {
-        "id": 2,
+        "id": 1,
         "owner_id": 1,
         "title": "Healthy Salad",
         "description": "A fresh and healthy salad.",

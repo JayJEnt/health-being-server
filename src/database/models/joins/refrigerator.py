@@ -9,7 +9,7 @@ class Refrigerator(Base):
 
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
     ingredient_id = Column(Integer, ForeignKey("ingredients.id"), primary_key=True)
-    amount = Column(Float, nullable=True)
+    amount = Column(Float, nullable=False)
 
     user = relationship("User", back_populates="refrigerator")
     ingredient = relationship("Ingredient", back_populates="refrigerator")
