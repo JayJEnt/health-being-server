@@ -5,7 +5,7 @@ from api.routers.users_data import (
     update_user_data,
     delete_user_data,
 )
-from api.schemas.user import UserDataCreate, UserData
+from api.schemas.user_data import UserDataCreate, UserData
 
 
 @pytest.mark.asyncio

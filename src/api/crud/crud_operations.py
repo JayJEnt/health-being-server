@@ -12,6 +12,7 @@ from api.crud.single_entity.get_methods import (
     get_elements,
     get_element_by_id,
     get_element_by_name,
+    is_duplicated,
 )
 from api.crud.single_entity.post_methods import create_element
 from api.crud.single_entity.put_methods import update_element_by_id
@@ -194,3 +195,12 @@ class CrudOperations:
         Search for elements by a phrase.
         """
         return search_elements(self.element_type, phrase, restrict)
+
+    def is_duplicated(
+        self,
+        element_id: int,
+    ) -> list:
+        """
+        Raise an error if rescource already exists.
+        """
+        return is_duplicated(self.element_type, element_id)

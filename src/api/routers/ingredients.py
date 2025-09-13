@@ -88,6 +88,9 @@ async def delete_ingredient(ingredient_id: int):
     await crud2.delete_relationships(ingredient_id, ["user"])  # TEMP FIX 25/08/2025
     return await crud.delete_all(
         ingredient_id,
-        related_attributes=["vitamins", "user"],  # TODO: FIX misses refrigerator table
+        related_attributes=[
+            "vitamins",
+            "user",
+        ],  # TODO: FIX misses refrigerator table TEMP FIX 25/08/2025
         nested_attributes=["ingredients_data"],
     )

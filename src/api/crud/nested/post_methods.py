@@ -1,9 +1,12 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
+from api.crud.single_entity.get_methods import is_duplicated
 from api.crud.utils import get_relation_config, get_related_config
 
 
-async def create_nested(element_type: str, element_id: int, nested_data_list: list) -> list:
+async def create_nested(
+    element_type: str, element_id: int, nested_data_list: list
+) -> list:
     """
     Create records in nested.
 
@@ -18,10 +21,16 @@ async def create_nested(element_type: str, element_id: int, nested_data_list: li
     nested_attributes = []
     for nested_data in nested_data_list:
         nested_name, nested_item = next(iter(nested_data.items()))
-        nested_config = get_relation_config(element_type, nested_name, relation_type="nested")
-        related_config = get_related_config(element_type, nested_name, relation_type="nested")
+        nested_config = get_relation_config(
+            element_type, nested_name, relation_type="nested"
+        )
+        related_config = get_related_config(
+            element_type, nested_name, relation_type="nested"
+        )
 
         nested_item[nested_config["join_key"]] = element_id
+
+        await is_duplicated(nested_config["name"], element_id)
 
         inserted = supabase_connection.insert(
             related_config["table"],

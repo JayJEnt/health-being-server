@@ -1,5 +1,5 @@
 from database.supabase_connection import supabase_connection
-from api.handlers.exceptions import ResourceNotFound
+from api.handlers.exceptions import ResourceNotFound, ResourceAlreadyTaken
 from api.crud.utils import restrict_data, get_main_config
 from logger import logger
 
@@ -80,3 +80,29 @@ async def get_element_by_id(element_type: str, element_id: int) -> dict:
         raise
 
     return element_data[0]
+
+
+async def is_duplicated(element_type: str, element_id: int) -> None:
+    """
+    Raise an error if rescource already exists in selected table
+
+    Args:
+        element_type (str): The type of the main element (e.g., "recipes").
+        element_id (int): The ID of the main element.
+
+    Return:
+        None
+
+    Raise:
+        ResourceAlreadyTaken
+    """
+    try:
+        await get_element_by_id(element_type, element_id)
+        raise ResourceAlreadyTaken
+    except ResourceAlreadyTaken:
+        logger.error(
+            f"Element with id: {element_id} already exists in table {element_type}."
+        )
+        raise
+    except ResourceNotFound:
+        pass
