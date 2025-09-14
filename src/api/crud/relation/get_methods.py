@@ -54,9 +54,14 @@ async def get_relationship(
         main_config = get_main_config(element_type)
         related_config = get_related_config(element_type, relation_name)
 
+        if main_config["table"] != related_config["table"]:
+            main_table = main_config["table"]
+        else:
+            main_table = main_config["table"] + "_2"
+
         names = [
             {related_config["table"]: related[related_config["column_name"]]},
-            {main_config["table"]: element[main_config["column_name"]]},
+            {main_table: element[main_config["column_name"]]},
         ]
         relation, p = pop_attributes(
             relation, [relation_config["join_keys"][0], relation_config["join_keys"][1]]
