@@ -15,3 +15,8 @@ class PostCreateRecipeFavourite(BaseModel):
 class RecipeFavourite(BaseModel):
     user_id: int
     recipe_id: int
+
+
+class RecipeFavouriteGet(BaseModel):
+    users: str
+    recipes: str

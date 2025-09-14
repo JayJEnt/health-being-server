@@ -10,6 +10,7 @@ from api.schemas.prefered_ingredients import (
     PreferedIngredients,
     CreatePreferedIngredients,
     PostCreatePreferedIngredients,
+    PreferedIngredientsGet,
 )
 from api.schemas.user import User
 
@@ -61,16 +62,16 @@ async def test_get_relation_prefered_ingredients(
     mock_supabase_connection,
     example_prefered_ingredients_injection,
     example_users_response,
-    example_prefered_ingredients_response,
+    example_prefered_ingredients_name_response,
 ):
     requesting_user = User(**example_users_response[0])
     response = await get_relation_prefered_ingredients(2, requesting_user)
 
-    assert response == example_prefered_ingredients_response[0]
+    assert response == example_prefered_ingredients_name_response[0]
 
-    parsed = PreferedIngredients(**response)
+    parsed = PreferedIngredientsGet(**response)
 
-    assert isinstance(parsed, PreferedIngredients)
+    assert isinstance(parsed, PreferedIngredientsGet)
 
 
 @pytest.mark.asyncio

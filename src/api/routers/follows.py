@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from api.authentication.allowed_roles import logged_only
 from api.authentication.token import validate_token
 from api.crud.crud_operations import CrudOperations
-from api.schemas.follows import CreateFollows, Follows
+from api.schemas.follows import CreateFollows, Follows, FollowsGet
 from api.schemas.user import User
 
 
@@ -32,12 +32,16 @@ async def create_relation_follows(
 
 
 @router.get(
-    "/{followed_user_id}", response_model=Follows, dependencies=[Depends(logged_only)]
+    "/{followed_user_id}",
+    response_model=FollowsGet,
+    dependencies=[Depends(logged_only)],
 )
 async def get_relation_follows(
     followed_user_id: int, requesting_user: User = Depends(validate_token)
 ):
-    return await crud.get_relationship(requesting_user.id, "user", followed_user_id)
+    return await crud.get_relationship(
+        requesting_user.id, "user", followed_user_id, id_to_name=True
+    )
 
 
 @router.delete(

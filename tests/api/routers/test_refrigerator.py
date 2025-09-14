@@ -10,6 +10,7 @@ from api.schemas.refrigerator import (
     CreateRefrigerator,
     Refrigerator,
     PostCreateRefrigerator,
+    RefrigeratorGet,
 )
 from api.schemas.user import User
 
@@ -57,16 +58,16 @@ async def test_get_relation_refrigerator(
     mock_supabase_connection,
     example_refrigerator_injection,
     example_users_response,
-    example_refrigerator_response,
+    example_refrigerator_name_response,
 ):
     requesting_user = User(**example_users_response[0])
     response = await get_relation_refrigerator(2, requesting_user)
 
-    assert response == example_refrigerator_response[0]
+    assert response == example_refrigerator_name_response[0]
 
-    parsed = Refrigerator(**response)
+    parsed = RefrigeratorGet(**response)
 
-    assert isinstance(parsed, Refrigerator)
+    assert isinstance(parsed, RefrigeratorGet)
 
 
 @pytest.mark.asyncio

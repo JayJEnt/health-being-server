@@ -40,6 +40,13 @@ def example_prefered_ingredients_response():
 
 
 @pytest.fixture()
+def example_prefered_ingredients_name_response():
+    return [
+        {"users": "testuser", "ingredients": "Bread", "preference": "alergic to"},
+    ]
+
+
+@pytest.fixture()
 def example_prefered_ingredients_update():
     return [
         {

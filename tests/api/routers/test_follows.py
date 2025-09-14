@@ -6,7 +6,7 @@ from api.routers.follows import (
     get_relation_follows,
     delete_relation_follows,
 )
-from api.schemas.follows import Follows, CreateFollows
+from api.schemas.follows import Follows, CreateFollows, FollowsGet
 from api.schemas.user import User
 
 
@@ -51,16 +51,16 @@ async def test_get_relation_follows(
     mock_supabase_connection,
     example_follows_injection,
     example_users_response,
-    example_follows_response,
+    example_follows_name_response,
 ):
     requesting_user = User(**example_users_response[0])
     response = await get_relation_follows(2, requesting_user)
 
-    assert response == example_follows_response[0]
+    assert response == example_follows_name_response[0]
 
-    parsed = Follows(**response)
+    parsed = FollowsGet(**response)
 
-    assert isinstance(parsed, Follows)
+    assert isinstance(parsed, FollowsGet)
 
 
 @pytest.mark.asyncio
