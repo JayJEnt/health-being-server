@@ -1,3 +1,5 @@
+import asyncio
+
 from api.crud.nested.delete_methods import delete_nested
 from api.crud.relation.delete_methods import delete_relationships
 from api.crud.single_entity.delete_methods import delete_element_by_id
@@ -21,8 +23,10 @@ async def delete_all(
     Returns:
         dict: Relationship item data.
     """
-    await delete_relationships(element_type, element_id, related_attributes)
-    await delete_nested(element_type, element_id, nested_attributes)
+    await asyncio.gather(
+        delete_relationships(element_type, element_id, related_attributes),
+        delete_nested(element_type, element_id, nested_attributes)
+    )
 
     element = await delete_element_by_id(element_type, element_id)
 

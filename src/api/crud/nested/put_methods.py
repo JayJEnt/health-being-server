@@ -29,7 +29,7 @@ async def update_nested(
         )
 
         try:
-            supabase_connection.delete_by(
+            await supabase_connection.delete_by(
                 related_config["table"], nested_config["join_key"], element_id
             )
         except ResourceNotFound:
@@ -40,7 +40,7 @@ async def update_nested(
 
         nested_item[nested_config["join_key"]] = element_id
 
-        inserted = supabase_connection.insert(
+        inserted = await supabase_connection.insert(
             related_config["table"],
             nested_item,
         )

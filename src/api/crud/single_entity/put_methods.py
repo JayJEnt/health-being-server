@@ -23,7 +23,7 @@ async def update_element_by_id(
     element_data = pydantic_to_dict(element_data)
 
     try:
-        element_data = supabase_connection.update_by(
+        element_data = await supabase_connection.update_by(
             config["table"],
             config["id"],
             element_id,

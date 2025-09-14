@@ -18,7 +18,7 @@ async def delete_element_by_id(element_type: str, element_id: int) -> dict:
     config = get_main_config(element_type)
 
     try:
-        element = supabase_connection.delete_by(
+        element = await supabase_connection.delete_by(
             config["table"], config["id"], element_id
         )
     except ResourceNotFound:

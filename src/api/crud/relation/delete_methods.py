@@ -22,7 +22,7 @@ async def delete_relationship(
     relation_config = get_relation_config(element_type, relation_name)
 
     try:
-        element = supabase_connection.delete_join_record(
+        element = await supabase_connection.delete_join_record(
             relation_config["join_table"],
             relation_config["join_keys"][0],
             element_id,
@@ -57,7 +57,7 @@ async def delete_relationships(
     for relation_name in relations:
         relation_config = get_relation_config(element_type, relation_name)
         try:
-            supabase_connection.delete_by(
+            await supabase_connection.delete_by(
                 relation_config["join_table"],
                 relation_config["join_keys"][0],
                 element_id,

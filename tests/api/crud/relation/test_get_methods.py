@@ -3,8 +3,8 @@ import pytest
 from api.crud.relation.get_methods import (
     get_relationship,
     get_relationships,
-    get_relationships_and_related_tables,
-    get_related_tables_items,
+    get_relationed_item,
+    get_item,
 )
 
 
@@ -55,7 +55,7 @@ async def test_get_relationships_and_related_tables_error(
     mock_supabase_connection, example_users_injection
 ):
     with pytest.raises(Exception) as excinfo:
-        await get_relationships_and_related_tables("user", 1, ["refrigerator"])
+        await get_relationed_item("user", 1, ["refrigerator"])
 
     assert str(excinfo.value) == "404: Requested resource not found"
 
@@ -67,6 +67,6 @@ async def test_get_related_tables_items(mock_supabase_connection):
         {"user_id": 1, "ingredient_id": 1, "amount": 50},
     ]
     with pytest.raises(Exception) as excinfo:
-        await get_related_tables_items("user", "refrigerator", join_table_items)
+        await get_item("user", "refrigerator", join_table_items)
 
     assert str(excinfo.value) == "404: Requested resource not found"

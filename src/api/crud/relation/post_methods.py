@@ -67,7 +67,7 @@ async def create_relationship(
                 related_item[field] = related_data[field]
                 join_data[field] = related_data[field]
 
-    supabase_connection.insert(relation_config["join_table"], join_data)
+    await supabase_connection.insert(relation_config["join_table"], join_data)
     logger.debug(
         f"Relation element: {join_data} inserted to table {relation_config['join_table']}."
     )

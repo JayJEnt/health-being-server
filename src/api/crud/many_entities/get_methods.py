@@ -1,9 +1,9 @@
+import asyncio
+
 from api.crud.nested.get_methods import get_nested
-from api.crud.relation.get_methods import get_relationships_and_related_tables
-from api.crud.utils import add_attributes, get_main_config
-from api.handlers.exceptions import ResourceNotFound
-from database.supabase_connection import supabase_connection
-from logger import logger
+from api.crud.relation.get_methods import get_relationed_item
+from api.crud.single_entity.get_methods import get_element_by_id
+from api.crud.utils import add_attributes
 
 
 async def get_all(
@@ -24,21 +24,8 @@ async def get_all(
     Returns:
         dict: Relationship item data.
     """
-    config = get_main_config(element_type)
-
-    try:
-        element_data = supabase_connection.find_by(
-            config["table"],
-            config["id"],
-            element_id,
-        )[0]
-    except ResourceNotFound:
-        logger.error(f"{element_type} with id={element_id} not found")
-        raise
-
-    attributes_to_add = await get_relationships_and_related_tables(
-        element_type, element_id, related_attributes
-    )
+    element_data = await get_element_by_id(element_type, element_id)
+    attributes_to_add = await asyncio.gather(*(get_relationed_item(element_type, element_id, relation_name) for relation_name in related_attributes))
     attributes_to_add += await get_nested(element_type, element_id, nested_attributes)
 
     element_data = add_attributes(element_data, attributes_to_add)

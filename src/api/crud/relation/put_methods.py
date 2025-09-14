@@ -28,7 +28,7 @@ async def update_relationships(
         relation_config = get_relation_config(element_type, relation_name)
 
         try:
-            supabase_connection.delete_by(
+            await supabase_connection.delete_by(
                 relation_config["join_table"],
                 relation_config["join_keys"][0],
                 element_id,

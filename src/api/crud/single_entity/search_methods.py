@@ -25,7 +25,7 @@ async def search_elements(
     for search_column in config["search_columns"]:
         actual_founds = []
         try:
-            actual_founds = supabase_connection.find_ilike(
+            actual_founds = await supabase_connection.find_ilike(
                 config["table"], search_column, phrase
             )
         except ResourceNotFound:

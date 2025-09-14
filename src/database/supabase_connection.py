@@ -6,8 +6,8 @@ from sqlalchemy import (
     update,
     delete,
     and_,
-    create_engine,
 )
+from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import declarative_base
 
 from typing import Any, Dict, Optional, List
@@ -23,17 +23,22 @@ Base = declarative_base()
 
 class SupabaseConnection:
     def __init__(self):
-        self.engine = create_engine(
-            settings.SUPABASE_URL, pool_size=1, max_overflow=0, future=True
+        self.engine = create_async_engine(
+            settings.SUPABASE_URL,
+            pool_size=10,
+            max_overflow=5,
+            future=True,
+            connect_args={"statement_cache_size": 0},
         )
+        self._tables = {}
 
     @staticmethod
     def error_handler(func):
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        async def wrapper(*args, **kwargs):
             try:
                 logger.info(f"Processing request: {func.__name__}")
-                result = func(*args, **kwargs)
+                result = await func(*args, **kwargs)
                 if result is None:
                     func_args = (
                         args[1:]
@@ -54,41 +59,59 @@ class SupabaseConnection:
                 raise InternalServerError
 
         return wrapper
+        
+    async def get_table(self, table_name: str) -> Table:
+        if table_name in self._tables:
+            return self._tables[table_name]
 
-    def execute_query(self, query: Any) -> Optional[List[Dict[str, Any]]]:
-        with self.engine.begin() as conn:
-            result = conn.execute(query)
+        async with self.engine.connect() as conn:
+            def load_table(sync_conn):
+                return Table(table_name, MetaData(), autoload_with=sync_conn)
+
+            table = await conn.run_sync(load_table)
+            self._tables[table_name] = table
+            return table
+
+    async def execute_query(self, query: Any) -> Optional[List[Dict[str, Any]]]:
+        async with self.engine.begin() as conn:
+            result = await conn.execute(query)
+            rows = [dict(row._mapping) for row in result]
+        return rows or None
+    
+    async def execute_query_select(self, query: Any) -> Optional[List[Dict[str, Any]]]:
+        async with self.engine.connect() as conn:
+            result = await conn.execute(query)
             rows = [dict(row._mapping) for row in result]
         return rows or None
 
     """CRUD"""
 
     @error_handler
-    def fetch_all(self, table_name: str) -> Optional[List[Dict[str, Any]]]:
-        table = Table(table_name, MetaData(), autoload_with=self.engine)
+    async def fetch_all(self, table_name: str) -> Optional[List[Dict[str, Any]]]:
+        table = await self.get_table(table_name)
         query = select(table)
 
-        return self.execute_query(query)
+        return await self.execute_query_select(query)
 
     @error_handler
-    def insert(self, table_name: str, data: dict) -> Optional[Dict[str, Any]]:
-        table = Table(table_name, MetaData(), autoload_with=self.engine)
+    async def insert(self, table_name: str, data: dict) -> Optional[Dict[str, Any]]:
+        table = await self.get_table(table_name)
         query = insert(table).values(data).returning(table)
 
-        rows = self.execute_query(query)
+        rows = await self.execute_query(query)
         return rows[0] if rows else None
 
     @error_handler
-    def find_by(
+    async def find_by(
         self, table_name: str, column: str, value: Any
     ) -> Optional[List[Dict[str, Any]]]:
-        table = Table(table_name, MetaData(), autoload_with=self.engine)
+        table = await self.get_table(table_name)
         query = select(table).where(table.c[column] == value)
 
-        return self.execute_query(query)
+        return await self.execute_query_select(query)
 
     @error_handler
-    def find_join_record(
+    async def find_join_record(
         self,
         table_name: str,
         first_column: str,
@@ -96,7 +119,7 @@ class SupabaseConnection:
         second_column: str,
         second_value: Any,
     ) -> Optional[Dict[str, Any]]:
-        table = Table(table_name, MetaData(), autoload_with=self.engine)
+        table = await self.get_table(table_name)
         query = select(table).where(
             and_(
                 table.c[first_column] == first_value,
@@ -104,30 +127,30 @@ class SupabaseConnection:
             )
         )
 
-        rows = self.execute_query(query)
+        rows = await self.execute_query_select(query)
         return rows[0] if rows else None
 
     @error_handler
-    def find_ilike(
+    async def find_ilike(
         self, table_name: str, column: str, value: str
     ) -> Optional[List[Dict[str, Any]]]:
-        table = Table(table_name, MetaData(), autoload_with=self.engine)
+        table = await self.get_table(table_name)
         query = select(table).where(table.c[column].ilike(f"%{value}%"))
 
-        return self.execute_query(query)
+        return await self.execute_query_select(query)
 
     @error_handler
-    def delete_by(
+    async def delete_by(
         self, table_name: str, column: str, value: Any
     ) -> Optional[Dict[str, Any]]:
-        table = Table(table_name, MetaData(), autoload_with=self.engine)
+        table = await self.get_table(table_name)
         query = delete(table).where(table.c[column] == value).returning(table)
 
-        rows = self.execute_query(query)
+        rows = await self.execute_query(query)
         return rows[0] if rows else None
 
     @error_handler
-    def delete_join_record(
+    async def delete_join_record(
         self,
         table_name: str,
         first_column: str,
@@ -135,7 +158,7 @@ class SupabaseConnection:
         second_column: str,
         second_value: Any,
     ) -> Optional[Dict[str, Any]]:
-        table = Table(table_name, MetaData(), autoload_with=self.engine)
+        table = await self.get_table(table_name)
         query = (
             delete(table)
             .where(
@@ -147,14 +170,14 @@ class SupabaseConnection:
             .returning(table)
         )
 
-        rows = self.execute_query(query)
+        rows = await self.execute_query(query)
         return rows[0] if rows else None
 
     @error_handler
-    def update_by(
+    async def update_by(
         self, table_name: str, column: str, value: Any, updates: dict
     ) -> Optional[Dict[str, Any]]:
-        table = Table(table_name, MetaData(), autoload_with=self.engine)
+        table = await self.get_table(table_name)
         query = (
             update(table)
             .where(table.c[column] == value)
@@ -162,7 +185,7 @@ class SupabaseConnection:
             .returning(table)
         )
 
-        rows = self.execute_query(query)
+        rows = await self.execute_query(query)
         return rows[0] if rows else None
 
 

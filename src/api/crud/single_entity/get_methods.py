@@ -17,7 +17,7 @@ async def get_elements(element_type: str, restrict: bool = False) -> list:
     """
     config = get_main_config(element_type)
 
-    elements_response = supabase_connection.fetch_all(config["table"])
+    elements_response = await supabase_connection.fetch_all(config["table"])
     if restrict:
         elements_response = restrict_data(element_type, elements_response)
 
@@ -45,7 +45,7 @@ async def get_element_by_name(
     else:
         column_name = config["column_name"]
 
-    elements = supabase_connection.find_ilike(
+    elements = await supabase_connection.find_ilike(
         config["table"],
         column_name,
         element_name,
@@ -70,7 +70,7 @@ async def get_element_by_id(element_type: str, element_id: int) -> dict:
     config = get_main_config(element_type)
 
     try:
-        element_data = supabase_connection.find_by(
+        element_data = await supabase_connection.find_by(
             config["table"],
             config["id"],
             element_id,

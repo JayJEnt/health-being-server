@@ -30,11 +30,11 @@ async def get_nested(
         )
 
         try:
-            nested_table_items = supabase_connection.find_by(
+            nested_table_items = (await supabase_connection.find_by(
                 related_config["table"],
                 nested_config["join_key"],
                 element_id,
-            )[0]
+            ))[0]
         except ResourceNotFound:
             logger.info(
                 f"No {nested_config["name"]} found for {element_type} id={element_id}"

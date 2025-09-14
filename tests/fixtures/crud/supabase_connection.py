@@ -21,7 +21,6 @@ from api.crud.nested import (
     post_methods as post_nested,
     put_methods as put_nested,
 )
-from api.crud.many_entities import get_methods as get_all_methods
 from database import supabase_connection
 from database.supabase_connection import Base
 from config import settings
@@ -52,7 +51,6 @@ def mock_supabase_connection(monkeypatch):
         get_nested,
         delete_nested,
         put_nested,
-        get_all_methods,
     ]
     for file in files_to_patch:
         monkeypatch.setattr(file, "supabase_connection", test_supabase_connection)

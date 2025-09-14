@@ -25,7 +25,7 @@ async def delete_nested(
             element_type, nested_name, relation_type="nested"
         )
         try:
-            supabase_connection.delete_by(
+            await supabase_connection.delete_by(
                 related_config["table"], nested_config["join_key"], element_id
             )
         except ResourceNotFound:
