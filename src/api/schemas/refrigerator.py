@@ -18,3 +18,10 @@ class Refrigerator(BaseModel):
     ingredient_id: int
     amount: float
     measure_unit: MeasureUnit
+
+
+class RefrigeratorGet(BaseModel):
+    users: str
+    ingredients: str
+    amount: float
+    measure_unit: MeasureUnit

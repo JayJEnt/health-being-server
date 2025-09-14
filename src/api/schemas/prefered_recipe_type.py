@@ -15,3 +15,8 @@ class PostCreatePreferedRecipeType(CreatePreferedRecipeType):
 class PreferedRecipeType(BaseModel):
     user_id: int
     type_id: int
+
+
+class PreferedRecipeTypeGet(BaseModel):
+    users: str
+    diet_types: str

@@ -52,7 +52,9 @@ async def create_relation_prefered_ingredients(
 async def get_relation_prefered_ingredients(
     ingredient_id: int, requesting_user: User = Depends(validate_token)
 ):
-    return await crud.get_relationship(requesting_user.id, "ingredients", ingredient_id)
+    return await crud.get_relationship(
+        requesting_user.id, "ingredients", ingredient_id, id_to_name=True
+    )
 
 
 # TODO: ADD PUT METHOD
