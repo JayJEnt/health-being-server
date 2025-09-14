@@ -40,6 +40,18 @@ def example_refrigerator_response():
 
 
 @pytest.fixture()
+def example_refrigerator_name_response():
+    return [
+        {
+            "users": "testuser",
+            "ingredients": "Bread",
+            "amount": 50.0,
+            "measure_unit": "g.",
+        },
+    ]
+
+
+@pytest.fixture()
 def example_refrigerator_update():
     return [
         {"name": "Carrot", "amount": 10, "measure_unit": "g."},

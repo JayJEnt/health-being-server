@@ -37,7 +37,9 @@ async def create_relation_prefered_recipe_type(
 async def get_relation_prefered_recipe_type(
     diet_type_id: int, requesting_user: User = Depends(validate_token)
 ):
-    return await crud.get_relationship(requesting_user.id, "diet_type", diet_type_id)
+    return await crud.get_relationship(
+        requesting_user.id, "diet_type", diet_type_id, id_to_name=True
+    )
 
 
 @router.delete("/{diet_type_id}", dependencies=[Depends(logged_only)])

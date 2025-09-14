@@ -20,7 +20,11 @@ async def test_google_login_no_google_secrets(mock_google_secrets):
 
 @pytest.mark.asyncio
 async def test_google_auth_callback(
-    mock_async_client, mock_datetime_now, dummy_request, google_oauth2_expected_token
+    mock_async_client,
+    mock_supabase_connection,
+    mock_datetime_now,
+    dummy_request,
+    google_oauth2_expected_token,
 ):
     response = await google_auth_callback(dummy_request)
 
@@ -52,6 +56,7 @@ async def test_google_auth_callback_no_token(
 async def test_google_auth_callback_user_exists(
     mock_async_client,
     mock_datetime_now,
+    mock_supabase_connection,
     example_users_injection,
     dummy_request,
     google_oauth2_expected_token_exists,

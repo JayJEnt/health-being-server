@@ -38,6 +38,16 @@ def example_follows_response():
 
 
 @pytest.fixture()
+def example_follows_name_response():
+    return [
+        {
+            "users": "testuser",
+            "users_2": "testuser",
+        },
+    ]
+
+
+@pytest.fixture()
 def example_follows_update():
     return [
         {

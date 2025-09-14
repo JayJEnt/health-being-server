@@ -4,10 +4,10 @@ import httpx
 
 from datetime import timedelta
 
-from api.handlers.exceptions import ResourceNotFound
 from api.authentication.oauth2_our import register
-from api.crud.single_entity.get_methods import get_element_by_name
 from api.authentication.token import create_access_token
+from api.crud.single_entity.get_methods import get_element_by_name
+from api.handlers.exceptions import ResourceNotFound
 from api.schemas.user import User, UserBaseModel
 from config import settings
 from logger import logger

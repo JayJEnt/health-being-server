@@ -1,6 +1,6 @@
-from database.supabase_connection import supabase_connection
-from api.handlers.exceptions import ResourceNotFound, ResourceAlreadyTaken
 from api.crud.utils import restrict_data, get_main_config
+from api.handlers.exceptions import ResourceNotFound, ResourceAlreadyTaken
+from database.supabase_connection import supabase_connection
 from logger import logger
 
 

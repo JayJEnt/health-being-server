@@ -11,3 +11,7 @@ class CreateFollows(BaseModel):
 class Follows(BaseModel):
     user_id: int
     followed_user_id: int
+
+
+class FollowsGet(BaseModel):
+    users: str

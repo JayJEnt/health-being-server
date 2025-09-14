@@ -89,13 +89,17 @@ class CrudOperations:
     """Relations"""
 
     def get_relationship(
-        self, element_id: int, relation_name: str, relation_id: int
+        self,
+        element_id: int,
+        relation_name: str,
+        relation_id: int,
+        id_to_name: bool = False,
     ) -> dict:
         """
         Get a specific relationship for an element.
         """
         return get_relationship(
-            self.element_type, element_id, relation_name, relation_id
+            self.element_type, element_id, relation_name, relation_id, id_to_name
         )
 
     def get_relationships(

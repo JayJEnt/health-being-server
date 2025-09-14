@@ -38,7 +38,7 @@ async def get_relation_refrigerator(
     ingredient_id: int, requesting_user: User = Depends(validate_token)
 ):
     return await crud.get_relationship(
-        requesting_user.id, "refrigerator", ingredient_id
+        requesting_user.id, "refrigerator", ingredient_id, id_to_name=True
     )
 
 

@@ -19,3 +19,9 @@ class PreferedIngredients(BaseModel):
     user_id: int
     ingredient_id: int
     preference: Preference
+
+
+class PreferedIngredientsGet(BaseModel):
+    users: str
+    ingredients: str
+    preference: Preference
