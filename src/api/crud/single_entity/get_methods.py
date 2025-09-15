@@ -1,3 +1,5 @@
+from typing import Any
+
 from api.crud.utils import restrict_data, get_main_config
 from api.handlers.exceptions import ResourceNotFound, ResourceAlreadyTaken
 from database.supabase_connection import supabase_connection
@@ -82,9 +84,7 @@ async def get_element_by_id(element_type: str, element_id: int) -> dict:
     return element_data[0]
 
 
-async def is_duplicated(
-    element_type: str, element_id: int | None = None, element_name: str | None = None
-) -> None:
+async def is_duplicated(element_type: str, element: Any) -> None:
     """
     Raise an error if rescource already exists in selected table
 
@@ -99,15 +99,17 @@ async def is_duplicated(
         ResourceAlreadyTaken
     """
     try:
-        if element_id:
-            await get_element_by_id(element_type, element_id)
+        if isinstance(element, int):
+            await get_element_by_id(element_type, element)
             error_msg = (
-                f"Element with id: {element_id} already exists in table {element_type}."
+                f"Element with id: {element} already exists in table {element_type}."
             )
             raise ResourceAlreadyTaken
-        elif element_name:
-            await get_element_by_name(element_type, element_name)
-            error_msg = f"Element with name: {element_name} already exists in table {element_type}."
+        elif isinstance(element, str):
+            await get_element_by_name(element_type, element)
+            error_msg = (
+                f"Element with name: {element} already exists in table {element_type}."
+            )
             raise ResourceAlreadyTaken
     except ResourceAlreadyTaken:
         logger.error(error_msg)

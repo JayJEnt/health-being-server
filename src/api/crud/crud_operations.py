@@ -202,10 +202,9 @@ class CrudOperations:
 
     def is_duplicated(
         self,
-        element_id: int | None = None,
-        element_name: str | None = None,
+        element,
     ) -> list:
         """
         Raise an error if rescource already exists.
         """
-        return is_duplicated(self.element_type, element_id, element_name)
+        return is_duplicated(self.element_type, element)

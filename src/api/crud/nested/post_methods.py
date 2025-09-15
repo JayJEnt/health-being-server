@@ -30,7 +30,7 @@ async def create_nested(
 
         nested_item[nested_config["join_key"]] = element_id
 
-        await is_duplicated(nested_config["name"], element_id=element_id)
+        await is_duplicated(nested_config["name"], element_id)
 
         inserted = supabase_connection.insert(
             related_config["table"],

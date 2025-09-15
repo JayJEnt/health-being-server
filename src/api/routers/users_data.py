@@ -33,7 +33,6 @@ async def update_owner_data(
 async def create_owner_data(
     user: UserDataCreate, requesting_user: User = Depends(validate_token)
 ):
-    await crud.is_duplicated(requesting_user.id)
     user = add_attributes(user, [{"user_id": requesting_user.id}])
     return await crud.post(user)
 

@@ -19,7 +19,7 @@ async def create_element(element_type: str, element_data: dict) -> dict:
     config = get_main_config(element_type)
     element_data = pydantic_to_dict(element_data)
 
-    await is_duplicated(element_type, element_name=element_data[config["column_name"]])
+    await is_duplicated(element_type, element_data[config["column_name"]])
 
     element_data = supabase_connection.insert(config["table"], element_data)
     logger.debug(f"Element: {element_data} inserted to table {config['table']}.")
