@@ -43,10 +43,16 @@ def example_refrigerator_response():
 def example_refrigerator_name_response():
     return [
         {
-            "users": "testuser",
-            "ingredients": "Bread",
+            "ingredient_id": 2,
+            "name": "Carrot",
             "amount": 50.0,
             "measure_unit": "g.",
+        },
+        {
+            "amount": 18.0,
+            "ingredient_id": 3,
+            "measure_unit": "g.",
+            "name": "Mushroom",
         },
     ]
 

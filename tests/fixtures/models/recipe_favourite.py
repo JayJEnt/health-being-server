@@ -49,5 +49,5 @@ def example_recipe_favourite_response():
 @pytest.fixture()
 def example_recipe_favourite_names_response():
     return [
-        {"recipes": "Healthy Salad", "users": "testuser"},
+        {"recipe_id": 1, "title": "Healthy Salad"},
     ]

@@ -6,9 +6,7 @@ from api.authentication.allowed_roles import logged_only
 from api.authentication.token import validate_token
 from api.crud.crud_operations import CrudOperations
 from api.schemas.prefered_ingredients import (
-    PreferedIngredients,
     CreatePreferedIngredients,
-    PostCreatePreferedIngredients,
 )
 from api.schemas.user import User
 
@@ -20,16 +18,17 @@ crud = CrudOperations("user")
 """/prefered_ingredients endpoint"""
 
 
-@router.get("", response_model=PreferedIngredients, dependencies=[Depends(logged_only)])
+@router.get("", dependencies=[Depends(logged_only)])
 async def get_all_relations_prefered_ingredients(
     requesting_user: User = Depends(validate_token),
 ):
-    return await crud.get_relationships(requesting_user.id, "ingredients")
+    return await crud.get_relationships(
+        requesting_user.id, "ingredients", find_name=True
+    )
 
 
 @router.post(
     "",
-    response_model=PostCreatePreferedIngredients,
     dependencies=[Depends(logged_only)],
 )
 async def create_relation_prefered_ingredients(
@@ -46,21 +45,19 @@ async def create_relation_prefered_ingredients(
 
 @router.get(
     "/{ingredient_id}",
-    response_model=PreferedIngredients,
     dependencies=[Depends(logged_only)],
 )
 async def get_relation_prefered_ingredients(
     ingredient_id: int, requesting_user: User = Depends(validate_token)
 ):
     return await crud.get_relationship(
-        requesting_user.id, "ingredients", ingredient_id, id_to_name=True
+        requesting_user.id, "ingredients", ingredient_id, find_name=True
     )
 
 
 # TODO: ADD PUT METHOD
 @router.delete(
     "/{ingredient_id}",
-    response_model=PreferedIngredients,
     dependencies=[Depends(logged_only)],
 )
 async def delete_relation_prefered_ingredients(

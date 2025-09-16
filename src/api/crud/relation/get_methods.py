@@ -1,6 +1,5 @@
 from api.crud.single_entity.get_methods import get_element_by_id
 from api.crud.utils import (
-    get_main_config,
     get_relation_config,
     get_related_config,
     pop_attributes,
@@ -16,7 +15,7 @@ async def get_relationship(
     element_id: int,
     relation_name: str,
     relation_id: int,
-    id_to_name: bool = False,
+    find_name: bool = False,
 ) -> dict:
     """
     Get single relationship between an element and one related item by their's id
@@ -47,26 +46,15 @@ async def get_relationship(
         )
         raise
 
-    if id_to_name:
-        element = await get_element_by_id(element_type, element_id)
-        related = await get_element_by_id(relation_name, element_id)
-
-        main_config = get_main_config(element_type)
+    if find_name:
+        related = await get_element_by_id(relation_name, relation_id)
         related_config = get_related_config(element_type, relation_name)
 
-        if main_config["table"] != related_config["table"]:
-            main_table = main_config["table"]
-        else:
-            main_table = main_config["table"] + "_2"
-
-        names = [
-            {related_config["table"]: related[related_config["column_name"]]},
-            {main_table: element[main_config["column_name"]]},
+        name = [
+            {related_config["column_name"]: related[related_config["column_name"]]},
         ]
-        relation, p = pop_attributes(
-            relation, [relation_config["join_keys"][0], relation_config["join_keys"][1]]
-        )
-        relation = add_attributes(relation, names)
+        relation, p = pop_attributes(relation, [relation_config["join_keys"][0]])
+        relation = add_attributes(relation, name)
 
     return relation
 
@@ -75,6 +63,7 @@ async def get_relationships(
     element_type: str,
     element_id: int,
     relation_name: str,
+    find_name: bool = False,
 ) -> list:
     """
     Get relationships between an element and one related item by relation item id's.
@@ -89,7 +78,7 @@ async def get_relationships(
     """
     relation_config = get_relation_config(element_type, relation_name)
     try:
-        element = supabase_connection.find_by(
+        relations = supabase_connection.find_by(
             relation_config["join_table"],
             relation_config["join_keys"][0],
             element_id,
@@ -100,7 +89,22 @@ async def get_relationships(
         )
         raise
 
-    return element
+    if find_name:
+        new_relations = []
+        for relation in relations:
+            relation_id = relation[relation_config["join_keys"][1]]
+            related = await get_element_by_id(relation_name, relation_id)
+            related_config = get_related_config(element_type, relation_name)
+
+            name = [
+                {related_config["column_name"]: related[related_config["column_name"]]},
+            ]
+            relation, p = pop_attributes(relation, [relation_config["join_keys"][0]])
+            relation = add_attributes(relation, name)
+            new_relations.append(relation)
+        relations = new_relations
+
+    return relations
 
 
 async def get_relationships_and_related_tables(

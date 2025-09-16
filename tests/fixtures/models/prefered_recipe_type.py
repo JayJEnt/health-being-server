@@ -41,5 +41,8 @@ def example_prefered_recipe_type_response():
 @pytest.fixture()
 def example_prefered_recipe_type_name_response():
     return [
-        {"users": "testuser", "diet_types": "vege"},
+        {
+            "type_id": 1,
+            "diet_name": "vege",
+        },
     ]

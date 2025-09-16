@@ -41,8 +41,8 @@ def example_follows_response():
 def example_follows_name_response():
     return [
         {
-            "users": "testuser",
-            "users_2": "testuser",
+            "followed_user_id": 2,
+            "username": "New User",
         },
     ]
 

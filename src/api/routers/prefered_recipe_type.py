@@ -20,7 +20,7 @@ crud = CrudOperations("user")
 async def get_all_relations_prefered_recipe_type(
     requesting_user: User = Depends(validate_token),
 ):
-    return await crud.get_relationships(requesting_user.id, "diet_type")
+    return await crud.get_relationships(requesting_user.id, "diet_type", find_name=True)
 
 
 @router.post("", dependencies=[Depends(logged_only)])
@@ -38,7 +38,7 @@ async def get_relation_prefered_recipe_type(
     diet_type_id: int, requesting_user: User = Depends(validate_token)
 ):
     return await crud.get_relationship(
-        requesting_user.id, "diet_type", diet_type_id, id_to_name=True
+        requesting_user.id, "diet_type", diet_type_id, find_name=True
     )
 
 
