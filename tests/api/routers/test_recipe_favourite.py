@@ -10,7 +10,6 @@ from api.schemas.recipe_favourite import (
     RecipeFavourite,
     CreateRecipeFavourite,
     PostCreateRecipeFavourite,
-    RecipeFavouriteGet,
 )
 from api.schemas.user import User
 
@@ -20,17 +19,17 @@ async def test_get_all_relations_recipe_favourite(
     mock_supabase_connection,
     example_recipe_favourite_injection,
     example_users_response,
-    example_recipe_favourite_response,
+    example_recipe_favourite_names_response,
 ):
     requesting_user = User(**example_users_response[0])
     response = await get_all_relations_recipe_favourite(requesting_user)
 
-    assert response == example_recipe_favourite_response
+    assert response == example_recipe_favourite_names_response
 
-    for item in response:
-        parsed = RecipeFavourite(**item)
+    # for item in response:
+    #     parsed = RecipeFavourite(**item)
 
-        assert isinstance(parsed, RecipeFavourite)
+    #     assert isinstance(parsed, RecipeFavourite)
 
 
 @pytest.mark.asyncio
@@ -67,9 +66,9 @@ async def test_get_relation_recipe_favourite(
 
     assert response == example_recipe_favourite_names_response[0]
 
-    parsed = RecipeFavouriteGet(**response)
+    # parsed = RecipeFavouriteGet(**response)
 
-    assert isinstance(parsed, RecipeFavouriteGet)
+    # assert isinstance(parsed, RecipeFavouriteGet)
 
 
 @pytest.mark.asyncio

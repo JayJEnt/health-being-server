@@ -12,7 +12,6 @@ from api.crud.single_entity.get_methods import (
     get_elements,
     get_element_by_id,
     get_element_by_name,
-    is_duplicated,
 )
 from api.crud.single_entity.post_methods import create_element
 from api.crud.single_entity.put_methods import update_element_by_id
@@ -93,24 +92,27 @@ class CrudOperations:
         element_id: int,
         relation_name: str,
         relation_id: int,
-        id_to_name: bool = False,
+        find_name: bool = False,
     ) -> dict:
         """
         Get a specific relationship for an element.
         """
         return get_relationship(
-            self.element_type, element_id, relation_name, relation_id, id_to_name
+            self.element_type, element_id, relation_name, relation_id, find_name
         )
 
     def get_relationships(
         self,
         element_id: int,
         relation_name: str,
+        find_name: bool = False,
     ) -> list:
         """
         Get all relationships for an element.
         """
-        return get_relationships(self.element_type, element_id, relation_name)
+        return get_relationships(
+            self.element_type, element_id, relation_name, find_name
+        )
 
     def post_relationship(
         self, element_id: int, relation_name: str, related_data: dict
@@ -199,12 +201,3 @@ class CrudOperations:
         Search for elements by a phrase.
         """
         return search_elements(self.element_type, phrase, restrict)
-
-    def is_duplicated(
-        self,
-        element,
-    ) -> list:
-        """
-        Raise an error if rescource already exists.
-        """
-        return is_duplicated(self.element_type, element)
