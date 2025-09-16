@@ -36,9 +36,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
           mkdir -p lambda-layer/python/lib/python3.12/site-packages
-          pip install -t lambda-layer/python/lib/python3.12/site-packages -r requirements.txt
+          pip install -t lambda-layer/python/lib/python3.12/site-packages -r infrastructure/requirements.txt
 
       - name: Create layer zip
         run: |
@@ -67,11 +66,8 @@ jobs:
 
       - name: Create filtered source zip
         run: |
-          EXCLUDE_LIST=(
-            "**/__pycache__/**"
-          )
           cd src
-          zip -r ../lambda-${{ needs.update-version.outputs.version }}.zip . -x "${EXCLUDE_LIST[@]}"
+          zip -r ../lambda-${{ needs.update-version.outputs.version }}.zip .
           cd ..
 
       - name: Configure AWS credentials
