@@ -5,8 +5,8 @@ from fastapi import APIRouter, Depends
 from api.authentication.allowed_roles import logged_only
 from api.authentication.token import validate_token
 from api.crud.crud_operations import CrudOperations
-from api.schemas.follows import CreateFollows
-from api.schemas.user import User
+from api.schemas.relation.follows import CreateFollows
+from api.schemas.user import UserResponse
 
 
 router = APIRouter(prefix="/follows", tags=["follows"])
@@ -17,13 +17,16 @@ crud = CrudOperations("user")
 
 
 @router.get("", dependencies=[Depends(logged_only)])
-async def get_all_relations_follows(requesting_user: User = Depends(validate_token)):
+async def get_all_relations_follows(
+    requesting_user: UserResponse = Depends(validate_token),
+):
     return await crud.get_relationships(requesting_user.id, "user", find_name=True)
 
 
 @router.post("", dependencies=[Depends(logged_only)])
 async def create_relation_follows(
-    followed_user: CreateFollows, requesting_user: User = Depends(validate_token)
+    followed_user: CreateFollows,
+    requesting_user: UserResponse = Depends(validate_token),
 ):
     return await crud.post_relationship(requesting_user.id, "user", followed_user)
 
@@ -36,7 +39,7 @@ async def create_relation_follows(
     dependencies=[Depends(logged_only)],
 )
 async def get_relation_follows(
-    followed_user_id: int, requesting_user: User = Depends(validate_token)
+    followed_user_id: int, requesting_user: UserResponse = Depends(validate_token)
 ):
     return await crud.get_relationship(
         requesting_user.id, "user", followed_user_id, find_name=True
@@ -45,6 +48,6 @@ async def get_relation_follows(
 
 @router.delete("/{followed_user_id}", dependencies=[Depends(logged_only)])
 async def delete_relation_follows(
-    followed_user_id: int, requesting_user: User = Depends(validate_token)
+    followed_user_id: int, requesting_user: UserResponse = Depends(validate_token)
 ):
     return await crud.delete_relationship(requesting_user.id, "user", followed_user_id)

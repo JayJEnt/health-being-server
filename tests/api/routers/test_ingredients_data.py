@@ -6,7 +6,10 @@ from api.routers.ingredients_data import (
     update_ingredient_data,
     delete_ingredient_data,
 )
-from api.schemas.ingredient import IngredientDataCreate, IngredientDataResponse
+from api.schemas.nested.ingredient_data import (
+    IngredientDataCreate,
+    IngredientDataResponse,
+)
 
 
 @pytest.mark.asyncio

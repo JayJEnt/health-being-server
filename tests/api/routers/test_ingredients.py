@@ -8,7 +8,7 @@ from api.routers.ingredients import (
     update_ingredient,
     delete_ingredient,
 )
-from api.schemas.ingredient import Ingredient, IngredientResponse
+from api.schemas.ingredient import IngredientResponse
 
 
 @pytest.mark.asyncio
@@ -23,9 +23,9 @@ async def test_get_ingredients(
     assert isinstance(response, list)
 
     for item in response:
-        parsed = Ingredient(**item)
+        parsed = IngredientResponse(**item)
 
-        assert isinstance(parsed, Ingredient)
+        assert isinstance(parsed, IngredientResponse)
 
 
 @pytest.mark.asyncio
@@ -39,9 +39,9 @@ async def test_get_ingredient(
 
     assert response == example_ingredients_response_all
 
-    parsed = Ingredient(**response)
+    parsed = IngredientResponse(**response)
 
-    assert isinstance(parsed, Ingredient)
+    assert isinstance(parsed, IngredientResponse)
 
 
 @pytest.mark.asyncio
@@ -54,9 +54,9 @@ async def test_get_ingredient_by_name(
 
     assert response == example_ingredients_response[2]
 
-    parsed = Ingredient(**response)
+    parsed = IngredientResponse(**response)
 
-    assert isinstance(parsed, Ingredient)
+    assert isinstance(parsed, IngredientResponse)
 
 
 @pytest.mark.asyncio

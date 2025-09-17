@@ -8,7 +8,7 @@ from api.routers.vitamins import (
     update_vitamin,
     delete_vitamin,
 )
-from api.schemas.vitamin import Vitamin
+from api.schemas.vitamin import VitaminResponse
 
 
 @pytest.mark.asyncio
@@ -21,9 +21,9 @@ async def test_get_vitamins(
     assert isinstance(response, list)
 
     for item in response:
-        parsed = Vitamin(**item)
+        parsed = VitaminResponse(**item)
 
-        assert isinstance(parsed, Vitamin)
+        assert isinstance(parsed, VitaminResponse)
 
 
 @pytest.mark.asyncio
@@ -34,9 +34,9 @@ async def test_get_vitamin(
 
     assert response == example_vitamins_response[0]
 
-    parsed = Vitamin(**response)
+    parsed = VitaminResponse(**response)
 
-    assert isinstance(parsed, Vitamin)
+    assert isinstance(parsed, VitaminResponse)
 
 
 @pytest.mark.asyncio
@@ -47,9 +47,9 @@ async def test_get_vitamin_by_name(
 
     assert response == example_vitamins_response[0]
 
-    parsed = Vitamin(**response)
+    parsed = VitaminResponse(**response)
 
-    assert isinstance(parsed, Vitamin)
+    assert isinstance(parsed, VitaminResponse)
 
 
 @pytest.mark.asyncio
@@ -60,9 +60,9 @@ async def test_create_vitamin(
 
     assert response == example_vitamins_response[0]
 
-    parsed = Vitamin(**response)
+    parsed = VitaminResponse(**response)
 
-    assert isinstance(parsed, Vitamin)
+    assert isinstance(parsed, VitaminResponse)
 
 
 @pytest.mark.asyncio
@@ -76,9 +76,9 @@ async def test_update_vitamin(
 
     assert response == example_vitamins_update_response[0]
 
-    parsed = Vitamin(**response)
+    parsed = VitaminResponse(**response)
 
-    assert isinstance(parsed, Vitamin)
+    assert isinstance(parsed, VitaminResponse)
 
 
 @pytest.mark.asyncio
@@ -89,6 +89,6 @@ async def test_delete_vitamin(
 
     assert response == example_vitamins_response[0]
 
-    parsed = Vitamin(**response)
+    parsed = VitaminResponse(**response)
 
-    assert isinstance(parsed, Vitamin)
+    assert isinstance(parsed, VitaminResponse)

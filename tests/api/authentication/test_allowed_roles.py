@@ -1,12 +1,12 @@
 import pytest
 
 from api.authentication.allowed_roles import admin_only, logged_only, owner_only
-from api.schemas.user import User
+from api.schemas.user import UserResponse
 
 
 @pytest.mark.asyncio
 async def test_admin_only(example_users_response):
-    requesting_user = User(**example_users_response[2])
+    requesting_user = UserResponse(**example_users_response[2])
     await admin_only(requesting_user)
 
     assert True  # If passes, then its good
@@ -14,7 +14,7 @@ async def test_admin_only(example_users_response):
 
 @pytest.mark.asyncio
 async def test_admin_only_error(example_users_response):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     with pytest.raises(Exception) as excinfo:
         await admin_only(requesting_user)
 
@@ -23,7 +23,7 @@ async def test_admin_only_error(example_users_response):
 
 @pytest.mark.asyncio
 async def test_logged_only(example_users_response):
-    requesting_user = User(**example_users_response[2])
+    requesting_user = UserResponse(**example_users_response[2])
     await logged_only(requesting_user)
 
     assert True  # If passes, then its good
@@ -41,7 +41,7 @@ async def test_logged_only_error(example_users_response):
 async def test_owner_only(
     mock_supabase_connection, example_users_response, example_recipes_injection
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     await owner_only("recipes", 1, requesting_user)
 
     assert True  # If passes, then its good
@@ -51,7 +51,7 @@ async def test_owner_only(
 async def test_owner_only_error(
     mock_supabase_connection, example_users_response, example_recipes_injection
 ):
-    requesting_user = User(**example_users_response[2])
+    requesting_user = UserResponse(**example_users_response[2])
     with pytest.raises(Exception) as excinfo:
         await owner_only("recipes", 1, requesting_user)
 

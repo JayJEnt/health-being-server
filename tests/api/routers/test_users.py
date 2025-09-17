@@ -7,7 +7,7 @@ from api.routers.users import (
     delete_user,
     get_user_by_name,
 )
-from api.schemas.user import User
+from api.schemas.user import UserResponse
 
 
 @pytest.mark.asyncio
@@ -22,9 +22,9 @@ async def test_get_users(
     assert isinstance(response, list)
 
     for item in response:
-        parsed = User(**item)
+        parsed = UserResponse(**item)
 
-        assert isinstance(parsed, User)
+        assert isinstance(parsed, UserResponse)
 
 
 @pytest.mark.asyncio
@@ -38,9 +38,9 @@ async def test_get_user(
 
     assert response == example_users_response_all
 
-    parsed = User(**response)
+    parsed = UserResponse(**response)
 
-    assert isinstance(parsed, User)
+    assert isinstance(parsed, UserResponse)
 
 
 @pytest.mark.asyncio
@@ -53,9 +53,9 @@ async def test_get_user_by_name(
 
     assert response == example_users_response[2]
 
-    parsed = User(**response)
+    parsed = UserResponse(**response)
 
-    assert isinstance(parsed, User)
+    assert isinstance(parsed, UserResponse)
 
 
 @pytest.mark.asyncio
@@ -70,9 +70,9 @@ async def test_update_user(
 
     assert response == example_users_response_update[0]
 
-    parsed = User(**response)
+    parsed = UserResponse(**response)
 
-    assert isinstance(parsed, User)
+    assert isinstance(parsed, UserResponse)
 
 
 @pytest.mark.asyncio
@@ -86,6 +86,6 @@ async def test_delete_user(
 
     assert response == example_users_response[0]
 
-    parsed = User(**response)
+    parsed = UserResponse(**response)
 
-    assert isinstance(parsed, User)
+    assert isinstance(parsed, UserResponse)

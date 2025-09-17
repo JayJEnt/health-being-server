@@ -6,8 +6,8 @@ from api.routers.follows import (
     get_relation_follows,
     delete_relation_follows,
 )
-from api.schemas.follows import Follows, CreateFollows
-from api.schemas.user import User
+from api.schemas.relation.follows import Follows, CreateFollows
+from api.schemas.user import UserResponse
 
 
 @pytest.mark.asyncio
@@ -17,7 +17,7 @@ async def test_get_all_relations_follows(
     example_users_response,
     example_follows_name_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await get_all_relations_follows(requesting_user)
 
     assert response == example_follows_name_response
@@ -35,15 +35,15 @@ async def test_create_relation_follows(
     example_follows_create,
     example_users_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     followed_user = CreateFollows(**example_follows_create[0])
     response = await create_relation_follows(followed_user, requesting_user)
 
     assert response == example_users_response[1]
 
-    parsed = User(**response)
+    parsed = UserResponse(**response)
 
-    assert isinstance(parsed, User)
+    assert isinstance(parsed, UserResponse)
 
 
 @pytest.mark.asyncio
@@ -53,7 +53,7 @@ async def test_get_relation_follows(
     example_users_response,
     example_follows_name_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await get_relation_follows(2, requesting_user)
 
     assert response == example_follows_name_response[0]
@@ -70,7 +70,7 @@ async def test_delete_relation_follows(
     example_users_response,
     example_follows_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await delete_relation_follows(2, requesting_user)
 
     assert response == example_follows_response[0]

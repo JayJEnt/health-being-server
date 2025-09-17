@@ -2,7 +2,10 @@
 
 from fastapi import APIRouter, Depends
 
-from api.schemas.ingredient import IngredientDataCreate, IngredientDataResponse
+from api.schemas.nested.ingredient_data import (
+    IngredientDataCreate,
+    IngredientDataResponse,
+)
 from api.crud.crud_operations import CrudOperations
 from api.authentication.allowed_roles import admin_only
 from api.crud.utils import add_attributes

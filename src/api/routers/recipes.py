@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from typing import List
 
 from api.schemas.recipe import RecipeCreate, RecipeOverview, RecipeResponse
-from api.schemas.user import User
+from api.schemas.user import UserResponse
 from api.crud.crud_operations import CrudOperations
 from api.crud.utils import add_attributes
 from api.authentication.allowed_roles import logged_only, owner_only
@@ -26,7 +26,7 @@ async def get_recipes():
 
 @router.post("", response_model=RecipeResponse, dependencies=[Depends(logged_only)])
 async def create_recipe(
-    recipe: RecipeCreate, requesting_user: User = Depends(validate_token)
+    recipe: RecipeCreate, requesting_user: UserResponse = Depends(validate_token)
 ):
     recipe = add_attributes(recipe, [{"owner_id": requesting_user.id}])
     return await crud.post_all(recipe, related_attributes=["ingredients", "diet_type"])
@@ -48,7 +48,7 @@ async def get_recipe(recipe_id: int):
 async def update_recipe(
     recipe_id: int,
     recipe: RecipeCreate,
-    requesting_user: User = Depends(validate_token),
+    requesting_user: UserResponse = Depends(validate_token),
 ):
     await owner_only("recipes", recipe_id, requesting_user)
 
@@ -59,7 +59,7 @@ async def update_recipe(
 
 @router.delete("/{recipe_id}", dependencies=[Depends(logged_only)])
 async def delete_recipe(
-    recipe_id: int, requesting_user: User = Depends(validate_token)
+    recipe_id: int, requesting_user: UserResponse = Depends(validate_token)
 ):
     await owner_only("recipes", recipe_id, requesting_user)
 

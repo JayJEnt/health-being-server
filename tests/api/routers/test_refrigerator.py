@@ -6,12 +6,12 @@ from api.routers.refrigerator import (
     get_relation_refrigerator,
     delete_relation_refrigerator,
 )
-from api.schemas.refrigerator import (
+from api.schemas.relation.refrigerator import (
     CreateRefrigerator,
     Refrigerator,
     PostCreateRefrigerator,
 )
-from api.schemas.user import User
+from api.schemas.user import UserResponse
 
 
 @pytest.mark.asyncio
@@ -21,7 +21,7 @@ async def test_get_all_relations_refrigerator(
     example_users_response,
     example_refrigerator_name_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await get_all_relations_refrigerator(requesting_user)
 
     assert response == example_refrigerator_name_response
@@ -41,7 +41,7 @@ async def test_create_relation_refrigerator(
     example_users_response,
     example_refrigerator_create_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     prefered_ingredient = CreateRefrigerator(**example_refrigerator_create[0])
     response = await create_relation_refrigerator(prefered_ingredient, requesting_user)
 
@@ -59,7 +59,7 @@ async def test_get_relation_refrigerator(
     example_users_response,
     example_refrigerator_name_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await get_relation_refrigerator(2, requesting_user)
 
     assert response == example_refrigerator_name_response[0]
@@ -76,7 +76,7 @@ async def test_delete_relation_refrigerator(
     example_users_response,
     example_refrigerator_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await delete_relation_refrigerator(2, requesting_user)
 
     assert response == example_refrigerator_response[0]

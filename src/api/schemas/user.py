@@ -1,39 +1,37 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import EmailStr
+from sqlmodel import Field, SQLModel
 
-from api.schemas.user_data import UserDataCreate
+from api.schemas.nested.user_data import UserDataCreate
 from api.schemas.enum_utils import Role
 
 
-"""User Create models"""
+class UserBase(SQLModel):
+    username: str = Field(unique=True, nullable=False)
+    email: EmailStr = Field(unique=True, nullable=False)
 
 
-class UserBaseModel(BaseModel):
-    username: str
-    email: EmailStr
-
-
-class UserCreate(UserBaseModel):
-    password: str
+class UserCreate(UserBase):
+    password: str = Field(nullable=False)
 
 
 class UserUpdateAdmin(UserCreate):
-    role: str
+    role: Role = Field(default=Role.user.value, nullable=False)
 
 
-"""User models"""
+class UserDB(UserCreate, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    hashed_password: str | None = Field(default=None, nullable=True)
+    role: Role = Field(default=Role.user.value, nullable=False)
 
 
-class User(UserBaseModel):
+class UserResponse(UserBase):
     id: int
-    role: Role = Role.user.value
+    role: Role
 
 
-class UserOurAuth(User):
+class UserOurAuth(UserResponse):
     hashed_password: str
 
 
-"""User with UserData models"""
-
-
-class UserCreateAll(User, UserDataCreate):
+class UserResponseAll(UserResponse, UserDataCreate):
     pass

@@ -8,7 +8,7 @@ from typing import Annotated
 from api.authentication.oauth2_google import google_login, google_auth_callback
 from api.authentication.oauth2_our import our_login, register
 from api.handlers.exceptions import UnknownProvider
-from api.schemas.user import UserCreate, User
+from api.schemas.user import UserCreate, UserResponse
 from api.schemas.token import Token
 
 
@@ -45,6 +45,6 @@ async def login_with_form(form_data: Annotated[OAuth2PasswordRequestForm, Depend
 """/oauth2_our/register endpoint"""
 
 
-@router.post("_our/register", response_model=User)
+@router.post("_our/register", response_model=UserResponse)
 async def our_register(user: UserCreate):
     return await register(user)

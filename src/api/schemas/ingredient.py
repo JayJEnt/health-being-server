@@ -1,65 +1,48 @@
-from pydantic import BaseModel
+from sqlmodel import Field, SQLModel
+
 from typing import List, Optional
 
 from api.schemas.enum_utils import MeasureUnit
-from api.schemas.vitamin import VitaminCreate, Vitamin
+from api.schemas.nested.ingredient_data import IngredientDataCreate
+from api.schemas.vitamin import VitaminCreate, VitaminResponse
 
 
-"""Ingredient base models"""
+class IngredientBase(SQLModel):
+    name: str = Field(unique=True, nullable=False)
 
 
-class IngredientName(BaseModel):
-    name: str
-
-
-class IngredientIndex(BaseModel):
-    id: int
-
-
-"""Ingredient data models"""
-
-
-class IngredientDataCreate(BaseModel):
-    calories_per_100: Optional[float] = 0.0
-    protein_per_100: Optional[float] = 0.0
-    fat_per_100: Optional[float] = 0.0
-    carbon_per_100: Optional[float] = 0.0
-    fiber_per_100: Optional[float] = 0.0
-    sugar_per_100: Optional[float] = 0.0
-    salt_per_100: Optional[float] = 0.0
-
-
-class IngredientDataResponse(IngredientDataCreate):
-    ingredient_id: int
-
-
-"""Ingredient models"""
-
-
-class Ingredient(IngredientName, IngredientIndex):
+class IngredientCreate(IngredientBase):
     pass
 
 
-class IngredientCreate(IngredientName):
+class IngredientDB(IngredientBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+
+
+class IngredientResponse(IngredientBase):
+    id: int
+
+
+class IngredientCreateAll(IngredientBase):
     vitamins: Optional[List[VitaminCreate]] = None
     ingredients_data: Optional[IngredientDataCreate]
 
 
-class IngredientResponse(Ingredient, IngredientDataCreate):
-    vitamins: Optional[List[Vitamin]] = None
+class IngredientResponse(IngredientResponse, IngredientDataCreate):
+    vitamins: Optional[List[VitaminResponse]] = None
 
 
-class IngredientUpdate(IngredientName):
+class IngredientUpdate(IngredientBase):
     vitamins: Optional[List[VitaminCreate]] = None
 
 
-class IngredientUpdateResponse(Ingredient):
-    vitamins: Optional[List[Vitamin]] = None
+class IngredientUpdateResponse(IngredientResponse):
+    vitamins: Optional[List[VitaminResponse]] = None
 
 
 """Ingredient included models"""
 
 
-class IngredientQuantity(IngredientName):
+class IngredientQuantity(IngredientBase):
     amount: float
     measure_unit: MeasureUnit

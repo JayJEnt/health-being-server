@@ -1,9 +1,26 @@
-from pydantic import BaseModel
+from sqlmodel import Field, SQLModel
+
+from typing import Optional
+
+# from api.schemas.relation.vitamins_included import VitaminsIncludedDB
+from config import settings
 
 
-class VitaminCreate(BaseModel):
-    name: str
+class VitaminBase(SQLModel):
+    name: str = Field(unique=True, nullable=False)
 
 
-class Vitamin(VitaminCreate):
+class VitaminCreate(VitaminBase):
+    pass
+
+
+class VitaminDB(VitaminBase, table=True):
+    __tablename__ = settings.VITAMIN_TABLE
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+
+    # ingredients: List[VitaminsIncludedDB] = Relationship(back_populates="vitamin")
+
+
+class VitaminResponse(VitaminBase):
     id: int

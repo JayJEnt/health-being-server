@@ -5,10 +5,10 @@ from fastapi import APIRouter, Depends
 from api.authentication.allowed_roles import logged_only
 from api.authentication.token import validate_token
 from api.crud.crud_operations import CrudOperations
-from api.schemas.prefered_ingredients import (
+from api.schemas.relation.prefered_ingredients import (
     CreatePreferedIngredients,
 )
-from api.schemas.user import User
+from api.schemas.user import UserResponse
 
 
 router = APIRouter(prefix="/prefered_ingredients", tags=["prefered_ingredients"])
@@ -20,7 +20,7 @@ crud = CrudOperations("user")
 
 @router.get("", dependencies=[Depends(logged_only)])
 async def get_all_relations_prefered_ingredients(
-    requesting_user: User = Depends(validate_token),
+    requesting_user: UserResponse = Depends(validate_token),
 ):
     return await crud.get_relationships(
         requesting_user.id, "ingredients", find_name=True
@@ -33,7 +33,7 @@ async def get_all_relations_prefered_ingredients(
 )
 async def create_relation_prefered_ingredients(
     prefered_ingredient: CreatePreferedIngredients,
-    requesting_user: User = Depends(validate_token),
+    requesting_user: UserResponse = Depends(validate_token),
 ):
     return await crud.post_relationship(
         requesting_user.id, "ingredients", prefered_ingredient
@@ -48,7 +48,7 @@ async def create_relation_prefered_ingredients(
     dependencies=[Depends(logged_only)],
 )
 async def get_relation_prefered_ingredients(
-    ingredient_id: int, requesting_user: User = Depends(validate_token)
+    ingredient_id: int, requesting_user: UserResponse = Depends(validate_token)
 ):
     return await crud.get_relationship(
         requesting_user.id, "ingredients", ingredient_id, find_name=True
@@ -61,7 +61,7 @@ async def get_relation_prefered_ingredients(
     dependencies=[Depends(logged_only)],
 )
 async def delete_relation_prefered_ingredients(
-    ingredient_id: int, requesting_user: User = Depends(validate_token)
+    ingredient_id: int, requesting_user: UserResponse = Depends(validate_token)
 ):
     return await crud.delete_relationship(
         requesting_user.id, "ingredients", ingredient_id

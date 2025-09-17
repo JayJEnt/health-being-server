@@ -6,7 +6,10 @@ from typing import List
 
 from api.authentication.allowed_roles import admin_only
 from api.crud.crud_operations import CrudOperations
-from api.schemas.ingredient import IngredientCreate, Ingredient, IngredientResponse
+from api.schemas.ingredient import (
+    IngredientCreateAll,
+    IngredientResponse,
+)
 
 
 router = APIRouter(prefix="/ingredients", tags=["ingredients"])
@@ -16,7 +19,7 @@ crud = CrudOperations("ingredients")
 """/ingredients endpoint"""
 
 
-@router.get("", response_model=List[Ingredient])
+@router.get("", response_model=List[IngredientResponse])
 async def get_ingredients():
     return await crud.get()
 
@@ -36,7 +39,7 @@ async def get_ingredient(ingredient_id: int):
 """/ingredients/name/{ingredient_name} endpoint"""
 
 
-@router.get("/name/{ingredient_name}", response_model=Ingredient)
+@router.get("/name/{ingredient_name}", response_model=IngredientResponse)
 async def get_ingredient_by_name(ingredient_name: str):
     return await crud.get_by_name(ingredient_name)
 
@@ -50,7 +53,7 @@ admin_router = APIRouter(prefix="/admin/ingredients", tags=["admin: ingredients"
 @admin_router.post(
     "", response_model=IngredientResponse, dependencies=[Depends(admin_only)]
 )
-async def create_ingredient(ingredient: IngredientCreate):
+async def create_ingredient(ingredient: IngredientCreateAll):
     return await crud.post_all(
         ingredient,
         related_attributes=["vitamins"],
@@ -66,7 +69,7 @@ async def create_ingredient(ingredient: IngredientCreate):
     response_model=IngredientResponse,
     dependencies=[Depends(admin_only)],
 )
-async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
+async def update_ingredient(ingredient_id: int, ingredient: IngredientCreateAll):
     return await crud.put_all(
         ingredient_id,
         ingredient,

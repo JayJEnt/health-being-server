@@ -6,12 +6,12 @@ from api.routers.recipe_favourite import (
     get_relation_recipe_favourite,
     delete_relation_recipe_favourite,
 )
-from api.schemas.recipe_favourite import (
+from api.schemas.relation.recipe_favourite import (
     RecipeFavourite,
     CreateRecipeFavourite,
     PostCreateRecipeFavourite,
 )
-from api.schemas.user import User
+from api.schemas.user import UserResponse
 
 
 @pytest.mark.asyncio
@@ -21,7 +21,7 @@ async def test_get_all_relations_recipe_favourite(
     example_users_response,
     example_recipe_favourite_names_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await get_all_relations_recipe_favourite(requesting_user)
 
     assert response == example_recipe_favourite_names_response
@@ -41,7 +41,7 @@ async def test_create_relation_recipe_favourite(
     example_users_response,
     example_recipe_favourite_create_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     prefered_ingredient = CreateRecipeFavourite(**example_recipe_favourite_create[0])
     response = await create_relation_recipe_favourite(
         prefered_ingredient, requesting_user
@@ -61,7 +61,7 @@ async def test_get_relation_recipe_favourite(
     example_users_response,
     example_recipe_favourite_names_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await get_relation_recipe_favourite(1, requesting_user)
 
     assert response == example_recipe_favourite_names_response[0]
@@ -78,7 +78,7 @@ async def test_delete_relation_recipe_favourite(
     example_users_response,
     example_recipe_favourite_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await delete_relation_recipe_favourite(1, requesting_user)
 
     assert response == example_recipe_favourite_response[0]

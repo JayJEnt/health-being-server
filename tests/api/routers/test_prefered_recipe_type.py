@@ -6,12 +6,12 @@ from api.routers.prefered_recipe_type import (
     get_relation_prefered_recipe_type,
     delete_relation_prefered_recipe_type,
 )
-from api.schemas.prefered_recipe_type import (
+from api.schemas.relation.prefered_recipe_type import (
     PreferedRecipeType,
     CreatePreferedRecipeType,
     PostCreatePreferedRecipeType,
 )
-from api.schemas.user import User
+from api.schemas.user import UserResponse
 
 
 @pytest.mark.asyncio
@@ -21,7 +21,7 @@ async def test_get_all_relations_prefered_recipe_type(
     example_users_response,
     example_prefered_recipe_type_name_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await get_all_relations_prefered_recipe_type(requesting_user)
 
     assert response == example_prefered_recipe_type_name_response
@@ -41,7 +41,7 @@ async def test_create_relation_prefered_recipe_type(
     example_users_response,
     example_prefered_recipe_type_create_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     prefered_ingredient = CreatePreferedRecipeType(
         **example_prefered_recipe_type_create[0]
     )
@@ -63,7 +63,7 @@ async def test_get_relation_prefered_recipe_type(
     example_users_response,
     example_prefered_recipe_type_name_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await get_relation_prefered_recipe_type(1, requesting_user)
 
     assert response == example_prefered_recipe_type_name_response[0]
@@ -80,7 +80,7 @@ async def test_delete_relation_prefered_recipe_type(
     example_users_response,
     example_prefered_recipe_type_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await delete_relation_prefered_recipe_type(1, requesting_user)
 
     assert response == example_prefered_recipe_type_response[0]

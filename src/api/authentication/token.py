@@ -7,7 +7,7 @@ from typing import Optional, Annotated, Any
 
 from api.crud.single_entity.get_methods import get_element_by_name
 from api.handlers.exceptions import InvalidToken, ResourceNotFound
-from api.schemas.user import User
+from api.schemas.user import UserResponse
 from config import settings
 from logger import logger
 
@@ -30,7 +30,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     return encoded_jwt
 
 
-async def validate_token(token: Annotated[str, Depends(oauth2_scheme)]) -> User:
+async def validate_token(token: Annotated[str, Depends(oauth2_scheme)]) -> UserResponse:
     logger.info("Validating token...")
 
     payload = await get_payload_from_token(token)
@@ -55,7 +55,7 @@ async def get_user_from_token(payload: dict) -> dict:
     try:
         user = await get_element_by_name("user", email, alternative_name=True)
         logger.info("Got User")
-        return User(**user)
+        return UserResponse(**user)
     except ResourceNotFound:
         raise InvalidToken
 

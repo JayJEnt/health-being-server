@@ -9,7 +9,7 @@ from api.routers.recipes import (
     delete_recipe,
 )
 from api.schemas.recipe import RecipeResponse, RecipeOverview
-from api.schemas.user import User
+from api.schemas.user import UserResponse
 
 
 @pytest.mark.asyncio
@@ -71,7 +71,7 @@ async def test_create_recipe(
     example_recipes_create_all,
     example_recipes_response_create_all,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await create_recipe(example_recipes_create_all[0], requesting_user)
 
     assert response == example_recipes_response_create_all
@@ -91,7 +91,7 @@ async def test_update_recipe(
     example_recipes_update_all,
     example_recipes_response_update_all,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await update_recipe(1, example_recipes_update_all[0], requesting_user)
 
     assert response == example_recipes_response_update_all
@@ -110,7 +110,7 @@ async def test_delete_recipe(
     example_users_response,
     example_recipes_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await delete_recipe(1, requesting_user)
 
     assert response == example_recipes_response[0]

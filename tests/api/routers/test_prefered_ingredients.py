@@ -6,12 +6,12 @@ from api.routers.prefered_ingredients import (
     get_relation_prefered_ingredients,
     delete_relation_prefered_ingredients,
 )
-from api.schemas.prefered_ingredients import (
+from api.schemas.relation.prefered_ingredients import (
     PreferedIngredients,
     CreatePreferedIngredients,
     PostCreatePreferedIngredients,
 )
-from api.schemas.user import User
+from api.schemas.user import UserResponse
 
 
 @pytest.mark.asyncio
@@ -21,7 +21,7 @@ async def test_get_all_relations_prefered_ingredients(
     example_users_response,
     example_prefered_ingredients_name_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await get_all_relations_prefered_ingredients(requesting_user)
 
     assert response == example_prefered_ingredients_name_response
@@ -41,7 +41,7 @@ async def test_create_relation_prefered_ingredients(
     example_users_response,
     example_prefered_ingredients_create_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     prefered_ingredient = CreatePreferedIngredients(
         **example_prefered_ingredients_create[0]
     )
@@ -63,7 +63,7 @@ async def test_get_relation_prefered_ingredients(
     example_users_response,
     example_prefered_ingredients_name_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await get_relation_prefered_ingredients(2, requesting_user)
 
     assert response == example_prefered_ingredients_name_response[0]
@@ -80,7 +80,7 @@ async def test_delete_relation_prefered_ingredients(
     example_users_response,
     example_prefered_ingredients_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
     response = await delete_relation_prefered_ingredients(2, requesting_user)
 
     assert response == example_prefered_ingredients_response[0]

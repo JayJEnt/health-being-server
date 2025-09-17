@@ -6,7 +6,7 @@ from typing import List
 
 from api.authentication.allowed_roles import admin_only
 from api.crud.crud_operations import CrudOperations
-from api.schemas.vitamin import VitaminCreate, Vitamin
+from api.schemas.vitamin import VitaminCreate, VitaminResponse
 
 
 router = APIRouter(prefix="/vitamins", tags=["vitamins"])
@@ -16,7 +16,7 @@ crud = CrudOperations("vitamins")
 """/vitamins endpoint"""
 
 
-@router.get("", response_model=List[Vitamin])
+@router.get("", response_model=List[VitaminResponse])
 async def get_vitamins():
     return await crud.get()
 
@@ -24,7 +24,7 @@ async def get_vitamins():
 """/vitamins/{vitamin_id} endpoint"""
 
 
-@router.get("/{vitamin_id}", response_model=Vitamin)
+@router.get("/{vitamin_id}", response_model=VitaminResponse)
 async def get_vitamin(vitamin_id: int):
     return await crud.get_by_id(vitamin_id)
 
@@ -32,7 +32,7 @@ async def get_vitamin(vitamin_id: int):
 """/vitamins/name/{vitamin_name} endpoint"""
 
 
-@router.get("/name/{vitamin_name}", response_model=Vitamin)
+@router.get("/name/{vitamin_name}", response_model=VitaminResponse)
 async def get_vitamin_by_name(vitamin_name: str):
     return await crud.get_by_name(vitamin_name)
 
@@ -43,7 +43,9 @@ admin_router = APIRouter(prefix="/admin/vitamins", tags=["admin: vitamins"])
 """/admin/vitamins endpoint"""
 
 
-@admin_router.post("", response_model=Vitamin, dependencies=[Depends(admin_only)])
+@admin_router.post(
+    "", response_model=VitaminResponse, dependencies=[Depends(admin_only)]
+)
 async def create_vitamin(vitamin: VitaminCreate):
     return await crud.post(vitamin)
 
@@ -52,7 +54,7 @@ async def create_vitamin(vitamin: VitaminCreate):
 
 
 @admin_router.put(
-    "/{vitamin_id}", response_model=Vitamin, dependencies=[Depends(admin_only)]
+    "/{vitamin_id}", response_model=VitaminResponse, dependencies=[Depends(admin_only)]
 )
 async def update_vitamin(vitamin_id: int, vitamin: VitaminCreate):
     return await crud.put(vitamin_id, vitamin)

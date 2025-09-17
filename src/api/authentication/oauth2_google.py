@@ -8,7 +8,7 @@ from api.authentication.oauth2_our import register
 from api.authentication.token import create_access_token
 from api.crud.single_entity.get_methods import get_element_by_name
 from api.handlers.exceptions import ResourceNotFound
-from api.schemas.user import User, UserBaseModel
+from api.schemas.user import UserResponse, UserBase
 from config import settings
 from logger import logger
 
@@ -69,7 +69,7 @@ async def google_auth_callback(request: Request):
             user_found_dict = await get_element_by_name(
                 "user", user["email"], alternative_name=True
             )
-            user = User(**user_found_dict)
+            user = UserResponse(**user_found_dict)
             logger.info(f"Successfully loged {user.email} in.")
         except ResourceNotFound:
             logger.info(
@@ -77,8 +77,8 @@ async def google_auth_callback(request: Request):
                 f"Starting registeration process..."
             )
             user_creat_dict = {"username": user["name"], "email": user["email"]}
-            user_create = UserBaseModel(**user_creat_dict)
-            user = User(**await register(user_create, other_provider=True))
+            user_create = UserBase(**user_creat_dict)
+            user = UserResponse(**await register(user_create, other_provider=True))
 
         user_data = {
             "id": user.id,

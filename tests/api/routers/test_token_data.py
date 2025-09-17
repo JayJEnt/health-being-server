@@ -4,27 +4,27 @@ from api.routers.token_data import (
     get_token_owner,
     is_user_an_admin,
 )
-from api.schemas.user import User
+from api.schemas.user import UserResponse
 
 
 @pytest.mark.asyncio
 async def test_get_token_owner(
     example_users_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
 
     response = await get_token_owner(requesting_user)
 
-    assert response == User(**example_users_response[0])
+    assert response == UserResponse(**example_users_response[0])
 
-    assert isinstance(response, User)
+    assert isinstance(response, UserResponse)
 
 
 @pytest.mark.asyncio
 async def test_is_user_an_admin(
     example_users_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    requesting_user = UserResponse(**example_users_response[0])
 
     response = await is_user_an_admin(requesting_user)
 
