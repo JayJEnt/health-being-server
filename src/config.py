@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     """DATABASE"""
     # SUPABASE SECRETS
     SUPABASE_URL: str = ""
+    SUPABASE_KEY: str = ""
 
     # TEST DATABASE
     TEST_DATABASE_URL: str = "sqlite:///:memory:"

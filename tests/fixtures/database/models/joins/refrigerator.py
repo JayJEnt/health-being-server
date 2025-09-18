@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, Float, String
 from sqlalchemy.orm import relationship
-from database.supabase_connection import Base
+
+from tests.fixtures.database.supabase_connection import Base
 from config import settings
 
 
