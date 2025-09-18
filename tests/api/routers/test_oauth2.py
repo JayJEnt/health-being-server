@@ -26,7 +26,11 @@ async def test_login_unknown():
 
 @pytest.mark.asyncio
 async def test_auth_callback(
-    mock_async_client, mock_datetime_now, dummy_request, google_oauth2_expected_token
+    mock_async_client,
+    mock_supabase_connection,
+    mock_datetime_now,
+    dummy_request,
+    google_oauth2_expected_token,
 ):
     response = await auth_callback(dummy_request)
 

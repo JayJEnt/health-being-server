@@ -2,7 +2,7 @@ from sqlmodel import Field, SQLModel
 
 from typing import Optional
 
-# from api.schemas.relation.vitamins_included import VitaminsIncludedDB
+# from api.schemas import VitaminsIncludedDB
 from config import settings
 
 

@@ -14,7 +14,7 @@ dotenv==0.9.9
 
 # database
 # sqlalchemy==2.0.43
-sqlmodel=0.0.24
+sqlmodel==0.0.24
 psycopg2==2.9.10
 boto3==1.40.7
 
