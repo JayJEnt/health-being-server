@@ -3,10 +3,8 @@ from fastapi import UploadFile
 import io
 import pytest
 
-from api.routers.images import (
-    upload_image,
-    download_image,
-)
+from api.routers.user_role.images import upload_image
+from api.routers.public.images import download_image
 
 
 @pytest.mark.asyncio

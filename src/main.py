@@ -6,9 +6,6 @@ from contextlib import asynccontextmanager
 from datetime import datetime as dt
 
 from api.routers import (
-    diet_types,
-    follows,
-    images,
     ingredients_data,
     ingredients,
     oauth2,
@@ -21,6 +18,17 @@ from api.routers import (
     users_data,
     users,
     vitamins,
+)
+from api.routers.admin_role import (
+    diet_types as admin_diet_types,
+)
+from api.routers.user_role import (
+    follows as user_follows,
+    images as user_images,
+)
+from api.routers.public import (
+    diet_types as public_diet_types,
+    images as public_images,
 )
 from logger import logger
 
@@ -59,10 +67,14 @@ def root_handler():
     return {"message": "Hello!"}
 
 
-app.include_router(diet_types.router)
-app.include_router(diet_types.admin_router)
-app.include_router(follows.router)
-app.include_router(images.router)
+app.include_router(admin_diet_types.router)
+
+app.include_router(public_diet_types.router)
+app.include_router(public_images.router)
+
+app.include_router(user_follows.router)
+app.include_router(user_images.router)
+
 app.include_router(ingredients_data.admin_router)
 app.include_router(ingredients.router)
 app.include_router(ingredients.admin_router)

@@ -1,9 +1,10 @@
 import pytest
 
-from api.routers.diet_types import (
+from api.routers.public.diet_types import (
     get_diet_types,
     get_diet_type,
-    get_diet_by_name,
+)
+from api.routers.admin_role.diet_types import (
     create_diet_type,
     update_diet_type,
     delete_diet_type,
@@ -30,7 +31,7 @@ async def test_get_diet_types(
 async def test_get_diet_type(
     mock_supabase_connection, example_diet_types_injection, example_diet_types_response
 ):
-    response = await get_diet_type(1)
+    response = await get_diet_type(diet_type_id=1)
 
     assert response == example_diet_types_response[0]
 
@@ -43,7 +44,7 @@ async def test_get_diet_type(
 async def test_get_diet_by_name(
     mock_supabase_connection, example_diet_types_injection, example_diet_types_response
 ):
-    response = await get_diet_by_name("VeGan")
+    response = await get_diet_type(diet_name="VeGan")
 
     assert response == example_diet_types_response[1]
 
@@ -72,7 +73,9 @@ async def test_update_diet_type(
     example_diet_types_update,
     example_diet_types_update_response,
 ):
-    response = await update_diet_type(1, example_diet_types_update[0])
+    response = await update_diet_type(
+        diet_type=example_diet_types_update[0], diet_type_id=1
+    )
 
     assert response == example_diet_types_update_response[0]
 
@@ -85,7 +88,7 @@ async def test_update_diet_type(
 async def test_delete_diet_type(
     mock_supabase_connection, example_diet_types_injection, example_diet_types_response
 ):
-    response = await delete_diet_type(1)
+    response = await delete_diet_type(diet_type_id=1)
 
     assert response == example_diet_types_response[0]
 

@@ -3,7 +3,8 @@ from fastapi import UploadFile
 import pytest
 
 from api.handlers.exceptions import InternalServerError
-from api.routers import images
+from api.routers.user_role import images as user_images
+from api.routers.public import images as public_images
 from database.s3_connection import S3Connection
 
 
@@ -20,7 +21,7 @@ def mocked_s3_connection(monkeypatch):
 
     test_s3_connection = S3Connection()
 
-    monkeypatch.setattr(images, "s3", test_s3_connection)
+    monkeypatch.setattr(user_images, "s3", test_s3_connection)
 
     yield
 
@@ -38,6 +39,6 @@ def mocked_s3_connection_error(monkeypatch):
 
     test_s3_connection = S3Connection()
 
-    monkeypatch.setattr(images, "s3", test_s3_connection)
+    monkeypatch.setattr(public_images, "s3", test_s3_connection)
 
     yield

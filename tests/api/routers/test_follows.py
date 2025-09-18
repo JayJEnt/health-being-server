@@ -1,12 +1,12 @@
 import pytest
 
-from api.routers.follows import (
+from api.routers.user_role.follows import (
     get_all_relations_follows,
     create_relation_follows,
     get_relation_follows,
     delete_relation_follows,
 )
-from api.schemas.follows import Follows, CreateFollows
+from api.schemas.follows import Follows, FollowsCreate, FollowsDelete
 from api.schemas.user import User
 
 
@@ -22,10 +22,10 @@ async def test_get_all_relations_follows(
 
     assert response == example_follows_name_response
 
-    # for item in response:
-    #     parsed = Follows(**item)
+    for item in response:
+        parsed = Follows(**item)
 
-    #     assert isinstance(parsed, Follows)
+        assert isinstance(parsed, Follows)
 
 
 @pytest.mark.asyncio
@@ -36,7 +36,7 @@ async def test_create_relation_follows(
     example_users_response,
 ):
     requesting_user = User(**example_users_response[0])
-    followed_user = CreateFollows(**example_follows_create[0])
+    followed_user = FollowsCreate(**example_follows_create[0])
     response = await create_relation_follows(followed_user, requesting_user)
 
     assert response == example_users_response[1]
@@ -58,9 +58,9 @@ async def test_get_relation_follows(
 
     assert response == example_follows_name_response[0]
 
-    # parsed = FollowsGet(**response)
+    parsed = Follows(**response)
 
-    # assert isinstance(parsed, FollowsGet)
+    assert isinstance(parsed, Follows)
 
 
 @pytest.mark.asyncio
@@ -75,6 +75,6 @@ async def test_delete_relation_follows(
 
     assert response == example_follows_response[0]
 
-    parsed = Follows(**response)
+    parsed = FollowsDelete(**response)
 
-    assert isinstance(parsed, Follows)
+    assert isinstance(parsed, FollowsDelete)

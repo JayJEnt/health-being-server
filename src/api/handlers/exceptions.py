@@ -80,6 +80,14 @@ class ResourceAlreadyTaken(BaseHTTPException):
         )
 
 
+class DemandQueryParameter(BaseHTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_405_METHOD_NOT_ALLOWED,
+            detail="Use of this endpoint without query parameter is not allowed!",
+        )
+
+
 class InternalServerError(BaseHTTPException):
     def __init__(self):
         super().__init__(

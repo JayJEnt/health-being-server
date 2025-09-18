@@ -1,17 +1,14 @@
 from pydantic import BaseModel
 
 
-"""Follows models"""
-
-
-class CreateFollows(BaseModel):
+class FollowsCreate(BaseModel):
     username: str
 
 
-class Follows(BaseModel):
-    user_id: int
+class Follows(FollowsCreate):
     followed_user_id: int
 
 
-class FollowsGet(BaseModel):
-    users: str
+class FollowsDelete(BaseModel):
+    followed_user_id: int
+    user_id: int
