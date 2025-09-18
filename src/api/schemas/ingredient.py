@@ -29,7 +29,7 @@ class IngredientDataCreate(BaseModel):
     salt_per_100: Optional[float] = 0.0
 
 
-class IngredientDataResponse(IngredientDataCreate):
+class IngredientData(IngredientDataCreate):
     ingredient_id: int
 
 

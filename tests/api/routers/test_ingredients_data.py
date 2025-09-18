@@ -1,12 +1,12 @@
 import pytest
 
-from api.routers.ingredients_data import (
+from api.routers.admin_role.ingredients_data import (
     get_ingredient_data,
     create_ingredient_data,
     update_ingredient_data,
     delete_ingredient_data,
 )
-from api.schemas.ingredient import IngredientDataCreate, IngredientDataResponse
+from api.schemas.ingredient import IngredientDataCreate, IngredientData
 
 
 @pytest.mark.asyncio
@@ -15,13 +15,13 @@ async def test_get_ingredient_data(
     example_ingredients_data_injection,
     example_ingredients_data_response,
 ):
-    response = await get_ingredient_data(1)
+    response = await get_ingredient_data(ingredient_id=1)
 
     assert response == example_ingredients_data_response
 
-    parsed = IngredientDataResponse(**response)
+    parsed = IngredientData(**response)
 
-    assert isinstance(parsed, IngredientDataResponse)
+    assert isinstance(parsed, IngredientData)
 
 
 @pytest.mark.asyncio
@@ -31,13 +31,13 @@ async def test_create_ingredient_data(
     example_ingredients_data_response,
 ):
     ingredient_data = IngredientDataCreate(**example_ingredients_data_create[0])
-    response = await create_ingredient_data(1, ingredient_data)
+    response = await create_ingredient_data(ingredient=ingredient_data, ingredient_id=1)
 
     assert response == example_ingredients_data_response
 
-    parsed = IngredientDataResponse(**response)
+    parsed = IngredientData(**response)
 
-    assert isinstance(parsed, IngredientDataResponse)
+    assert isinstance(parsed, IngredientData)
 
 
 @pytest.mark.asyncio
@@ -48,13 +48,13 @@ async def test_update_ingredient_data(
     example_ingredients_data_update_response,
 ):
     ingredient_data = IngredientDataCreate(**example_ingredients_data_update[0])
-    response = await update_ingredient_data(1, ingredient_data)
+    response = await update_ingredient_data(ingredient=ingredient_data, ingredient_id=1)
 
     assert response == example_ingredients_data_update_response
 
-    parsed = IngredientDataResponse(**response)
+    parsed = IngredientData(**response)
 
-    assert isinstance(parsed, IngredientDataResponse)
+    assert isinstance(parsed, IngredientData)
 
 
 @pytest.mark.asyncio
@@ -63,10 +63,10 @@ async def test_delete_ingredient_data(
     example_ingredients_data_injection,
     example_ingredients_data_response,
 ):
-    response = await delete_ingredient_data(1)
+    response = await delete_ingredient_data(ingredient_id=1)
 
     assert response == example_ingredients_data_response
 
-    parsed = IngredientDataResponse(**response)
+    parsed = IngredientData(**response)
 
-    assert isinstance(parsed, IngredientDataResponse)
+    assert isinstance(parsed, IngredientData)
