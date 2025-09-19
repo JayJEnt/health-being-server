@@ -1,6 +1,6 @@
 import pytest
 
-from api.routers.admin_role.ingredients_data import (
+from api.routers.admin_role.ingredients_data_admin import (
     get_ingredient_data,
     create_ingredient_data,
     update_ingredient_data,

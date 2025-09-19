@@ -1,6 +1,6 @@
 import pytest
 
-from api.routers.user_role.follows import (
+from api.routers.user_role.follows_user import (
     get_all_relations_follows,
     create_relation_follows,
     get_relation_follows,

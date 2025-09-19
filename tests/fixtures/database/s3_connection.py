@@ -3,8 +3,8 @@ from fastapi import UploadFile
 import pytest
 
 from api.handlers.exceptions import InternalServerError
-from api.routers.user_role import images as user_images
-from api.routers.public import images as public_images
+from api.routers.user_role import images_user as user_images
+from api.routers.public import images_public as public_images
 from database.s3_connection import S3Connection
 
 

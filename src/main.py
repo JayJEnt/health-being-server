@@ -19,16 +19,16 @@ from api.routers import (
     vitamins,
 )
 from api.routers.admin_role import (
-    diet_types as admin_diet_types,
-    ingredients_data as admin_ingredients_data,
+    diet_types_admin as admin_diet_types,
+    ingredients_data_admin as admin_ingredients_data,
 )
 from api.routers.user_role import (
-    follows as user_follows,
-    images as user_images,
+    follows_user as user_follows,
+    images_user as user_images,
 )
 from api.routers.public import (
-    diet_types as public_diet_types,
-    images as public_images,
+    diet_types_public as public_diet_types,
+    images_public as public_images,
 )
 from logger import logger
 
