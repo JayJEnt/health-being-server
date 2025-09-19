@@ -1,22 +1,21 @@
 from pydantic import BaseModel
 
 
-"""Recipe favourite models"""
-
-
-class CreateRecipeFavourite(BaseModel):
+class RecipeFavouriteCreate(BaseModel):
     title: str
 
 
-class PostCreateRecipeFavourite(BaseModel):
+class RecipeFavouriteCreateResponse(RecipeFavouriteCreate):
     id: int
+    owner_id: int
+    description: str
+    instructions: list[str]
 
 
-class RecipeFavourite(BaseModel):
-    user_id: int
+class RecipeFavouriteResponse(RecipeFavouriteCreate):
     recipe_id: int
 
 
-class RecipeFavouriteGet(BaseModel):
-    users: str
-    recipes: str
+class RecipeFavouriteDelete(BaseModel):
+    user_id: int
+    recipe_id: int

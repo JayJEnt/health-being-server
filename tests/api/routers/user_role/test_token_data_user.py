@@ -1,6 +1,6 @@
 import pytest
 
-from api.routers.token_data import (
+from api.routers.user_role.token_data_user import (
     get_token_owner,
     is_user_an_admin,
 )

@@ -6,12 +6,7 @@ from contextlib import asynccontextmanager
 from datetime import datetime as dt
 
 from api.routers import (
-    prefered_recipe_type,
-    recipe_favourite,
     recipes,
-    refrigerator,
-    token_data,
-    users_data,
     users,
     vitamins,
 )
@@ -19,6 +14,7 @@ from api.routers.admin_role import (
     diet_types_admin,
     ingredients_admin,
     ingredients_data_admin,
+    users_data_admin,
 )
 from api.routers.public import (
     diet_types_public,
@@ -30,6 +26,11 @@ from api.routers.user_role import (
     follows_user,
     images_user,
     prefered_ingredients_user,
+    prefered_recipe_type_user,
+    recipe_favourite_user,
+    refrigerator_user,
+    token_data_user,
+    users_data_user,
 )
 from logger import logger
 
@@ -71,6 +72,7 @@ def root_handler():
 app.include_router(diet_types_admin.router)
 app.include_router(ingredients_admin.router)
 app.include_router(ingredients_data_admin.router)
+app.include_router(users_data_admin.router)
 
 app.include_router(diet_types_public.router)
 app.include_router(images_public.router)
@@ -80,16 +82,15 @@ app.include_router(oauth2_public.router)
 app.include_router(follows_user.router)
 app.include_router(images_user.router)
 app.include_router(prefered_ingredients_user.router)
+app.include_router(prefered_recipe_type_user.router)
+app.include_router(recipe_favourite_user.router)
+app.include_router(refrigerator_user.router)
+app.include_router(token_data_user.router)
+app.include_router(users_data_user.router)
 
 
-app.include_router(prefered_recipe_type.router)
-app.include_router(recipe_favourite.router)
 app.include_router(recipes.router)
 app.include_router(recipes.admin_router)
-app.include_router(refrigerator.router)
-app.include_router(token_data.router)
-app.include_router(users_data.router)
-app.include_router(users_data.admin_router)
 app.include_router(users.router)
 app.include_router(users.admin_router)
 app.include_router(vitamins.router)

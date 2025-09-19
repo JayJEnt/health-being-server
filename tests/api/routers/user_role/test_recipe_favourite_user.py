@@ -1,15 +1,16 @@
 import pytest
 
-from api.routers.recipe_favourite import (
+from api.routers.user_role.recipe_favourite_user import (
     get_all_relations_recipe_favourite,
     create_relation_recipe_favourite,
     get_relation_recipe_favourite,
     delete_relation_recipe_favourite,
 )
 from api.schemas.recipe_favourite import (
-    RecipeFavourite,
-    CreateRecipeFavourite,
-    PostCreateRecipeFavourite,
+    RecipeFavouriteDelete,
+    RecipeFavouriteCreate,
+    RecipeFavouriteCreateResponse,
+    RecipeFavouriteResponse,
 )
 from api.schemas.user import User
 
@@ -26,10 +27,10 @@ async def test_get_all_relations_recipe_favourite(
 
     assert response == example_recipe_favourite_names_response
 
-    # for item in response:
-    #     parsed = RecipeFavourite(**item)
+    for item in response:
+        parsed = RecipeFavouriteResponse(**item)
 
-    #     assert isinstance(parsed, RecipeFavourite)
+        assert isinstance(parsed, RecipeFavouriteResponse)
 
 
 @pytest.mark.asyncio
@@ -42,16 +43,16 @@ async def test_create_relation_recipe_favourite(
     example_recipe_favourite_create_response,
 ):
     requesting_user = User(**example_users_response[0])
-    prefered_ingredient = CreateRecipeFavourite(**example_recipe_favourite_create[0])
+    prefered_ingredient = RecipeFavouriteCreate(**example_recipe_favourite_create[0])
     response = await create_relation_recipe_favourite(
         prefered_ingredient, requesting_user
     )
 
     assert response == example_recipe_favourite_create_response[0]
 
-    parsed = PostCreateRecipeFavourite(**response)
+    parsed = RecipeFavouriteCreateResponse(**response)
 
-    assert isinstance(parsed, PostCreateRecipeFavourite)
+    assert isinstance(parsed, RecipeFavouriteCreateResponse)
 
 
 @pytest.mark.asyncio
@@ -66,9 +67,9 @@ async def test_get_relation_recipe_favourite(
 
     assert response == example_recipe_favourite_names_response[0]
 
-    # parsed = RecipeFavouriteGet(**response)
+    parsed = RecipeFavouriteResponse(**response)
 
-    # assert isinstance(parsed, RecipeFavouriteGet)
+    assert isinstance(parsed, RecipeFavouriteResponse)
 
 
 @pytest.mark.asyncio
@@ -83,6 +84,6 @@ async def test_delete_relation_recipe_favourite(
 
     assert response == example_recipe_favourite_response[0]
 
-    parsed = RecipeFavourite(**response)
+    parsed = RecipeFavouriteDelete(**response)
 
-    assert isinstance(parsed, RecipeFavourite)
+    assert isinstance(parsed, RecipeFavouriteDelete)

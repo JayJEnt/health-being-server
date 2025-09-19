@@ -1,15 +1,16 @@
 import pytest
 
-from api.routers.prefered_recipe_type import (
+from api.routers.user_role.prefered_recipe_type_user import (
     get_all_relations_prefered_recipe_type,
     create_relation_prefered_recipe_type,
     get_relation_prefered_recipe_type,
     delete_relation_prefered_recipe_type,
 )
 from api.schemas.prefered_recipe_type import (
-    PreferedRecipeType,
-    CreatePreferedRecipeType,
-    PostCreatePreferedRecipeType,
+    PreferedRecipeTypeCreate,
+    PreferedRecipeTypeResponse,
+    PreferedRecipeTypeCreateResponse,
+    PreferedRecipeTypeDelete,
 )
 from api.schemas.user import User
 
@@ -26,10 +27,10 @@ async def test_get_all_relations_prefered_recipe_type(
 
     assert response == example_prefered_recipe_type_name_response
 
-    # for item in response:
-    #     parsed = PreferedRecipeType(**item)
+    for item in response:
+        parsed = PreferedRecipeTypeResponse(**item)
 
-    #     assert isinstance(parsed, PreferedRecipeType)
+        assert isinstance(parsed, PreferedRecipeTypeResponse)
 
 
 @pytest.mark.asyncio
@@ -42,7 +43,7 @@ async def test_create_relation_prefered_recipe_type(
     example_prefered_recipe_type_create_response,
 ):
     requesting_user = User(**example_users_response[0])
-    prefered_ingredient = CreatePreferedRecipeType(
+    prefered_ingredient = PreferedRecipeTypeCreate(
         **example_prefered_recipe_type_create[0]
     )
     response = await create_relation_prefered_recipe_type(
@@ -51,9 +52,9 @@ async def test_create_relation_prefered_recipe_type(
 
     assert response == example_prefered_recipe_type_create_response[0]
 
-    parsed = PostCreatePreferedRecipeType(**response)
+    parsed = PreferedRecipeTypeCreateResponse(**response)
 
-    assert isinstance(parsed, PostCreatePreferedRecipeType)
+    assert isinstance(parsed, PreferedRecipeTypeCreateResponse)
 
 
 @pytest.mark.asyncio
@@ -68,9 +69,9 @@ async def test_get_relation_prefered_recipe_type(
 
     assert response == example_prefered_recipe_type_name_response[0]
 
-    # parsed = PreferedRecipeTypeGet(**response)
+    parsed = PreferedRecipeTypeResponse(**response)
 
-    # assert isinstance(parsed, PreferedRecipeTypeGet)
+    assert isinstance(parsed, PreferedRecipeTypeResponse)
 
 
 @pytest.mark.asyncio
@@ -85,6 +86,6 @@ async def test_delete_relation_prefered_recipe_type(
 
     assert response == example_prefered_recipe_type_response[0]
 
-    parsed = PreferedRecipeType(**response)
+    parsed = PreferedRecipeTypeDelete(**response)
 
-    assert isinstance(parsed, PreferedRecipeType)
+    assert isinstance(parsed, PreferedRecipeTypeDelete)

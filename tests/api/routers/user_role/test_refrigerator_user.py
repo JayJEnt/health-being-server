@@ -1,15 +1,16 @@
 import pytest
 
-from api.routers.refrigerator import (
+from api.routers.user_role.refrigerator_user import (
     get_all_relations_refrigerator,
     create_relation_refrigerator,
     get_relation_refrigerator,
     delete_relation_refrigerator,
 )
 from api.schemas.refrigerator import (
-    CreateRefrigerator,
-    Refrigerator,
-    PostCreateRefrigerator,
+    RefrigeratorCreate,
+    RefrigeratorResponse,
+    RefrigeratorCreateResponse,
+    RefrigeratorDelete,
 )
 from api.schemas.user import User
 
@@ -26,10 +27,10 @@ async def test_get_all_relations_refrigerator(
 
     assert response == example_refrigerator_name_response
 
-    # for item in response:
-    #     parsed = Refrigerator(**item)
+    for item in response:
+        parsed = RefrigeratorResponse(**item)
 
-    #     assert isinstance(parsed, Refrigerator)
+        assert isinstance(parsed, RefrigeratorResponse)
 
 
 @pytest.mark.asyncio
@@ -42,14 +43,14 @@ async def test_create_relation_refrigerator(
     example_refrigerator_create_response,
 ):
     requesting_user = User(**example_users_response[0])
-    prefered_ingredient = CreateRefrigerator(**example_refrigerator_create[0])
+    prefered_ingredient = RefrigeratorCreate(**example_refrigerator_create[0])
     response = await create_relation_refrigerator(prefered_ingredient, requesting_user)
 
     assert response == example_refrigerator_create_response[0]
 
-    parsed = PostCreateRefrigerator(**response)
+    parsed = RefrigeratorCreateResponse(**response)
 
-    assert isinstance(parsed, PostCreateRefrigerator)
+    assert isinstance(parsed, RefrigeratorCreateResponse)
 
 
 @pytest.mark.asyncio
@@ -64,9 +65,9 @@ async def test_get_relation_refrigerator(
 
     assert response == example_refrigerator_name_response[0]
 
-    # parsed = RefrigeratorGet(**response)
+    parsed = RefrigeratorResponse(**response)
 
-    # assert isinstance(parsed, RefrigeratorGet)
+    assert isinstance(parsed, RefrigeratorResponse)
 
 
 @pytest.mark.asyncio
@@ -81,6 +82,6 @@ async def test_delete_relation_refrigerator(
 
     assert response == example_refrigerator_response[0]
 
-    parsed = Refrigerator(**response)
+    parsed = RefrigeratorDelete(**response)
 
-    assert isinstance(parsed, Refrigerator)
+    assert isinstance(parsed, RefrigeratorDelete)

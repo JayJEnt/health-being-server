@@ -3,25 +3,23 @@ from pydantic import BaseModel
 from api.schemas.enum_utils import MeasureUnit
 
 
-class CreateRefrigerator(BaseModel):
-    name: str
+class RefrigeratorBase(BaseModel):
     amount: float
     measure_unit: MeasureUnit
 
 
-class PostCreateRefrigerator(CreateRefrigerator):
+class RefrigeratorCreate(RefrigeratorBase):
+    name: str
+
+
+class RefrigeratorCreateResponse(RefrigeratorCreate):
     id: int
 
 
-class Refrigerator(BaseModel):
+class RefrigeratorResponse(RefrigeratorCreate):
+    ingredient_id: int
+
+
+class RefrigeratorDelete(RefrigeratorBase):
     user_id: int
     ingredient_id: int
-    amount: float
-    measure_unit: MeasureUnit
-
-
-class RefrigeratorGet(BaseModel):
-    users: str
-    ingredients: str
-    amount: float
-    measure_unit: MeasureUnit

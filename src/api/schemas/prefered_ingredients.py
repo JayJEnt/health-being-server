@@ -3,9 +3,6 @@ from pydantic import BaseModel
 from api.schemas.enum_utils import Preference
 
 
-"""Prefered ingredients models"""
-
-
 class PreferedIngredientsCreate(BaseModel):
     name: str
     preference: Preference
