@@ -1,15 +1,16 @@
 import pytest
 
-from api.routers.prefered_ingredients import (
+from api.routers.user_role.prefered_ingredients_user import (
     get_all_relations_prefered_ingredients,
     create_relation_prefered_ingredients,
     get_relation_prefered_ingredients,
     delete_relation_prefered_ingredients,
 )
 from api.schemas.prefered_ingredients import (
-    PreferedIngredients,
-    CreatePreferedIngredients,
-    PostCreatePreferedIngredients,
+    PreferedIngredientsCreate,
+    PreferedIngredientsDelete,
+    PreferedIngredientsResponse,
+    PreferedIngredientsCreateResponse,
 )
 from api.schemas.user import User
 
@@ -26,10 +27,10 @@ async def test_get_all_relations_prefered_ingredients(
 
     assert response == example_prefered_ingredients_name_response
 
-    # for item in response:
-    #     parsed = PreferedIngredients(**item)
+    for item in response:
+        parsed = PreferedIngredientsResponse(**item)
 
-    #     assert isinstance(parsed, PreferedIngredients)
+        assert isinstance(parsed, PreferedIngredientsResponse)
 
 
 @pytest.mark.asyncio
@@ -42,7 +43,7 @@ async def test_create_relation_prefered_ingredients(
     example_prefered_ingredients_create_response,
 ):
     requesting_user = User(**example_users_response[0])
-    prefered_ingredient = CreatePreferedIngredients(
+    prefered_ingredient = PreferedIngredientsCreate(
         **example_prefered_ingredients_create[0]
     )
     response = await create_relation_prefered_ingredients(
@@ -51,9 +52,9 @@ async def test_create_relation_prefered_ingredients(
 
     assert response == example_prefered_ingredients_create_response[0]
 
-    parsed = PostCreatePreferedIngredients(**response)
+    parsed = PreferedIngredientsCreateResponse(**response)
 
-    assert isinstance(parsed, PostCreatePreferedIngredients)
+    assert isinstance(parsed, PreferedIngredientsCreateResponse)
 
 
 @pytest.mark.asyncio
@@ -68,9 +69,9 @@ async def test_get_relation_prefered_ingredients(
 
     assert response == example_prefered_ingredients_name_response[0]
 
-    # parsed = PreferedIngredientsGet(**response)
+    parsed = PreferedIngredientsResponse(**response)
 
-    # assert isinstance(parsed, PreferedIngredientsGet)
+    assert isinstance(parsed, PreferedIngredientsResponse)
 
 
 @pytest.mark.asyncio
@@ -85,6 +86,6 @@ async def test_delete_relation_prefered_ingredients(
 
     assert response == example_prefered_ingredients_response[0]
 
-    parsed = PreferedIngredients(**response)
+    parsed = PreferedIngredientsDelete(**response)
 
-    assert isinstance(parsed, PreferedIngredients)
+    assert isinstance(parsed, PreferedIngredientsDelete)

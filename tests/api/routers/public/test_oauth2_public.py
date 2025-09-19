@@ -1,6 +1,6 @@
 import pytest
 
-from api.routers.oauth2 import (
+from api.routers.public.oauth2_public import (
     login,
     auth_callback,
     login_with_form,

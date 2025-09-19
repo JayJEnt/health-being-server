@@ -6,9 +6,6 @@ from contextlib import asynccontextmanager
 from datetime import datetime as dt
 
 from api.routers import (
-    ingredients,
-    oauth2,
-    prefered_ingredients,
     prefered_recipe_type,
     recipe_favourite,
     recipes,
@@ -19,16 +16,20 @@ from api.routers import (
     vitamins,
 )
 from api.routers.admin_role import (
-    diet_types_admin as admin_diet_types,
-    ingredients_data_admin as admin_ingredients_data,
-)
-from api.routers.user_role import (
-    follows_user as user_follows,
-    images_user as user_images,
+    diet_types_admin,
+    ingredients_admin,
+    ingredients_data_admin,
 )
 from api.routers.public import (
-    diet_types_public as public_diet_types,
-    images_public as public_images,
+    diet_types_public,
+    images_public,
+    ingredients_public,
+    oauth2_public,
+)
+from api.routers.user_role import (
+    follows_user,
+    images_user,
+    prefered_ingredients_user,
 )
 from logger import logger
 
@@ -67,20 +68,20 @@ def root_handler():
     return {"message": "Hello!"}
 
 
-app.include_router(admin_diet_types.router)
-app.include_router(admin_ingredients_data.router)
+app.include_router(diet_types_admin.router)
+app.include_router(ingredients_admin.router)
+app.include_router(ingredients_data_admin.router)
 
-app.include_router(public_diet_types.router)
-app.include_router(public_images.router)
+app.include_router(diet_types_public.router)
+app.include_router(images_public.router)
+app.include_router(ingredients_public.router)
+app.include_router(oauth2_public.router)
 
-app.include_router(user_follows.router)
-app.include_router(user_images.router)
+app.include_router(follows_user.router)
+app.include_router(images_user.router)
+app.include_router(prefered_ingredients_user.router)
 
 
-app.include_router(ingredients.router)
-app.include_router(ingredients.admin_router)
-app.include_router(oauth2.router)
-app.include_router(prefered_ingredients.router)
 app.include_router(prefered_recipe_type.router)
 app.include_router(recipe_favourite.router)
 app.include_router(recipes.router)
