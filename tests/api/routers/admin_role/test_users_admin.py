@@ -1,11 +1,10 @@
 import pytest
 
-from api.routers.users import (
+from api.routers.admin_role.users_admin import (
     get_users,
     get_user,
     update_user,
     delete_user,
-    get_user_by_name,
 )
 from api.schemas.user import User
 
@@ -34,7 +33,7 @@ async def test_get_user(
     example_users_data_injection,
     example_users_response_all,
 ):
-    response = await get_user(1)
+    response = await get_user(user_id=1)
 
     assert response == example_users_response_all
 
@@ -49,7 +48,7 @@ async def test_get_user_by_name(
     example_users_injection,
     example_users_response,
 ):
-    response = await get_user_by_name("New Admin")
+    response = await get_user(username="New Admin")
 
     assert response == example_users_response[2]
 
@@ -66,7 +65,7 @@ async def test_update_user(
     example_users_update,
     example_users_response_update,
 ):
-    response = await update_user(1, example_users_update[0])
+    response = await update_user(user_id=1, user=example_users_update[0])
 
     assert response == example_users_response_update[0]
 
@@ -82,7 +81,7 @@ async def test_delete_user(
     example_users_data_injection,
     example_users_response,
 ):
-    response = await delete_user(1)
+    response = await delete_user(user_id=1)
 
     assert response == example_users_response[0]
 
