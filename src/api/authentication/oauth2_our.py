@@ -62,7 +62,7 @@ async def register(user: UserCreate, other_provider: bool = False):
     except ResourceAlreadyTaken:
         logger.info(
             f"Email: {user.email} is already registered in our base."
-            f"Try to log into."
+            f" Try to log into."
         )
 
     except ResourceNotFound:
@@ -74,7 +74,7 @@ async def register(user: UserCreate, other_provider: bool = False):
         user_response = await create_element("user", user)
         logger.info(
             f"Email: {user['email']} is successfully registered."
-            f"Now you can log into."
+            f" Now you can log into."
         )
 
     return user_response

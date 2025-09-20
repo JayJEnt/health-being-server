@@ -21,9 +21,12 @@ class RecipeOverview(BaseModel):
     title: str
 
 
-class RecipeResponse(RecipeOverview):
+class Recipe(RecipeOverview):
     owner_id: int
     description: str
     instructions: List[str]
+
+
+class RecipeResponse(Recipe):
     diet_type: Optional[List[DietTypeCreate]] = None
     ingredients: List[IngredientQuantity]

@@ -37,7 +37,7 @@ async def create_relationship(
         logger.error(
             f"{relation_config['name']} '{related_data[related_config['column_name']]}' not recognized"
         )
-        return None
+        raise
 
     if element_type == relation_name and element_id == exists["id"]:
         logger.error(

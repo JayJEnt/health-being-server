@@ -68,8 +68,11 @@ async def test_post_all_elements(mock_supabase_connection):
 
 @pytest.mark.asyncio
 async def test_post_all_elements_error_resource_not_found(mock_supabase_connection):
-    response = await create_all(
-        "recipes", recipe_create_all, related_attributes=["ingredients", "diet_type"]
-    )
+    with pytest.raises(Exception) as e_info:
+        await create_all(
+            "recipes",
+            recipe_create_all,
+            related_attributes=["ingredients", "diet_type"],
+        )
 
-    assert response == recipe_response_resource_not_found
+    assert str(e_info.value) == "404: Requested resource not found"

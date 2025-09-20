@@ -1,17 +1,11 @@
 from enum import Enum
 
 
-"""Activity Options"""
-
-
 class ActivityLevel(str, Enum):
     sedentary = "sedentary"
     light = "light"
     moderate = "moderate"
     very = "very"
-
-
-"""Silhouette Options"""
 
 
 class Silhouette(str, Enum):
@@ -20,15 +14,9 @@ class Silhouette(str, Enum):
     endomorph = "endomorph"
 
 
-"""Role Options"""
-
-
 class Role(str, Enum):
     user = "user"
     admin = "admin"
-
-
-"""Measure Options"""
 
 
 class MeasureUnit(str, Enum):
@@ -37,9 +25,6 @@ class MeasureUnit(str, Enum):
     liter = "l."
     milliliter = "ml."
     unit = ""
-
-
-"""Preference Options"""
 
 
 class Preference(str, Enum):

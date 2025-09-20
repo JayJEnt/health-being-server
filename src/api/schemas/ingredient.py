@@ -5,18 +5,12 @@ from api.schemas.enum_utils import MeasureUnit
 from api.schemas.vitamin import VitaminCreate, Vitamin
 
 
-"""Ingredient base models"""
-
-
 class IngredientName(BaseModel):
     name: str
 
 
 class IngredientIndex(BaseModel):
     id: int
-
-
-"""Ingredient data models"""
 
 
 class IngredientDataCreate(BaseModel):
@@ -29,11 +23,8 @@ class IngredientDataCreate(BaseModel):
     salt_per_100: Optional[float] = 0.0
 
 
-class IngredientDataResponse(IngredientDataCreate):
+class IngredientData(IngredientDataCreate):
     ingredient_id: int
-
-
-"""Ingredient models"""
 
 
 class Ingredient(IngredientName, IngredientIndex):
@@ -57,9 +48,10 @@ class IngredientUpdateResponse(Ingredient):
     vitamins: Optional[List[Vitamin]] = None
 
 
-"""Ingredient included models"""
-
-
-class IngredientQuantity(IngredientName):
+class Quantity(BaseModel):
     amount: float
     measure_unit: MeasureUnit
+
+
+class IngredientQuantity(IngredientName, Quantity):
+    pass

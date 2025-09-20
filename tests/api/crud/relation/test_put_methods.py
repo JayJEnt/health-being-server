@@ -21,8 +21,9 @@ async def test_update_relationships(
 async def test_update_relationships_error(
     mock_supabase_connection, example_refrigerator_update
 ):
-    response = await update_relationships(
-        "user", 999, [{"refrigerator": example_refrigerator_update}]
-    )
+    with pytest.raises(Exception) as exc_info:
+        await update_relationships(
+            "user", 999, [{"refrigerator": example_refrigerator_update}]
+        )
 
-    assert response == [{"refrigerator": [None, None]}]
+    assert str(exc_info.value) == "404: Requested resource not found"
