@@ -5,13 +5,6 @@ class RecipeFavouriteCreate(BaseModel):
     title: str
 
 
-class RecipeFavouriteCreateResponse(RecipeFavouriteCreate):
-    id: int
-    owner_id: int
-    description: str
-    instructions: list[str]
-
-
 class RecipeFavouriteResponse(RecipeFavouriteCreate):
     recipe_id: int
 

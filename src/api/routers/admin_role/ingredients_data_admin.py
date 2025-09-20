@@ -13,7 +13,7 @@ crud = CrudOperations("ingredients_data")
 
 
 @router.get(
-    "/",
+    "",
     response_model=IngredientData,
     dependencies=[Depends(admin_only)],
 )
@@ -22,7 +22,7 @@ async def get_ingredient_data(ingredient_id: int):
 
 
 @router.post(
-    "/",
+    "",
     response_model=IngredientData,
     dependencies=[Depends(admin_only)],
 )
@@ -32,7 +32,7 @@ async def create_ingredient_data(ingredient: IngredientDataCreate, ingredient_id
 
 
 @router.put(
-    "/",
+    "",
     response_model=IngredientData,
     dependencies=[Depends(admin_only)],
 )
@@ -41,7 +41,7 @@ async def update_ingredient_data(ingredient: IngredientDataCreate, ingredient_id
 
 
 @router.delete(
-    "/",
+    "",
     response_model=IngredientData,
     dependencies=[Depends(admin_only)],
 )

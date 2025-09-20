@@ -10,7 +10,7 @@ from api.schemas.user import User
 from api.schemas.user_data import UserData, UserDataCreate
 
 
-router = APIRouter(prefix="/users_data", tags=["user: users_data"])
+router = APIRouter(prefix="/users_data/owner", tags=["user: users_data"])
 crud = CrudOperations("user_data")
 
 

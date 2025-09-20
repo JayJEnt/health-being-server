@@ -1,19 +1,16 @@
 import pytest
 
-from api.routers.user_role.token_data_user import (
-    get_token_owner,
-    is_user_an_admin,
-)
+from api.routers.user_role.token_data_user import get_token_data
 from api.schemas.user import User
 
 
 @pytest.mark.asyncio
-async def test_get_token_owner(
+async def get_token_data_owner(
     example_users_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    user = User(**example_users_response[0])
 
-    response = await get_token_owner(requesting_user)
+    response = await get_token_data(user=user)
 
     assert response == User(**example_users_response[0])
 
@@ -24,9 +21,9 @@ async def test_get_token_owner(
 async def test_is_user_an_admin(
     example_users_response,
 ):
-    requesting_user = User(**example_users_response[0])
+    user = User(**example_users_response[0])
 
-    response = await is_user_an_admin(requesting_user)
+    response = await get_token_data(user=user, admin_role=True)
 
     assert response is False
 

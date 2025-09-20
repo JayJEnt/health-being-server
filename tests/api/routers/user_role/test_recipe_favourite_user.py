@@ -1,7 +1,6 @@
 import pytest
 
 from api.routers.user_role.recipe_favourite_user import (
-    get_all_relations_recipe_favourite,
     create_relation_recipe_favourite,
     get_relation_recipe_favourite,
     delete_relation_recipe_favourite,
@@ -9,10 +8,10 @@ from api.routers.user_role.recipe_favourite_user import (
 from api.schemas.recipe_favourite import (
     RecipeFavouriteDelete,
     RecipeFavouriteCreate,
-    RecipeFavouriteCreateResponse,
     RecipeFavouriteResponse,
 )
 from api.schemas.user import User
+from api.schemas.recipe import Recipe
 
 
 @pytest.mark.asyncio
@@ -23,7 +22,7 @@ async def test_get_all_relations_recipe_favourite(
     example_recipe_favourite_names_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await get_all_relations_recipe_favourite(requesting_user)
+    response = await get_relation_recipe_favourite(requesting_user=requesting_user)
 
     assert response == example_recipe_favourite_names_response
 
@@ -43,16 +42,16 @@ async def test_create_relation_recipe_favourite(
     example_recipe_favourite_create_response,
 ):
     requesting_user = User(**example_users_response[0])
-    prefered_ingredient = RecipeFavouriteCreate(**example_recipe_favourite_create[0])
+    recipe = RecipeFavouriteCreate(**example_recipe_favourite_create[0])
     response = await create_relation_recipe_favourite(
-        prefered_ingredient, requesting_user
+        recipe=recipe, requesting_user=requesting_user
     )
 
     assert response == example_recipe_favourite_create_response[0]
 
-    parsed = RecipeFavouriteCreateResponse(**response)
+    parsed = Recipe(**response)
 
-    assert isinstance(parsed, RecipeFavouriteCreateResponse)
+    assert isinstance(parsed, Recipe)
 
 
 @pytest.mark.asyncio
@@ -63,7 +62,9 @@ async def test_get_relation_recipe_favourite(
     example_recipe_favourite_names_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await get_relation_recipe_favourite(1, requesting_user)
+    response = await get_relation_recipe_favourite(
+        recipe_id=1, requesting_user=requesting_user
+    )
 
     assert response == example_recipe_favourite_names_response[0]
 
@@ -80,7 +81,9 @@ async def test_delete_relation_recipe_favourite(
     example_recipe_favourite_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await delete_relation_recipe_favourite(1, requesting_user)
+    response = await delete_relation_recipe_favourite(
+        recipe_id=1, requesting_user=requesting_user
+    )
 
     assert response == example_recipe_favourite_response[0]
 

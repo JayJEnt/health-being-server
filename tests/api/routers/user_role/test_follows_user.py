@@ -1,7 +1,6 @@
 import pytest
 
 from api.routers.user_role.follows_user import (
-    get_all_relations_follows,
     create_relation_follows,
     get_relation_follows,
     delete_relation_follows,
@@ -18,7 +17,7 @@ async def test_get_all_relations_follows(
     example_follows_name_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await get_all_relations_follows(requesting_user)
+    response = await get_relation_follows(requesting_user=requesting_user)
 
     assert response == example_follows_name_response
 
@@ -37,7 +36,9 @@ async def test_create_relation_follows(
 ):
     requesting_user = User(**example_users_response[0])
     followed_user = FollowsCreate(**example_follows_create[0])
-    response = await create_relation_follows(followed_user, requesting_user)
+    response = await create_relation_follows(
+        followed_user=followed_user, requesting_user=requesting_user
+    )
 
     assert response == example_users_response[1]
 
@@ -54,7 +55,9 @@ async def test_get_relation_follows(
     example_follows_name_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await get_relation_follows(2, requesting_user)
+    response = await get_relation_follows(
+        followed_user_id=2, requesting_user=requesting_user
+    )
 
     assert response == example_follows_name_response[0]
 
@@ -71,7 +74,9 @@ async def test_delete_relation_follows(
     example_follows_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await delete_relation_follows(2, requesting_user)
+    response = await delete_relation_follows(
+        followed_user_id=2, requesting_user=requesting_user
+    )
 
     assert response == example_follows_response[0]
 

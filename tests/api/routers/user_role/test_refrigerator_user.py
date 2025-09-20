@@ -1,7 +1,6 @@
 import pytest
 
 from api.routers.user_role.refrigerator_user import (
-    get_all_relations_refrigerator,
     create_relation_refrigerator,
     get_relation_refrigerator,
     delete_relation_refrigerator,
@@ -23,7 +22,7 @@ async def test_get_all_relations_refrigerator(
     example_refrigerator_name_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await get_all_relations_refrigerator(requesting_user)
+    response = await get_relation_refrigerator(requesting_user=requesting_user)
 
     assert response == example_refrigerator_name_response
 
@@ -43,8 +42,10 @@ async def test_create_relation_refrigerator(
     example_refrigerator_create_response,
 ):
     requesting_user = User(**example_users_response[0])
-    prefered_ingredient = RefrigeratorCreate(**example_refrigerator_create[0])
-    response = await create_relation_refrigerator(prefered_ingredient, requesting_user)
+    ingredient = RefrigeratorCreate(**example_refrigerator_create[0])
+    response = await create_relation_refrigerator(
+        ingredient=ingredient, requesting_user=requesting_user
+    )
 
     assert response == example_refrigerator_create_response[0]
 
@@ -61,7 +62,9 @@ async def test_get_relation_refrigerator(
     example_refrigerator_name_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await get_relation_refrigerator(2, requesting_user)
+    response = await get_relation_refrigerator(
+        ingredient_id=2, requesting_user=requesting_user
+    )
 
     assert response == example_refrigerator_name_response[0]
 
@@ -78,7 +81,9 @@ async def test_delete_relation_refrigerator(
     example_refrigerator_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await delete_relation_refrigerator(2, requesting_user)
+    response = await delete_relation_refrigerator(
+        ingredient_id=2, requesting_user=requesting_user
+    )
 
     assert response == example_refrigerator_response[0]
 

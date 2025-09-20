@@ -1,7 +1,6 @@
 import pytest
 
 from api.routers.user_role.prefered_recipe_type_user import (
-    get_all_relations_prefered_recipe_type,
     create_relation_prefered_recipe_type,
     get_relation_prefered_recipe_type,
     delete_relation_prefered_recipe_type,
@@ -9,9 +8,9 @@ from api.routers.user_role.prefered_recipe_type_user import (
 from api.schemas.prefered_recipe_type import (
     PreferedRecipeTypeCreate,
     PreferedRecipeTypeResponse,
-    PreferedRecipeTypeCreateResponse,
     PreferedRecipeTypeDelete,
 )
+from api.schemas.diet_type import DietType
 from api.schemas.user import User
 
 
@@ -23,7 +22,7 @@ async def test_get_all_relations_prefered_recipe_type(
     example_prefered_recipe_type_name_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await get_all_relations_prefered_recipe_type(requesting_user)
+    response = await get_relation_prefered_recipe_type(requesting_user=requesting_user)
 
     assert response == example_prefered_recipe_type_name_response
 
@@ -43,18 +42,16 @@ async def test_create_relation_prefered_recipe_type(
     example_prefered_recipe_type_create_response,
 ):
     requesting_user = User(**example_users_response[0])
-    prefered_ingredient = PreferedRecipeTypeCreate(
-        **example_prefered_recipe_type_create[0]
-    )
+    diet_type = PreferedRecipeTypeCreate(**example_prefered_recipe_type_create[0])
     response = await create_relation_prefered_recipe_type(
-        prefered_ingredient, requesting_user
+        diet_type=diet_type, requesting_user=requesting_user
     )
 
     assert response == example_prefered_recipe_type_create_response[0]
 
-    parsed = PreferedRecipeTypeCreateResponse(**response)
+    parsed = DietType(**response)
 
-    assert isinstance(parsed, PreferedRecipeTypeCreateResponse)
+    assert isinstance(parsed, DietType)
 
 
 @pytest.mark.asyncio
@@ -65,7 +62,9 @@ async def test_get_relation_prefered_recipe_type(
     example_prefered_recipe_type_name_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await get_relation_prefered_recipe_type(1, requesting_user)
+    response = await get_relation_prefered_recipe_type(
+        diet_type_id=1, requesting_user=requesting_user
+    )
 
     assert response == example_prefered_recipe_type_name_response[0]
 
@@ -82,7 +81,9 @@ async def test_delete_relation_prefered_recipe_type(
     example_prefered_recipe_type_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await delete_relation_prefered_recipe_type(1, requesting_user)
+    response = await delete_relation_prefered_recipe_type(
+        diet_type_id=1, requesting_user=requesting_user
+    )
 
     assert response == example_prefered_recipe_type_response[0]
 

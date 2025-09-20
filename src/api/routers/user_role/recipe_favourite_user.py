@@ -2,16 +2,17 @@
 
 from fastapi import APIRouter, Depends
 
+from typing import List, Union
+
 from api.authentication.allowed_roles import logged_only
 from api.authentication.token import validate_token
 from api.crud.crud_operations import CrudOperations
-from api.handlers.exceptions import DemandQueryParameter
 from api.schemas.recipe_favourite import (
     RecipeFavouriteCreate,
-    RecipeFavouriteCreateResponse,
     RecipeFavouriteResponse,
     RecipeFavouriteDelete,
 )
+from api.schemas.recipe import Recipe
 from api.schemas.user import User
 
 
@@ -21,18 +22,22 @@ crud = CrudOperations("user")
 
 @router.get(
     "",
-    response_model=list[RecipeFavouriteResponse],
+    response_model=Union[RecipeFavouriteResponse, List[RecipeFavouriteResponse]],
     dependencies=[Depends(logged_only)],
 )
-async def get_all_relations_recipe_favourite(
-    requesting_user: User = Depends(validate_token),
+async def get_relation_recipe_favourite(
+    recipe_id: int = None, requesting_user: User = Depends(validate_token)
 ):
+    if recipe_id:
+        return await crud.get_relationship(
+            requesting_user.id, "recipes", recipe_id, find_name=True
+        )
     return await crud.get_relationships(requesting_user.id, "recipes", find_name=True)
 
 
 @router.post(
     "",
-    response_model=RecipeFavouriteCreateResponse,
+    response_model=Recipe,
     dependencies=[Depends(logged_only)],
 )
 async def create_relation_recipe_favourite(
@@ -41,25 +46,10 @@ async def create_relation_recipe_favourite(
     return await crud.post_relationship(requesting_user.id, "recipes", recipe)
 
 
-@router.get(
-    "/", response_model=RecipeFavouriteResponse, dependencies=[Depends(logged_only)]
-)
-async def get_relation_recipe_favourite(
-    recipe_id: int, requesting_user: User = Depends(validate_token)
-):
-    if not recipe_id:
-        raise DemandQueryParameter
-    return await crud.get_relationship(
-        requesting_user.id, "recipes", recipe_id, find_name=True
-    )
-
-
 @router.delete(
-    "/", response_model=RecipeFavouriteDelete, dependencies=[Depends(logged_only)]
+    "", response_model=RecipeFavouriteDelete, dependencies=[Depends(logged_only)]
 )
 async def delete_relation_recipe_favourite(
     recipe_id: int, requesting_user: User = Depends(validate_token)
 ):
-    if not recipe_id:
-        raise DemandQueryParameter
     return await crud.delete_relationship(requesting_user.id, "recipes", recipe_id)

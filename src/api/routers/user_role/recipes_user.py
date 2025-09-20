@@ -6,7 +6,6 @@ from api.authentication.allowed_roles import logged_only, owner_only
 from api.authentication.token import validate_token
 from api.crud.crud_operations import CrudOperations
 from api.crud.utils import add_attributes
-from api.handlers.exceptions import DemandQueryParameter
 from api.schemas.recipe import RecipeCreate, Recipe, RecipeResponse
 from api.schemas.user import User
 
@@ -23,14 +22,12 @@ async def create_recipe(
     return await crud.post_all(recipe, related_attributes=["ingredients", "diet_type"])
 
 
-@router.put("/", response_model=RecipeResponse, dependencies=[Depends(logged_only)])
+@router.put("", response_model=RecipeResponse, dependencies=[Depends(logged_only)])
 async def update_recipe(
     recipe: RecipeCreate,
-    recipe_id: int = None,
+    recipe_id: int,
     requesting_user: User = Depends(validate_token),
 ):
-    if not recipe_id:
-        raise DemandQueryParameter
     await owner_only("recipes", recipe_id, requesting_user)
 
     return await crud.put_all(
@@ -38,12 +35,10 @@ async def update_recipe(
     )
 
 
-@router.delete("/", response_model=Recipe, dependencies=[Depends(logged_only)])
+@router.delete("", response_model=Recipe, dependencies=[Depends(logged_only)])
 async def delete_recipe(
-    recipe_id: int = None, requesting_user: User = Depends(validate_token)
+    recipe_id: int, requesting_user: User = Depends(validate_token)
 ):
-    if not recipe_id:
-        raise DemandQueryParameter
     await owner_only("recipes", recipe_id, requesting_user)
 
     return await crud.delete_all(

@@ -1,7 +1,6 @@
 import pytest
 
 from api.routers.user_role.prefered_ingredients_user import (
-    get_all_relations_prefered_ingredients,
     create_relation_prefered_ingredients,
     get_relation_prefered_ingredients,
     delete_relation_prefered_ingredients,
@@ -23,7 +22,7 @@ async def test_get_all_relations_prefered_ingredients(
     example_prefered_ingredients_name_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await get_all_relations_prefered_ingredients(requesting_user)
+    response = await get_relation_prefered_ingredients(requesting_user=requesting_user)
 
     assert response == example_prefered_ingredients_name_response
 
@@ -47,7 +46,7 @@ async def test_create_relation_prefered_ingredients(
         **example_prefered_ingredients_create[0]
     )
     response = await create_relation_prefered_ingredients(
-        prefered_ingredient, requesting_user
+        prefered_ingredient=prefered_ingredient, requesting_user=requesting_user
     )
 
     assert response == example_prefered_ingredients_create_response[0]
@@ -65,7 +64,9 @@ async def test_get_relation_prefered_ingredients(
     example_prefered_ingredients_name_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await get_relation_prefered_ingredients(2, requesting_user)
+    response = await get_relation_prefered_ingredients(
+        ingredient_id=2, requesting_user=requesting_user
+    )
 
     assert response == example_prefered_ingredients_name_response[0]
 
@@ -82,7 +83,9 @@ async def test_delete_relation_prefered_ingredients(
     example_prefered_ingredients_response,
 ):
     requesting_user = User(**example_users_response[0])
-    response = await delete_relation_prefered_ingredients(2, requesting_user)
+    response = await delete_relation_prefered_ingredients(
+        ingredient_id=2, requesting_user=requesting_user
+    )
 
     assert response == example_prefered_ingredients_response[0]
 

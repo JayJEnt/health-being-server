@@ -21,11 +21,12 @@ async def test_create_relationship(
 async def test_create_relationship_error_not_found(
     mock_supabase_connection, example_refrigerator_create
 ):
-    response = await create_relationship(
-        "user", 1, "refrigerator", example_refrigerator_create[0]
-    )
+    with pytest.raises(Exception) as e_info:
+        await create_relationship(
+            "user", 1, "refrigerator", example_refrigerator_create[0]
+        )
 
-    assert response is None
+    assert str(e_info.value) == "404: Requested resource not found"
 
 
 @pytest.mark.asyncio
