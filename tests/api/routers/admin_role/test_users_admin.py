@@ -2,7 +2,6 @@ import pytest
 
 from api.routers.admin_role.users_admin import (
     get_users,
-    get_user,
     update_user,
     delete_user,
 )
@@ -31,11 +30,11 @@ async def test_get_user(
     mock_supabase_connection,
     example_users_injection,
     example_users_data_injection,
-    example_users_response_all,
+    example_users_response,
 ):
-    response = await get_user(user_id=1)
+    response = await get_users(user_id=1)
 
-    assert response == example_users_response_all
+    assert response == example_users_response[0]
 
     parsed = User(**response)
 
@@ -48,7 +47,7 @@ async def test_get_user_by_name(
     example_users_injection,
     example_users_response,
 ):
-    response = await get_user(username="New Admin")
+    response = await get_users(username="New Admin")
 
     assert response == example_users_response[2]
 

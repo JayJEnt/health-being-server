@@ -11,7 +11,6 @@ router = APIRouter(prefix="/ingredients", tags=["admin: ingredients"])
 crud = CrudOperations("ingredients")
 
 
-# TODO: Change to query params
 @router.post("", response_model=IngredientResponse, dependencies=[Depends(admin_only)])
 async def create_ingredient(ingredient: IngredientCreate):
     return await crud.post_all(
@@ -22,7 +21,7 @@ async def create_ingredient(ingredient: IngredientCreate):
 
 
 @router.put(
-    "/{ingredient_id}",
+    "",
     response_model=IngredientResponse,
     dependencies=[Depends(admin_only)],
 )
@@ -40,7 +39,7 @@ crud2 = CrudOperations("refrigerator")
 
 
 @router.delete(
-    "/{ingredient_id}",
+    "",
     response_model=IngredientResponse,
     dependencies=[Depends(admin_only)],
 )
@@ -51,6 +50,7 @@ async def delete_ingredient(ingredient_id: int):
         related_attributes=[
             "vitamins",
             "user",
+            "recipes",
         ],  # TODO: FIX misses refrigerator table TEMP FIX 25/08/2025
         nested_attributes=["ingredients_data"],
     )

@@ -1,9 +1,6 @@
 import pytest
 
-from api.routers.public.recipes_public import (
-    get_recipes,
-    get_recipe,
-)
+from api.routers.public.recipes_public import get_recipes
 from api.schemas.recipe import RecipeResponse, RecipeOverview
 
 
@@ -48,7 +45,7 @@ async def test_get_recipe(
     example_recipes_injection_all,
     example_recipes_response_all,
 ):
-    response = await get_recipe(recipe_id=1)
+    response = await get_recipes(recipe_id=1)
 
     assert response == example_recipes_response_all
 

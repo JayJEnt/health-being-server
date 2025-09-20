@@ -1,9 +1,6 @@
 import pytest
 
-from api.routers.public.vitamins_public import (
-    get_vitamins,
-    get_vitamin,
-)
+from api.routers.public.vitamins_public import get_vitamins
 from api.schemas.vitamin import Vitamin
 
 
@@ -26,7 +23,7 @@ async def test_get_vitamins(
 async def test_get_vitamin_by_name(
     mock_supabase_connection, example_vitamins_injection, example_vitamins_response
 ):
-    response = await get_vitamin(vitamin_name="C")
+    response = await get_vitamins(vitamin_name="C")
 
     assert response == example_vitamins_response[0]
 
@@ -39,7 +36,7 @@ async def test_get_vitamin_by_name(
 async def test_get_vitamin(
     mock_supabase_connection, example_vitamins_injection, example_vitamins_response
 ):
-    response = await get_vitamin(vitamin_id=1)
+    response = await get_vitamins(vitamin_id=1)
 
     assert response == example_vitamins_response[0]
 

@@ -5,7 +5,6 @@ from fastapi import APIRouter, Depends
 from api.authentication.allowed_roles import admin_only
 from api.crud.crud_operations import CrudOperations
 from api.crud.utils import add_attributes
-from api.handlers.exceptions import DemandQueryParameter
 from api.schemas.ingredient import IngredientDataCreate, IngredientData
 
 
@@ -18,9 +17,7 @@ crud = CrudOperations("ingredients_data")
     response_model=IngredientData,
     dependencies=[Depends(admin_only)],
 )
-async def get_ingredient_data(ingredient_id: int = None):
-    if not ingredient_id:
-        raise DemandQueryParameter
+async def get_ingredient_data(ingredient_id: int):
     return await crud.get_by_id(ingredient_id)
 
 
@@ -29,11 +26,7 @@ async def get_ingredient_data(ingredient_id: int = None):
     response_model=IngredientData,
     dependencies=[Depends(admin_only)],
 )
-async def create_ingredient_data(
-    ingredient: IngredientDataCreate, ingredient_id: int = None
-):
-    if not ingredient_id:
-        raise DemandQueryParameter
+async def create_ingredient_data(ingredient: IngredientDataCreate, ingredient_id: int):
     ingredient = add_attributes(ingredient, [{"ingredient_id": ingredient_id}])
     return await crud.post(ingredient)
 
@@ -43,11 +36,7 @@ async def create_ingredient_data(
     response_model=IngredientData,
     dependencies=[Depends(admin_only)],
 )
-async def update_ingredient_data(
-    ingredient: IngredientDataCreate, ingredient_id: int = None
-):
-    if not ingredient_id:
-        raise DemandQueryParameter
+async def update_ingredient_data(ingredient: IngredientDataCreate, ingredient_id: int):
     return await crud.put(ingredient_id, ingredient)
 
 
@@ -56,7 +45,5 @@ async def update_ingredient_data(
     response_model=IngredientData,
     dependencies=[Depends(admin_only)],
 )
-async def delete_ingredient_data(ingredient_id: int = None):
-    if not ingredient_id:
-        raise DemandQueryParameter
+async def delete_ingredient_data(ingredient_id: int):
     return await crud.delete(ingredient_id)

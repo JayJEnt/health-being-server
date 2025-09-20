@@ -2,31 +2,20 @@
 
 from fastapi import APIRouter
 
-from typing import List
+from typing import List, Union
 
 from api.crud.crud_operations import CrudOperations
-from api.schemas.ingredient import Ingredient, IngredientResponse
+from api.schemas.ingredient import Ingredient
 
 
 router = APIRouter(prefix="/ingredients", tags=["public: ingredients"])
 crud = CrudOperations("ingredients")
 
 
-# TODO: Change to query params
-@router.get("", response_model=List[Ingredient])
-async def get_ingredients():
+@router.get("", response_model=Union[Ingredient, List[Ingredient]])
+async def get_ingredients(ingredient_id: int = None, ingredient_name: str = None):
+    if ingredient_id:
+        return await crud.get_by_id(ingredient_id)
+    if ingredient_name:
+        return await crud.get_by_name(ingredient_name)
     return await crud.get()
-
-
-@router.get("/{ingredient_id}", response_model=IngredientResponse)
-async def get_ingredient(ingredient_id: int):
-    return await crud.get_all(
-        ingredient_id,
-        related_attributes=["vitamins"],
-        nested_attributes=["ingredients_data"],
-    )
-
-
-@router.get("/name/{ingredient_name}", response_model=Ingredient)
-async def get_ingredient_by_name(ingredient_name: str):
-    return await crud.get_by_name(ingredient_name)

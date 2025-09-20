@@ -4,7 +4,6 @@ from fastapi import APIRouter, Depends
 
 from api.authentication.allowed_roles import admin_only
 from api.crud.crud_operations import CrudOperations
-from api.handlers.exceptions import DemandQueryParameter
 from api.schemas.diet_type import DietTypeCreate, DietType
 
 
@@ -17,15 +16,11 @@ async def create_diet_type(diet_type: DietTypeCreate):
     return await crud.post(diet_type)
 
 
-@router.put("/", response_model=DietType, dependencies=[Depends(admin_only)])
-async def update_diet_type(diet_type: DietTypeCreate, diet_type_id: int = None):
-    if not diet_type_id:
-        raise DemandQueryParameter
+@router.put("", response_model=DietType, dependencies=[Depends(admin_only)])
+async def update_diet_type(diet_type: DietTypeCreate, diet_type_id: int):
     return await crud.put(diet_type_id, diet_type)
 
 
-@router.delete("/", response_model=DietType, dependencies=[Depends(admin_only)])
-async def delete_diet_type(diet_type_id: int = None):
-    if not diet_type_id:
-        raise DemandQueryParameter
+@router.delete("", response_model=DietType, dependencies=[Depends(admin_only)])
+async def delete_diet_type(diet_type_id: int):
     return await crud.delete(diet_type_id)

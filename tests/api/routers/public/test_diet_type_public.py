@@ -1,9 +1,6 @@
 import pytest
 
-from api.routers.public.diet_types_public import (
-    get_diet_types,
-    get_diet_type,
-)
+from api.routers.public.diet_types_public import get_diet_types
 from api.schemas.diet_type import DietType
 
 
@@ -26,7 +23,7 @@ async def test_get_diet_types(
 async def test_get_diet_type(
     mock_supabase_connection, example_diet_types_injection, example_diet_types_response
 ):
-    response = await get_diet_type(diet_type_id=1)
+    response = await get_diet_types(diet_type_id=1)
 
     assert response == example_diet_types_response[0]
 
@@ -39,7 +36,7 @@ async def test_get_diet_type(
 async def test_get_diet_by_name(
     mock_supabase_connection, example_diet_types_injection, example_diet_types_response
 ):
-    response = await get_diet_type(diet_name="VeGan")
+    response = await get_diet_types(diet_name="VeGan")
 
     assert response == example_diet_types_response[1]
 

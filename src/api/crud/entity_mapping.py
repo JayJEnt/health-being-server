@@ -76,6 +76,12 @@ ENTITY_MAPPING = {
                 "join_keys": ("ingredient_id", "user_id"),
                 "extra_fields": ["preference"],
             },
+            {
+                "name": "recipes",
+                "join_table": settings.INGREDIENTS_INCLUDED_TABLE,
+                "join_keys": ("ingredient_id", "recipe_id"),
+                "extra_fields": ["amount", "measure_unit"],
+            },
         ],
         "nested": [
             {
