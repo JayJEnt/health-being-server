@@ -1,6 +1,7 @@
 import pytest
 
 from api.crud.single_entity.put_methods import update_element_by_id
+from api.handlers.http_exceptions import ResourceNotFound
 
 
 @pytest.mark.asyncio
@@ -19,7 +20,5 @@ async def test_update_element(
 async def test_update_nonexistent_element(
     mock_supabase_connection, example_recipes_update
 ):
-    with pytest.raises(Exception) as excinfo:
+    with pytest.raises(ResourceNotFound):
         await update_element_by_id("recipes", 999, example_recipes_update[0])
-
-    assert str(excinfo.value) == "404: Requested resource not found"

@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional, Annotated, Any
 
 from api.crud.single_entity.get_methods import get_element_by_name
-from api.handlers.exceptions import InvalidToken, ResourceNotFound
+from api.handlers.http_exceptions import InvalidToken, ResourceNotFound
 from api.schemas.user import User
 from config import settings
 from logger import logger

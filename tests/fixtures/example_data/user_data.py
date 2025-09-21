@@ -43,7 +43,7 @@ async def example_users_data_injection(
 
 
 @pytest.fixture()
-def example_users_data_response(example_users_data_create):
+def example_users_data_response():
     return [
         {
             "user_id": 1,

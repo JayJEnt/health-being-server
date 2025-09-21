@@ -1,6 +1,7 @@
 import pytest
 
 from api.authentication.oauth2_our import authenticate_user, our_login, register
+from api.handlers.http_exceptions import InvalidCredentials
 from api.schemas.user import UserOurAuth, UserCreate
 
 
@@ -64,10 +65,8 @@ async def test_our_login_error(
     example_form_data_error,
     expected_token_our_login,
 ):
-    with pytest.raises(Exception) as exc_info:
+    with pytest.raises(InvalidCredentials):
         await our_login(example_form_data_error)
-
-    assert str(exc_info.value) == "401: Incorrect username or password"
 
 
 @pytest.mark.asyncio

@@ -6,6 +6,7 @@ from api.crud.relation.get_methods import (
     get_relationships_and_related_tables,
     get_related_tables_items,
 )
+from api.handlers.http_exceptions import ResourceNotFound
 
 
 @pytest.mark.asyncio
@@ -23,10 +24,8 @@ async def test_get_relationship(
 async def test_get_relationship_error(
     mock_supabase_connection, example_users_injection
 ):
-    with pytest.raises(Exception) as excinfo:
+    with pytest.raises(ResourceNotFound):
         await get_relationship("user", 1, "refrigerator", 1)
-
-    assert str(excinfo.value) == "404: Requested resource not found"
 
 
 @pytest.mark.asyncio
@@ -44,29 +43,22 @@ async def test_get_relationships(
 async def test_get_relationships_error(
     mock_supabase_connection, example_users_injection
 ):
-    with pytest.raises(Exception) as excinfo:
+    with pytest.raises(ResourceNotFound):
         await get_relationships("user", 1, "refrigerator")
-
-    assert str(excinfo.value) == "404: Requested resource not found"
 
 
 @pytest.mark.asyncio
 async def test_get_relationships_and_related_tables_error(
     mock_supabase_connection, example_users_injection
 ):
-    with pytest.raises(Exception) as excinfo:
+    with pytest.raises(ResourceNotFound):
         await get_relationships_and_related_tables("user", 1, ["refrigerator"])
 
-    assert str(excinfo.value) == "404: Requested resource not found"
 
-
-# TODO: why so long?
 @pytest.mark.asyncio
 async def test_get_related_tables_items(mock_supabase_connection):
     join_table_items = [
         {"user_id": 1, "ingredient_id": 1, "amount": 50},
     ]
-    with pytest.raises(Exception) as excinfo:
+    with pytest.raises(ResourceNotFound):
         await get_related_tables_items("user", "refrigerator", join_table_items)
-
-    assert str(excinfo.value) == "404: Requested resource not found"

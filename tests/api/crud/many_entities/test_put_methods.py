@@ -3,6 +3,7 @@ import pytest
 from api.crud.single_entity.post_methods import create_element
 from api.crud.many_entities.post_methods import create_all
 from api.crud.many_entities.put_methods import update_all
+from api.handlers.http_exceptions import ResourceNotFound
 
 
 diet_type_create = {
@@ -101,12 +102,10 @@ async def test_put_all_elements(mock_supabase_connection):
 
 @pytest.mark.asyncio
 async def test_put_all_elements_error_resource_not_found(mock_supabase_connection):
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(ResourceNotFound):
         await update_all(
             "recipes",
             1,
             recipe_update_all,
             related_attributes=["ingredients", "diet_type"],
         )
-
-    assert str(e_info.value) == "404: Requested resource not found"

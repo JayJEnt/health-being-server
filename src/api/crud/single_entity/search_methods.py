@@ -1,6 +1,6 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
-from api.handlers.exceptions import ResourceNotFound
+from api.handlers.http_exceptions import ResourceNotFound
 from api.crud.utils import restrict_data, get_main_config
 
 

@@ -10,6 +10,7 @@ from api.authentication.token import (
     refresh_token,
 )
 from api.crud.single_entity.post_methods import create_element
+from api.handlers.http_exceptions import InvalidToken
 
 
 def test_create_access_token(mock_datetime_now, user_data, expected_token):
@@ -51,10 +52,8 @@ async def test_get_payload_from_token(
 async def test_get_payload_from_invalid_token(
     expected_token,
 ):
-    with pytest.raises(Exception) as excinfo:
+    with pytest.raises(InvalidToken):
         await get_payload_from_token(expected_token)
-
-    assert str(excinfo.value) == "401: Could not validate credentials"
 
 
 @pytest.mark.asyncio
@@ -71,18 +70,14 @@ async def test_get_user_from_token(
 
 @pytest.mark.asyncio
 async def test_get_user_from_token_no_user(mock_supabase_connection, expected_payload):
-    with pytest.raises(Exception) as excinfo:
+    with pytest.raises(InvalidToken):
         await get_user_from_token(expected_payload)
-
-    assert str(excinfo.value) == "401: Could not validate credentials"
 
 
 @pytest.mark.asyncio
 async def test_get_user_from_token_no_email(mock_supabase_connection, invalid_payload):
-    with pytest.raises(Exception) as excinfo:
+    with pytest.raises(InvalidToken):
         await get_user_from_token(invalid_payload)
-
-    assert str(excinfo.value) == "401: Could not validate credentials"
 
 
 @pytest.mark.asyncio
@@ -94,10 +89,8 @@ async def test_time_for_refresh(expected_payload):
 
 @pytest.mark.asyncio
 async def test_time_for_refresh_invalid_token(invalid_payload, mock_datetime_now):
-    with pytest.raises(Exception) as excinfo:
+    with pytest.raises(InvalidToken):
         await time_for_refresh(invalid_payload, timedelta(minutes=5))
-
-    assert str(excinfo.value) == "401: Could not validate credentials"
 
 
 @pytest.mark.asyncio

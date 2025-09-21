@@ -1,7 +1,7 @@
 from typing import Any
 
 from api.crud.utils import restrict_data, get_main_config
-from api.handlers.exceptions import ResourceNotFound, ResourceAlreadyTaken
+from api.handlers.http_exceptions import ResourceNotFound, ResourceAlreadyTaken
 from database.supabase_connection import supabase_connection
 from logger import logger
 

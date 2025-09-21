@@ -2,7 +2,7 @@ from logger import logger
 from database.supabase_connection import supabase_connection
 from api.crud.relation.post_methods import create_relationship
 from api.crud.utils import get_relation_config
-from api.handlers.exceptions import ResourceNotFound
+from api.handlers.http_exceptions import ResourceNotFound
 
 
 async def update_relationships(

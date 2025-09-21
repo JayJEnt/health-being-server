@@ -5,7 +5,7 @@ from fastapi.responses import Response
 
 from functools import wraps
 
-from api.handlers.exceptions import ResourceNotFound, InternalServerError
+from api.handlers.http_exceptions import ResourceNotFound, InternalServerError
 from config import settings
 from logger import logger
 
@@ -21,23 +21,13 @@ class S3Connection:
             try:
                 logger.info(f"Processing request: {func.__name__}")
                 result = await func(*args, **kwargs)
-                if func.__name__ == "download" and result is None:
-                    func_args = (
-                        args[1:]
-                        if args and args[0].__class__.__name__ == "S3Connection"
-                        else args
-                    )
-                    logger.info(
-                        f"Resource not found - Operation: {func.__name__}, "
-                        f"Args: {func_args}"
-                    )
-                    raise ResourceNotFound
                 logger.info("Sucesfully processed.")
                 return result
             except ClientError as e:
                 if e.response["Error"]["Code"] == "NoSuchKey":
                     raise ResourceNotFound
                 logger.error(f"S3 client error: {e}")
+                raise
             except Exception as ex:
                 logger.error(f"S3 error: {ex}")
                 raise InternalServerError

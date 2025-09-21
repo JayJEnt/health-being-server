@@ -6,7 +6,7 @@ from typing import Annotated
 
 from api.authentication.hash_methods import verify_password, hash_password
 from api.authentication.token import create_access_token
-from api.handlers.exceptions import (
+from api.handlers.http_exceptions import (
     ResourceAlreadyTaken,
     ResourceNotFound,
     InvalidCredentials,

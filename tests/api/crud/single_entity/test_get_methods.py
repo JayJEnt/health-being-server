@@ -4,7 +4,9 @@ from api.crud.single_entity.get_methods import (
     get_elements,
     get_element_by_name,
     get_element_by_id,
+    is_duplicated,
 )
+from api.handlers.http_exceptions import ResourceNotFound, ResourceAlreadyTaken
 
 
 @pytest.mark.asyncio
@@ -49,20 +51,16 @@ async def test_get_element_by_alternative_name(
 
 @pytest.mark.asyncio
 async def test_get_element_by_name_error(mock_supabase_connection):
-    with pytest.raises(Exception) as excinfo:
+    with pytest.raises(ResourceNotFound):
         await get_element_by_name("user", "New User")
-
-    assert str(excinfo.value) == "404: Requested resource not found"
 
 
 @pytest.mark.asyncio
 async def test_get_element_by_name_error_2(
     mock_supabase_connection, example_users_injection
 ):
-    with pytest.raises(Exception) as excinfo:
+    with pytest.raises(ResourceNotFound):
         await get_element_by_name("user", "New")
-
-    assert str(excinfo.value) == "404: Requested resource not found"
 
 
 @pytest.mark.asyncio
@@ -76,7 +74,24 @@ async def test_get_element_by_id(
 
 @pytest.mark.asyncio
 async def test_get_element_by_id_error(mock_supabase_connection):
-    with pytest.raises(Exception) as excinfo:
+    with pytest.raises(ResourceNotFound):
         await get_element_by_id("user", 999)
 
-    assert str(excinfo.value) == "404: Requested resource not found"
+
+@pytest.mark.asyncio
+async def test_is_duplicated_by_id(mock_supabase_connection, example_users_injection):
+    with pytest.raises(ResourceAlreadyTaken):
+        await is_duplicated("user", 1)
+
+
+@pytest.mark.asyncio
+async def test_is_duplicated_by_name(mock_supabase_connection, example_users_injection):
+    with pytest.raises(ResourceAlreadyTaken):
+        await is_duplicated("user", "New User")
+
+
+@pytest.mark.asyncio
+async def test_is_not_duplicated(mock_supabase_connection):
+    await is_duplicated("user", "New User")
+
+    assert True  # Hasn't triggered any exceptions

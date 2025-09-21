@@ -5,7 +5,7 @@ from api.crud.utils import (
     pop_attributes,
     add_attributes,
 )
-from api.handlers.exceptions import ResourceNotFound
+from api.handlers.http_exceptions import ResourceNotFound
 from database.supabase_connection import supabase_connection
 from logger import logger
 

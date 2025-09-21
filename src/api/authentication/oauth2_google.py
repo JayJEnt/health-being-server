@@ -1,4 +1,4 @@
-from fastapi import Request, HTTPException
+from fastapi import Request
 from fastapi.responses import RedirectResponse
 import httpx
 
@@ -7,7 +7,12 @@ from datetime import timedelta
 from api.authentication.oauth2_our import register
 from api.authentication.token import create_access_token
 from api.crud.single_entity.get_methods import get_element_by_name
-from api.handlers.exceptions import ResourceNotFound
+from api.handlers.http_exceptions import (
+    ResourceNotFound,
+    AuthorizationCodeNotFound,
+    TokenNotRecived,
+)
+from api.handlers.custom_exceptions import MissingVariables
 from api.schemas.user import User, UserBaseModel
 from config import settings
 from logger import logger
@@ -21,7 +26,7 @@ async def google_login():
             settings.GOOGLE_REDIRECT_URI,
         ]
     ):
-        raise RuntimeError("Missing required Google OAuth environment variables")
+        raise MissingVariables
     url = (
         f"{settings.GOOGLE_AUTH_ENDPOINT}?"
         f"client_id={settings.GOOGLE_CLIENT_ID}&"
@@ -38,7 +43,7 @@ async def google_login():
 async def google_auth_callback(request: Request):
     code = request.query_params.get("code")
     if not code:
-        raise HTTPException(status_code=404, detail="Authorization code not found")
+        raise AuthorizationCodeNotFound
 
     data = {
         "code": code,
@@ -54,9 +59,7 @@ async def google_auth_callback(request: Request):
         access_token = token_data.get("access_token", "")
 
         if not access_token:
-            raise HTTPException(
-                status_code=400, detail="Failed to retrieve access token"
-            )
+            raise TokenNotRecived
 
         user_response = await client.get(
             settings.GOOGLE_USERINFO_ENDPOINT,
