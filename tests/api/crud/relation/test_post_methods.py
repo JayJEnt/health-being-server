@@ -40,6 +40,22 @@ async def test_create_relationship_error_reference_to_itself(
 
 
 @pytest.mark.asyncio
+async def test_create_relationship_error_rescource_already_taken(
+    mock_supabase_connection,
+    example_ingredients_injection,
+    example_refrigerator_create,
+    example_refrigerator_create_response,
+):
+    await create_relationship("user", 1, "refrigerator", example_refrigerator_create[0])
+    with pytest.raises(Exception) as e_info:
+        await create_relationship(
+            "user", 1, "refrigerator", example_refrigerator_create[0]
+        )
+
+    assert str(e_info.value) == "409: Conflict, the resource is already taken"
+
+
+@pytest.mark.asyncio
 async def test_create_relationships(
     mock_supabase_connection,
     example_ingredients_injection,

@@ -26,7 +26,7 @@ async def test_get_users(
 
 
 @pytest.mark.asyncio
-async def test_get_user(
+async def test_get_user_by_id(
     mock_supabase_connection,
     example_users_injection,
     example_users_data_injection,
@@ -50,6 +50,21 @@ async def test_get_user_by_name(
     response = await get_users(username="New Admin")
 
     assert response == example_users_response[2]
+
+    parsed = User(**response)
+
+    assert isinstance(parsed, User)
+
+
+@pytest.mark.asyncio
+async def test_get_user_by_email(
+    mock_supabase_connection,
+    example_users_injection,
+    example_users_response,
+):
+    response = await get_users(email="newuser@example.com")
+
+    assert response == example_users_response[1]
 
     parsed = User(**response)
 

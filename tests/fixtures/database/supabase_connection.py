@@ -36,28 +36,12 @@ from api.crud.nested import (
 from api.crud.many_entities import get_methods as get_all_methods
 from api.handlers.exceptions import InternalServerError
 from api.handlers.exceptions import ResourceNotFound
-from database.supabase_connection import SupabaseConnection
 from database import supabase_connection
 from config import settings
 from logger import logger
 
 
 Base = declarative_base()
-
-
-@pytest.fixture()
-def mocked_supabase_connection_error():
-    class MockSupabaseConnection(SupabaseConnection):
-        def __init__(self):
-            self.engine = create_engine(settings.TEST_DATABASE_URL)
-            Base.metadata.create_all(self.engine)
-
-        def execute_query(self, query):
-            raise InternalServerError
-
-    conn = MockSupabaseConnection()
-    yield conn
-    conn.engine.dispose()
 
 
 class MockSupabaseConnection:
@@ -232,3 +216,64 @@ def mock_supabase_connection(monkeypatch):
 
     Base.metadata.drop_all(test_supabase_connection.engine)
     test_supabase_connection.engine.dispose()
+
+
+@pytest.fixture
+def mocked_supabase_connection(input_data):
+    class FakeSupabaseClient:
+        def table(self, *args, **kwargs):
+            return self
+
+        def select(self, *args, **kwargs):
+            return self
+
+        def insert(self, *args, **kwargs):
+            return self
+
+        def update(self, *args, **kwargs):
+            return self
+
+        def delete(self, *args, **kwargs):
+            return self
+
+        def eq(self, *args, **kwargs):
+            return self
+
+        def ilike(self, *args, **kwargs):
+            return self
+
+        def execute(self, *args, **kwargs):
+            return type("Response", (), {"data": input_data})()
+
+    conn = supabase_connection.SupabaseConnection()
+    conn._client = FakeSupabaseClient()
+
+    return conn
+
+
+@pytest.fixture
+def mocked_supabase_connection_wrong_credentials(monkeypatch):
+    def mocked_create_client(*args, **kwargs):
+        raise ConnectionRefusedError
+
+    monkeypatch.setattr(supabase_connection, "create_client", mocked_create_client)
+
+    return supabase_connection.SupabaseConnection
+
+
+@pytest.fixture
+def broken_supabase_connection():
+    class BrokenSupabaseClient:
+        def table(self, *args, **kwargs):
+            return self
+
+        def select(self, *args, **kwargs):
+            return self
+
+        def execute(self, *args, **kwargs):
+            raise RuntimeError()
+
+    conn = supabase_connection.SupabaseConnection()
+    conn._client = BrokenSupabaseClient()
+
+    return conn
