@@ -34,8 +34,8 @@ from api.crud.nested import (
     put_methods as put_nested,
 )
 from api.crud.many_entities import get_methods as get_all_methods
-from api.handlers.exceptions import InternalServerError
-from api.handlers.exceptions import ResourceNotFound
+from api.handlers.http_exceptions import InternalServerError
+from api.handlers.http_exceptions import ResourceNotFound
 from database import supabase_connection
 from config import settings
 from logger import logger

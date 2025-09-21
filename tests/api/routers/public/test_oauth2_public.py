@@ -1,5 +1,6 @@
 import pytest
 
+from api.handlers.http_exceptions import UnknownProvider
 from api.routers.public.oauth2_public import (
     login,
     auth_callback,
@@ -18,10 +19,8 @@ async def test_login_google(mock_redirect):
 
 @pytest.mark.asyncio
 async def test_login_unknown():
-    with pytest.raises(Exception) as exc_info:
+    with pytest.raises(UnknownProvider):
         await login("unknown")
-
-    assert str(exc_info.value) == "404: Unknown provider"
 
 
 @pytest.mark.asyncio

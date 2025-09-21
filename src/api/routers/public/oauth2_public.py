@@ -7,7 +7,7 @@ from typing import Annotated
 
 from api.authentication.oauth2_google import google_login, google_auth_callback
 from api.authentication.oauth2_our import our_login, register
-from api.handlers.exceptions import UnknownProvider
+from api.handlers.http_exceptions import UnknownProvider
 from api.schemas.user import UserCreate, User
 from api.schemas.token import Token
 

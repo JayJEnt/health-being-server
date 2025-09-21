@@ -1,6 +1,6 @@
 import pytest
 
-from api.handlers.exceptions import ResourceNotFound, InternalServerError
+from api.handlers.http_exceptions import ResourceNotFound, InternalServerError
 
 
 def test_supabase_connection_init(mocked_supabase_connection_wrong_credentials):

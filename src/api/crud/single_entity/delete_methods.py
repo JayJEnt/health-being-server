@@ -1,7 +1,7 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
 from api.crud.utils import get_main_config
-from api.handlers.exceptions import ResourceNotFound
+from api.handlers.http_exceptions import ResourceNotFound
 
 
 async def delete_element_by_id(element_type: str, element_id: int) -> dict:

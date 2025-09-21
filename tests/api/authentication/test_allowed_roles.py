@@ -1,7 +1,7 @@
 import pytest
 
 from api.authentication.allowed_roles import admin_only, logged_only, owner_only
-from api.handlers.exceptions import (
+from api.handlers.http_exceptions import (
     DemandAdminAccess,
     DemandBeingLogged,
     DemandOwnerAccess,

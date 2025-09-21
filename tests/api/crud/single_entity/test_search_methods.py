@@ -1,6 +1,7 @@
 import pytest
 
 from api.crud.single_entity.search_methods import search_elements
+from api.handlers.http_exceptions import ResourceNotFound
 
 
 @pytest.mark.asyncio
@@ -25,7 +26,5 @@ async def test_search_elements_restricted(
 
 @pytest.mark.asyncio
 async def test_update_nonexistent_element(mock_supabase_connection):
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(ResourceNotFound):
         await search_elements("recipes", "Nonexistent")
-
-    assert str(e_info.value) == "404: Requested resource not found"

@@ -3,7 +3,7 @@ from supabase import create_client, Client
 from typing import Any, Dict, Optional
 from functools import wraps
 
-from api.handlers.exceptions import ResourceNotFound, InternalServerError
+from api.handlers.http_exceptions import ResourceNotFound, InternalServerError
 from config import settings
 from logger import logger
 

@@ -2,7 +2,7 @@ import boto3
 import moto
 import pytest
 
-from api.handlers.exceptions import InternalServerError
+from api.handlers.http_exceptions import InternalServerError
 from api.routers.user_role import images_user
 from api.routers.public import images_public
 from database.s3_connection import S3Connection

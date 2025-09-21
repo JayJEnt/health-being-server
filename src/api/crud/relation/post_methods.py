@@ -3,7 +3,7 @@ from database.supabase_connection import supabase_connection
 from api.crud.single_entity.get_methods import get_element_by_name
 from api.crud.relation.get_methods import get_relationship
 from api.crud.utils import pydantic_to_dict, get_relation_config, get_related_config
-from api.handlers.exceptions import (
+from api.handlers.http_exceptions import (
     ResourceNotFound,
     ReferencesToItself,
     ResourceAlreadyTaken,

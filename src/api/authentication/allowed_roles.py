@@ -5,7 +5,7 @@ from typing import Annotated
 from api.schemas.user import User
 from api.crud.single_entity.get_methods import get_element_by_id
 from api.authentication.token import validate_token
-from api.handlers.exceptions import (
+from api.handlers.http_exceptions import (
     DemandAdminAccess,
     DemandBeingLogged,
     DemandOwnerAccess,

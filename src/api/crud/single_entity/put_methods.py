@@ -1,7 +1,7 @@
 from logger import logger
 from database.supabase_connection import supabase_connection
 from api.crud.utils import get_main_config, pydantic_to_dict
-from api.handlers.exceptions import ResourceNotFound
+from api.handlers.http_exceptions import ResourceNotFound
 
 
 async def update_element_by_id(

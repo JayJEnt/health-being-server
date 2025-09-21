@@ -3,7 +3,7 @@ import pytest
 
 import io
 
-from api.handlers.exceptions import InternalServerError
+from api.handlers.http_exceptions import InternalServerError, ResourceNotFound
 from api.routers.public.images_public import download_image
 from api.routers.user_role.images_user import upload_image
 
@@ -21,10 +21,8 @@ async def test_download_image(mocked_s3_connection):
 
 @pytest.mark.asyncio
 async def test_download_image_no_key(mocked_s3_connection):
-    with pytest.raises(Exception) as e_info:
+    with pytest.raises(ResourceNotFound):
         await download_image(1)
-
-    assert str(e_info.value) == "404: Requested resource not found"
 
 
 @pytest.mark.asyncio

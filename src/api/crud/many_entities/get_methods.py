@@ -1,7 +1,7 @@
 from api.crud.nested.get_methods import get_nested
 from api.crud.relation.get_methods import get_relationships_and_related_tables
 from api.crud.utils import add_attributes, get_main_config
-from api.handlers.exceptions import ResourceNotFound
+from api.handlers.http_exceptions import ResourceNotFound
 from database.supabase_connection import supabase_connection
 from logger import logger
 

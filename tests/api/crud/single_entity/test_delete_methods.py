@@ -1,6 +1,7 @@
 import pytest
 
 from api.crud.single_entity.delete_methods import delete_element_by_id
+from api.handlers.http_exceptions import ResourceNotFound
 
 
 @pytest.mark.asyncio
@@ -14,7 +15,5 @@ async def test_delete_element(
 
 @pytest.mark.asyncio
 async def test_delete_nonexistent_element(mock_supabase_connection):
-    with pytest.raises(Exception) as excinfo:
+    with pytest.raises(ResourceNotFound):
         await delete_element_by_id("recipes", 999)
-
-    assert str(excinfo.value) == "404: Requested resource not found"
