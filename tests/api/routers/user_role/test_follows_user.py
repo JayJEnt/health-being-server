@@ -5,7 +5,7 @@ from api.routers.user_role.follows_user import (
     get_relation_follows,
     delete_relation_follows,
 )
-from api.schemas.follows import Follows, FollowsCreate, FollowsDelete
+from api.schemas.follows import FollowsResponse, FollowsCreate, FollowsDelete
 from api.schemas.user import User
 
 
@@ -22,9 +22,9 @@ async def test_get_all_relations_follows(
     assert response == example_follows_name_response
 
     for item in response:
-        parsed = Follows(**item)
+        parsed = FollowsResponse(**item)
 
-        assert isinstance(parsed, Follows)
+        assert isinstance(parsed, FollowsResponse)
 
 
 @pytest.mark.asyncio
@@ -61,9 +61,9 @@ async def test_get_relation_follows(
 
     assert response == example_follows_name_response[0]
 
-    parsed = Follows(**response)
+    parsed = FollowsResponse(**response)
 
-    assert isinstance(parsed, Follows)
+    assert isinstance(parsed, FollowsResponse)
 
 
 @pytest.mark.asyncio

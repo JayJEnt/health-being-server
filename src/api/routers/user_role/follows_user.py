@@ -7,7 +7,7 @@ from typing import List, Union
 from api.authentication.allowed_roles import logged_only
 from api.authentication.token import validate_token
 from api.crud.crud_operations import CrudOperations
-from api.schemas.follows import FollowsCreate, Follows, FollowsDelete
+from api.schemas.follows import FollowsCreate, FollowsResponse, FollowsDelete
 from api.schemas.user import User
 
 
@@ -17,7 +17,7 @@ crud = CrudOperations("user")
 
 @router.get(
     "",
-    response_model=Union[Follows, List[Follows]],
+    response_model=Union[FollowsResponse, List[FollowsResponse]],
     dependencies=[Depends(logged_only)],
 )
 async def get_relation_follows(

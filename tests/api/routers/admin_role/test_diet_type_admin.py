@@ -5,7 +5,7 @@ from api.routers.admin_role.diet_types_admin import (
     update_diet_type,
     delete_diet_type,
 )
-from api.schemas.diet_type import DietType
+from api.schemas.diet_type import DietTypeResponse
 
 
 @pytest.mark.asyncio
@@ -16,9 +16,9 @@ async def test_create_diet_type(
 
     assert response == example_diet_types_response[0]
 
-    parsed = DietType(**response)
+    parsed = DietTypeResponse(**response)
 
-    assert isinstance(parsed, DietType)
+    assert isinstance(parsed, DietTypeResponse)
 
 
 @pytest.mark.asyncio
@@ -34,9 +34,9 @@ async def test_update_diet_type(
 
     assert response == example_diet_types_update_response[0]
 
-    parsed = DietType(**response)
+    parsed = DietTypeResponse(**response)
 
-    assert isinstance(parsed, DietType)
+    assert isinstance(parsed, DietTypeResponse)
 
 
 @pytest.mark.asyncio
@@ -47,6 +47,6 @@ async def test_delete_diet_type(
 
     assert response == example_diet_types_response[0]
 
-    parsed = DietType(**response)
+    parsed = DietTypeResponse(**response)
 
-    assert isinstance(parsed, DietType)
+    assert isinstance(parsed, DietTypeResponse)
