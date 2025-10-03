@@ -10,7 +10,7 @@ from api.schemas.prefered_recipe_type import (
     PreferedRecipeTypeResponse,
     PreferedRecipeTypeDelete,
 )
-from api.schemas.diet_type import DietType
+from api.schemas.diet_type import DietTypeResponse
 from api.schemas.user import User
 
 
@@ -49,9 +49,9 @@ async def test_create_relation_prefered_recipe_type(
 
     assert response == example_prefered_recipe_type_create_response[0]
 
-    parsed = DietType(**response)
+    parsed = DietTypeResponse(**response)
 
-    assert isinstance(parsed, DietType)
+    assert isinstance(parsed, DietTypeResponse)
 
 
 @pytest.mark.asyncio

@@ -5,5 +5,5 @@ class DietTypeCreate(BaseModel):
     diet_name: str
 
 
-class DietType(DietTypeCreate):
+class DietTypeResponse(DietTypeCreate):
     id: int

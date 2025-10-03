@@ -5,8 +5,7 @@ from api.authentication.token import (
     create_access_token,
     validate_token,
     get_payload_from_token,
-    get_user_from_token,
-    time_for_refresh,
+    get_user_from_payload,
     refresh_token,
 )
 from api.crud.single_entity.post_methods import create_element
@@ -61,7 +60,7 @@ async def test_get_user_from_token(
     mock_supabase_connection, expected_payload, user_create
 ):
     await create_element("user", user_create)
-    user = await get_user_from_token(expected_payload)
+    user = await get_user_from_payload(expected_payload)
 
     assert user.id == 1
     assert user.username == user_create["username"]
@@ -71,26 +70,13 @@ async def test_get_user_from_token(
 @pytest.mark.asyncio
 async def test_get_user_from_token_no_user(mock_supabase_connection, expected_payload):
     with pytest.raises(InvalidToken):
-        await get_user_from_token(expected_payload)
+        await get_user_from_payload(expected_payload)
 
 
 @pytest.mark.asyncio
 async def test_get_user_from_token_no_email(mock_supabase_connection, invalid_payload):
     with pytest.raises(InvalidToken):
-        await get_user_from_token(invalid_payload)
-
-
-@pytest.mark.asyncio
-async def test_time_for_refresh(expected_payload):
-    result = await time_for_refresh(expected_payload, timedelta(minutes=20))
-
-    assert result is True
-
-
-@pytest.mark.asyncio
-async def test_time_for_refresh_invalid_token(invalid_payload, mock_datetime_now):
-    with pytest.raises(InvalidToken):
-        await time_for_refresh(invalid_payload, timedelta(minutes=5))
+        await get_user_from_payload(invalid_payload)
 
 
 @pytest.mark.asyncio

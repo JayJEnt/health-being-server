@@ -5,7 +5,7 @@ class FollowsCreate(BaseModel):
     username: str
 
 
-class Follows(FollowsCreate):
+class FollowsResponse(FollowsCreate):
     followed_user_id: int
 
 

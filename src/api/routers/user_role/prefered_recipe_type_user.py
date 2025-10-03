@@ -12,7 +12,7 @@ from api.schemas.prefered_recipe_type import (
     PreferedRecipeTypeDelete,
     PreferedRecipeTypeResponse,
 )
-from api.schemas.diet_type import DietType
+from api.schemas.diet_type import DietTypeResponse
 from api.schemas.user import User
 
 
@@ -38,7 +38,7 @@ async def get_relation_prefered_recipe_type(
 
 @router.post(
     "",
-    response_model=DietType,
+    response_model=DietTypeResponse,
     dependencies=[Depends(logged_only)],
 )
 async def create_relation_prefered_recipe_type(

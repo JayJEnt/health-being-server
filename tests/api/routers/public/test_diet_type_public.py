@@ -1,7 +1,7 @@
 import pytest
 
 from api.routers.public.diet_types_public import get_diet_types
-from api.schemas.diet_type import DietType
+from api.schemas.diet_type import DietTypeResponse
 
 
 @pytest.mark.asyncio
@@ -14,9 +14,9 @@ async def test_get_diet_types(
     assert isinstance(response, list)
 
     for item in response:
-        parsed = DietType(**item)
+        parsed = DietTypeResponse(**item)
 
-        assert isinstance(parsed, DietType)
+        assert isinstance(parsed, DietTypeResponse)
 
 
 @pytest.mark.asyncio
@@ -27,9 +27,9 @@ async def test_get_diet_type(
 
     assert response == example_diet_types_response[0]
 
-    parsed = DietType(**response)
+    parsed = DietTypeResponse(**response)
 
-    assert isinstance(parsed, DietType)
+    assert isinstance(parsed, DietTypeResponse)
 
 
 @pytest.mark.asyncio
@@ -40,6 +40,6 @@ async def test_get_diet_by_name(
 
     assert response == example_diet_types_response[1]
 
-    parsed = DietType(**response)
+    parsed = DietTypeResponse(**response)
 
-    assert isinstance(parsed, DietType)
+    assert isinstance(parsed, DietTypeResponse)

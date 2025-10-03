@@ -26,7 +26,7 @@ async def update_owner(
     return await crud.put_all(requesting_user.id, user)
 
 
-@router.delete("", dependencies=[Depends(logged_only)])
+@router.delete("", response_model=User, dependencies=[Depends(logged_only)])
 async def delete_owner(requesting_user: User = Depends(validate_token)):
     return await crud.delete_all(
         requesting_user.id,
