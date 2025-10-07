@@ -12,15 +12,13 @@ from api.schemas.user import User
 async def test_get_owner(
     mock_supabase_connection,
     example_users_injection,
-    example_users_data_injection,
     example_users_response,
-    example_users_response_all,
 ):
     requesting_user = User(**example_users_response[0])
 
     response = await get_owner(requesting_user=requesting_user)
 
-    assert response == example_users_response_all
+    assert response == example_users_response[0]
 
     parsed = User(**response)
 
@@ -53,7 +51,6 @@ async def test_update_owner(
 async def test_delete_owner(
     mock_supabase_connection,
     example_users_injection,
-    example_users_data_injection,
     example_users_response,
 ):
     requesting_user = User(**example_users_response[0])

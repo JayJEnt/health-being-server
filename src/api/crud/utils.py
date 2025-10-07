@@ -114,16 +114,13 @@ def get_main_config(element_type: str):
     return config
 
 
-def get_relation_config(
-    element_type: str, relation_name: str, relation_type: str = "relation"
-):
+def get_relation_config(element_type: str, relation_name: str):
     """
     Get a config for relation/join table
 
     Args:
         element_type (str): The type of the main element (e.g., "recipes").
         relation_name (str): The type of the relation element (e.g., "ingredients").
-        relation_type (str): Optional parameter ["relation" or "nested"] are avaible.
 
     Return:
         relation_config (dict): config for requested relation_name
@@ -133,34 +130,31 @@ def get_relation_config(
     relation_config = next(
         (
             relation
-            for relation in config[relation_type]
+            for relation in config["relation"]
             if relation["name"] == relation_name
         ),
         None,
     )
     if not relation_config:
         raise ValueError(
-            f"Relation '{relation_name}' type '{relation_type}' not defined for element '{element_type}'"
+            f"Relation '{relation_name}' not defined for element '{element_type}'"
         )
 
     return relation_config
 
 
-def get_related_config(
-    element_type: str, relation_name: str, relation_type: str = "relation"
-):
+def get_related_config(element_type: str, relation_name: str):
     """
     Get a config for related entity table
 
     Args:
         element_type (str): The type of the main element (e.g., "recipes").
         relation_name (str): The type of the relation element (e.g., "ingredients").
-        relation_type (str): Optional parameter ["relation" or "nested"] are avaible.
 
     Return:
         related_config (dict): config for related element of requested relation_name
     """
-    relation_config = get_relation_config(element_type, relation_name, relation_type)
+    relation_config = get_relation_config(element_type, relation_name)
 
     related_config = ENTITY_MAPPING.get(relation_config["name"], None)
 

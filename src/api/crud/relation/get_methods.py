@@ -170,18 +170,21 @@ async def get_related_tables_items(
                 related_config["table"],
                 related_config["id"],
                 join_table_item[relation_config["join_keys"][1]],
-            )
+            )[0]
         except ResourceNotFound:
             logger.error(
                 f"Couldn't find item: {relation_config["name"]} in {related_config["table"]}. "
                 f"The previously found relationship is matching not exisiting item!"
             )
             raise
-        related_item = related_item[0]
 
-        item_data = {}
-        for k, v in related_item.items():
-            item_data[k] = v
+        selected_attributes = relation_config["selected_attributes"]
+        if selected_attributes:
+            related_item = {
+                attribute: related_item[attribute] for attribute in selected_attributes
+            }
+
+        item_data = dict(related_item)
 
         if "extra_fields" in relation_config:
             for field in relation_config["extra_fields"]:

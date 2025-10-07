@@ -12,6 +12,11 @@ def example_users_create():
             "email": "test@example.com",
             "hashed_password": "Password",
             "role": "user",
+            "height": 180.0,
+            "weight": 75.0,
+            "age": 25,
+            "activity_level": "moderate",
+            "silhouette": "ectomorph",
         },
         {
             "username": "New User",
@@ -43,6 +48,11 @@ def example_users_response():
             "email": "test@example.com",
             "hashed_password": "Password",
             "role": "user",
+            "height": 180.0,
+            "weight": 75.0,
+            "age": 25,
+            "activity_level": "moderate",
+            "silhouette": "ectomorph",
         },
         {
             "id": 2,
@@ -50,6 +60,11 @@ def example_users_response():
             "email": "newuser@example.com",
             "hashed_password": "Password",
             "role": "user",
+            "activity_level": None,
+            "age": None,
+            "height": None,
+            "weight": None,
+            "silhouette": None,
         },
         {
             "id": 3,
@@ -57,37 +72,13 @@ def example_users_response():
             "email": "newadmin@example.com",
             "hashed_password": "Password",
             "role": "admin",
+            "activity_level": None,
+            "age": None,
+            "height": None,
+            "weight": None,
+            "silhouette": None,
         },
     ]
-
-
-@pytest.fixture()
-def example_users_response_all():
-    return {
-        "id": 1,
-        "username": "testuser",
-        "email": "test@example.com",
-        "hashed_password": "Password",
-        "role": "user",
-        "user_id": 1,
-        "height": 180.0,
-        "weight": 75.0,
-        "age": 25,
-        "activity_level": "moderate",
-        "silhouette": "ectomorph",
-    }
-
-
-@pytest.fixture()
-def example_users_create_all(example_users_create, example_users_data_create):
-    for index in range(len(example_users_create)):
-        example_users_create[index]["users_data"] = example_users_data_create[index]
-    return example_users_create
-
-
-@pytest.fixture()
-def example_users_response_create_all():
-    return None
 
 
 @pytest.fixture()
@@ -123,6 +114,11 @@ def example_users_response_update():
             "email": "test@example.com",
             "hashed_password": "$2b$12$9VpQw6INCOS9B98cgHSVse8bqF7zx5x2z1BvOUVoRckisrVV7nFUu",
             "role": "user",
+            "height": 180.0,
+            "weight": 75.0,
+            "age": 25,
+            "activity_level": "moderate",
+            "silhouette": "ectomorph",
         },
         {
             "id": 2,
@@ -130,6 +126,11 @@ def example_users_response_update():
             "email": "changed@example.com",
             "hashed_password": "$2b$12$9VpQw6INCOS9B98cgHSVse8bqF7zx5x2z1BvOUVoRckisrVV7nFUu",
             "role": "user",
+            "activity_level": None,
+            "age": None,
+            "height": None,
+            "weight": None,
+            "silhouette": None,
         },
         {
             "id": 3,
@@ -137,5 +138,10 @@ def example_users_response_update():
             "email": "newadmin@changed.com",
             "hashed_password": "$2b$12$9VpQw6INCOS9B98cgHSVse8bqF7zx5x2z1BvOUVoRckisrVV7nFUu",
             "role": "admin",
+            "activity_level": None,
+            "age": None,
+            "height": None,
+            "weight": None,
+            "silhouette": None,
         },
     ]

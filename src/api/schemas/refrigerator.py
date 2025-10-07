@@ -1,4 +1,4 @@
-from api.schemas.ingredient import Quantity
+from api.schemas.utils import Quantity
 
 
 class RefrigeratorCreate(Quantity):

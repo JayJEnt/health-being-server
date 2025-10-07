@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Float
 from sqlalchemy.orm import relationship
 
 from tests.fixtures.database.supabase_connection import Base
@@ -13,9 +13,11 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     hashed_password = Column(String, nullable=True)
     role = Column(String, nullable=False, default="user")
-
-    # 1:1
-    user_data = relationship("UserData", back_populates="user", uselist=False)
+    height = Column(Float, nullable=True)
+    weight = Column(Float, nullable=True)
+    age = Column(Integer, nullable=True)
+    activity_level = Column(String, nullable=True)
+    silhouette = Column(String, nullable=True)
 
     # N:M
     recipes = relationship("RecipeFavourite", back_populates="user")

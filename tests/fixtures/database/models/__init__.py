@@ -1,9 +1,7 @@
 from tests.fixtures.database.models.diet_type import DietType
 from tests.fixtures.database.models.ingredient import Ingredient
-from tests.fixtures.database.models.ingredient_data import IngredientData
 from tests.fixtures.database.models.recipe import Recipe
 from tests.fixtures.database.models.user import User
-from tests.fixtures.database.models.user_data import UserData
 from tests.fixtures.database.models.vitamin import Vitamin
 from tests.fixtures.database.models.joins.diet_type_included import DietTypeIncluded
 from tests.fixtures.database.models.joins.ingredients_included import (
@@ -23,7 +21,6 @@ __all__ = [
     "DietTypeIncluded",
     "Follow",
     "Ingredient",
-    "IngredientData",
     "IngredientsIncluded",
     "PreferedIngredients",
     "PreferedRecipeType",
@@ -31,7 +28,6 @@ __all__ = [
     "RecipeFavourite",
     "Refrigerator",
     "User",
-    "UserData",
     "Vitamin",
     "VitaminsIncluded",
 ]

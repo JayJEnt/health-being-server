@@ -5,7 +5,7 @@ from api.routers.admin_role.ingredients_admin import (
     update_ingredient,
     delete_ingredient,
 )
-from api.schemas.ingredient import IngredientResponse
+from api.schemas.ingredient import IngredientResponseAll
 
 
 @pytest.mark.asyncio
@@ -19,16 +19,16 @@ async def test_create_ingredient(
 
     assert response == example_ingredients_response_create_all
 
-    parsed = IngredientResponse(**response)
+    parsed = IngredientResponseAll(**response)
 
-    assert isinstance(parsed, IngredientResponse)
+    assert isinstance(parsed, IngredientResponseAll)
 
 
 @pytest.mark.asyncio
 async def test_update_ingredient(
     mock_supabase_connection,
     example_vitamins_injection,
-    example_ingredients_injectio_all,
+    example_ingredients_injection_all,
     example_ingredients_update_all,
     example_ingredients_response_update_all,
 ):
@@ -36,22 +36,22 @@ async def test_update_ingredient(
 
     assert response == example_ingredients_response_update_all
 
-    parsed = IngredientResponse(**response)
+    parsed = IngredientResponseAll(**response)
 
-    assert isinstance(parsed, IngredientResponse)
+    assert isinstance(parsed, IngredientResponseAll)
 
 
 @pytest.mark.asyncio
 async def test_delete_ingredient(
     mock_supabase_connection,
     example_vitamins_injection,
-    example_ingredients_injectio_all,
+    example_ingredients_injection_all,
     example_ingredients_response,
 ):
     response = await delete_ingredient(1)
 
     assert response == example_ingredients_response[0]
 
-    parsed = IngredientResponse(**response)
+    parsed = IngredientResponseAll(**response)
 
-    assert isinstance(parsed, IngredientResponse)
+    assert isinstance(parsed, IngredientResponseAll)

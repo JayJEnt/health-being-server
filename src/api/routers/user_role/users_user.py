@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Depends
 
-from api.schemas.user import User, UserCreate, UserCreateAll
+from api.schemas.user import User, UserCreate
 from api.authentication.allowed_roles import logged_only
 from api.crud.crud_operations import CrudOperations
 from api.authentication.token import validate_token
@@ -13,9 +13,9 @@ router = APIRouter(prefix="/users/owner", tags=["user: users"])
 crud = CrudOperations("user")
 
 
-@router.get("", response_model=UserCreateAll, dependencies=[Depends(logged_only)])
+@router.get("", response_model=User, dependencies=[Depends(logged_only)])
 async def get_owner(requesting_user: User = Depends(validate_token)):
-    return await crud.get_all(requesting_user.id, nested_attributes=["user_data"])
+    return await crud.get_all(requesting_user.id)
 
 
 @router.put("", response_model=User, dependencies=[Depends(logged_only)])
@@ -37,5 +37,4 @@ async def delete_owner(requesting_user: User = Depends(validate_token)):
             "recipes",
             "refrigerator",
         ],
-        nested_attributes=["user_data"],
     )

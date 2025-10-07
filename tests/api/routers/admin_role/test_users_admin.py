@@ -29,7 +29,6 @@ async def test_get_users(
 async def test_get_user_by_id(
     mock_supabase_connection,
     example_users_injection,
-    example_users_data_injection,
     example_users_response,
 ):
     response = await get_users(user_id=1)
@@ -92,7 +91,6 @@ async def test_update_user(
 async def test_delete_user(
     mock_supabase_connection,
     example_users_injection,
-    example_users_data_injection,
     example_users_response,
 ):
     response = await delete_user(user_id=1)

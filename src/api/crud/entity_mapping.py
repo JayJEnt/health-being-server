@@ -18,17 +18,10 @@ entity_name: {
             extra_fields (the fields that are stored in join table e.g: amount, measure)
         }
     ]
-    nested entities (1:N) entities: [
-        {
-            entity_name: "ingredients_data",
-            join_key: "ingredient_id",
-        }
-    ]
     entity restricted attributes
 }
 """
 
-# TODO: FIX DOC
 from config import settings
 
 
@@ -43,20 +36,22 @@ ENTITY_MAPPING = {
                 "name": "diet_type",
                 "join_table": settings.DIET_TYPE_INCLUDED_TABLE,
                 "join_keys": ("recipe_id", "diet_type_id"),
+                "selected_attributes": [],
             },
             {
                 "name": "ingredients",
                 "join_table": settings.INGREDIENTS_INCLUDED_TABLE,
                 "join_keys": ("recipe_id", "ingredient_id"),
                 "extra_fields": ["amount", "measure_unit"],
+                "selected_attributes": ["name", "id"],
             },
             {
                 "name": "user",
                 "join_table": settings.RECIPE_FAVOURITE,
                 "join_keys": ("recipe_id", "user_id"),
+                "selected_attributes": [],
             },
         ],
-        "nested": [],
         "restricted": ["description", "instructions"],
     },
     "ingredients": {
@@ -69,25 +64,22 @@ ENTITY_MAPPING = {
                 "name": "vitamins",
                 "join_table": settings.VITAMINS_INCLUDED_TABLE,
                 "join_keys": ("ingredient_id", "vitamin_id"),
+                "selected_attributes": [],
             },
             {
                 "name": "user",
                 "join_table": settings.PREFERED_INGREDIENTS_TABLE,
                 "join_keys": ("ingredient_id", "user_id"),
                 "extra_fields": ["preference"],
+                "selected_attributes": [],
             },
             {
                 "name": "recipes",
                 "join_table": settings.INGREDIENTS_INCLUDED_TABLE,
                 "join_keys": ("ingredient_id", "recipe_id"),
                 "extra_fields": ["amount", "measure_unit"],
+                "selected_attributes": ["name", "id"],
             },
-        ],
-        "nested": [
-            {
-                "name": "ingredients_data",
-                "join_key": "ingredient_id",
-            }
         ],
         "restricted": [],
     },
@@ -97,7 +89,6 @@ ENTITY_MAPPING = {
         "column_name": "name",
         "id": "id",
         "relation": [],
-        "nested": [],
         "restricted": [],
     },
     "diet_type": {
@@ -110,9 +101,9 @@ ENTITY_MAPPING = {
                 "name": "user",
                 "join_table": settings.PREFERED_RECIPE_TYPE_TABLE,
                 "join_keys": ("type_id", "user_id"),
+                "selected_attributes": [],
             },
         ],
-        "nested": [],
         "restricted": [],
     },
     "user": {
@@ -126,34 +117,33 @@ ENTITY_MAPPING = {
                 "name": "recipes",
                 "join_table": settings.RECIPE_FAVOURITE,
                 "join_keys": ("user_id", "recipe_id"),
+                "selected_attributes": [],
             },
             {
                 "name": "user",
                 "join_table": settings.FOLLOW_TABLE,
                 "join_keys": ("user_id", "followed_user_id"),
+                "selected_attributes": [],
             },
             {
                 "name": "ingredients",
                 "join_table": settings.PREFERED_INGREDIENTS_TABLE,
                 "join_keys": ("user_id", "ingredient_id"),
                 "extra_fields": ["preference"],
+                "selected_attributes": ["name", "id"],
             },
             {
                 "name": "refrigerator",
                 "join_table": settings.REFRIGERATOR_TABLE,
                 "join_keys": ("user_id", "ingredient_id"),
                 "extra_fields": ["amount", "measure_unit"],
+                "selected_attributes": ["name", "id"],
             },
             {
                 "name": "diet_type",
                 "join_table": settings.PREFERED_RECIPE_TYPE_TABLE,
                 "join_keys": ("user_id", "type_id"),
-            },
-        ],
-        "nested": [
-            {
-                "name": "user_data",
-                "join_key": "user_id",
+                "selected_attributes": [],
             },
         ],
         "restricted": [],
@@ -164,7 +154,6 @@ ENTITY_MAPPING = {
         "column_name": "user_id",
         "id": "user_id",
         "relation": [],
-        "nested": [],
         "restricted": [],
     },
     "ingredients_data": {
@@ -173,7 +162,6 @@ ENTITY_MAPPING = {
         "column_name": "ingredient_id",
         "id": "ingredient_id",
         "relation": [],
-        "nested": [],
         "restricted": [],
     },
     "refrigerator": {
@@ -187,13 +175,8 @@ ENTITY_MAPPING = {
                 "join_table": settings.REFRIGERATOR_TABLE,
                 "join_keys": ("ingredient_id", "user_id"),
                 "extra_fields": ["amount", "measure_unit"],
+                "selected_attributes": ["name", "id"],
             },
-        ],
-        "nested": [
-            {
-                "name": "ingredients_data",
-                "join_key": "ingredient_id",
-            }
         ],
         "restricted": [],
     },
