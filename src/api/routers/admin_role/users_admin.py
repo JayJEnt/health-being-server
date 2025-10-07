@@ -35,4 +35,4 @@ async def update_user(user: UserUpdateAdmin, user_id: int):
 
 @router.delete("", dependencies=[Depends(admin_only)])
 async def delete_user(user_id: int):
-    return await crud.delete_all(user_id, nested_attributes=["user_data"])
+    return await crud.delete_all(user_id)

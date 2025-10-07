@@ -1,7 +1,7 @@
 import pytest
 
 from api.routers.public.ingredients_public import get_ingredients
-from api.schemas.ingredient import Ingredient
+from api.schemas.ingredient import IngredientResponse
 
 
 @pytest.mark.asyncio
@@ -16,25 +16,25 @@ async def test_get_ingredients(
     assert isinstance(response, list)
 
     for item in response:
-        parsed = Ingredient(**item)
+        parsed = IngredientResponse(**item)
 
-        assert isinstance(parsed, Ingredient)
+        assert isinstance(parsed, IngredientResponse)
 
 
 @pytest.mark.asyncio
 async def test_get_ingredient(
     mock_supabase_connection,
     example_vitamins_injection,
-    example_ingredients_injectio_all,
+    example_ingredients_injection_all,
     example_ingredients_response,
 ):
     response = await get_ingredients(ingredient_id=1)
 
     assert response == example_ingredients_response[0]
 
-    parsed = Ingredient(**response)
+    parsed = IngredientResponse(**response)
 
-    assert isinstance(parsed, Ingredient)
+    assert isinstance(parsed, IngredientResponse)
 
 
 @pytest.mark.asyncio
@@ -47,6 +47,6 @@ async def test_get_ingredient_by_name(
 
     assert response == example_ingredients_response[2]
 
-    parsed = Ingredient(**response)
+    parsed = IngredientResponse(**response)
 
-    assert isinstance(parsed, Ingredient)
+    assert isinstance(parsed, IngredientResponse)

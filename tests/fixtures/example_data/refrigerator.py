@@ -26,8 +26,8 @@ async def example_refrigerator_injection(
 @pytest.fixture()
 def example_refrigerator_create_response():
     return [
-        {"id": 2, "name": "Carrot", "amount": 50, "measure_unit": "g."},
-        {"id": 3, "name": "Mushroom", "amount": 18, "measure_unit": "g."},
+        {"id": 2, "name": "Carrot", "amount": 50.0, "measure_unit": "g."},
+        {"id": 3, "name": "Mushroom", "amount": 18.0, "measure_unit": "g."},
     ]
 
 

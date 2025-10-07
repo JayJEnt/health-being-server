@@ -32,58 +32,47 @@ class CrudOperations:
         self,
         element_id: int,
         related_attributes: list = [],
-        nested_attributes: list = [],
     ) -> dict:
         """
-        Get all (entity, relationships, nested) data for an element by its id and specified related and nested attributes.
+        Get all (entity, relationships) data for an element by its id and specified related attributes.
         """
-        return get_all(
-            self.element_type, element_id, related_attributes, nested_attributes
-        )
+        return get_all(self.element_type, element_id, related_attributes)
 
     def post_all(
         self,
         element_data: dict,
         related_attributes: list = [],
-        nested_attributes: list = [],
     ) -> dict:
         """
-        Create all (entity, relationships, nested) data for an element by its id and specified related and nested attributes, which are required.
+        Create all (entity, relationships) data for an element by its id and specified related attributes, which are required.
         """
-        return create_all(
-            self.element_type, element_data, related_attributes, nested_attributes
-        )
+        return create_all(self.element_type, element_data, related_attributes)
 
     def put_all(
         self,
         element_id: int,
         element_data: dict,
         related_attributes: list = [],
-        nested_attributes: list = [],
     ) -> dict:
         """
-        Update all (entity, relationships, nested) data for an element by its id and specified related and nested attributes, which are required.
+        Update all (entity, relationships) data for an element by its id and specified related attributes, which are required.
         """
         return update_all(
             self.element_type,
             element_id,
             element_data,
             related_attributes,
-            nested_attributes,
         )
 
     def delete_all(
         self,
         element_id: int,
         related_attributes: list = [],
-        nested_attributes: list = [],
     ) -> dict:
         """
-        Delete all (entity, relationships, nested) data for an element by its id and specified related and nested attributes, that are attached.
+        Delete all (entity, relationships) data for an element by its id and specified related attributes, that are attached.
         """
-        return delete_all(
-            self.element_type, element_id, related_attributes, nested_attributes
-        )
+        return delete_all(self.element_type, element_id, related_attributes)
 
     """Relations"""
 

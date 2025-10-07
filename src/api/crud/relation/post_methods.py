@@ -57,6 +57,13 @@ async def create_relationship(
         pass
 
     related_item = {**exists}
+
+    selected_attributes = relation_config["selected_attributes"]
+    if selected_attributes:
+        related_item = {
+            attribute: related_item[attribute] for attribute in selected_attributes
+        }
+
     join_data = {
         relation_config["join_keys"][0]: element_id,
         relation_config["join_keys"][1]: exists["id"],

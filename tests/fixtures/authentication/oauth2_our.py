@@ -47,6 +47,11 @@ def example_users_hashed_response():
             "email": "test@example.com",
             "hashed_password": "$2b$12$9VpQw6INCOS9B98cgHSVse8bqF7zx5x2z1BvOUVoRckisrVV7nFUu",
             "role": "user",
+            "activity_level": None,
+            "age": None,
+            "height": None,
+            "weight": None,
+            "silhouette": None,
         },
         {
             "id": 2,
@@ -54,6 +59,11 @@ def example_users_hashed_response():
             "email": "newuser@example.com",
             "hashed_password": "$2b$12$9VpQw6INCOS9B98cgHSVse8bqF7zx5x2z1BvOUVoRckisrVV7nFUu",
             "role": "user",
+            "activity_level": None,
+            "age": None,
+            "height": None,
+            "weight": None,
+            "silhouette": None,
         },
         {
             "id": 3,
@@ -61,6 +71,11 @@ def example_users_hashed_response():
             "email": "newadmin@example.com",
             "hashed_password": "$2b$12$9VpQw6INCOS9B98cgHSVse8bqF7zx5x2z1BvOUVoRckisrVV7nFUu",
             "role": "admin",
+            "activity_level": None,
+            "age": None,
+            "height": None,
+            "weight": None,
+            "silhouette": None,
         },
     ]
 

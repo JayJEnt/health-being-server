@@ -28,6 +28,5 @@ def test_get_relation_config_error():
         get_relation_config("recipes", "fake_input")
 
     assert (
-        str(excinfo.value)
-        == "Relation 'fake_input' type 'relation' not defined for element 'recipes'"
+        str(excinfo.value) == "Relation 'fake_input' not defined for element 'recipes'"
     )

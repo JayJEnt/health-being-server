@@ -4,25 +4,26 @@ from fastapi import APIRouter, Depends
 
 from api.authentication.allowed_roles import admin_only
 from api.crud.crud_operations import CrudOperations
-from api.schemas.ingredient import IngredientCreate, IngredientResponse
+from api.schemas.ingredient import IngredientCreate, IngredientResponseAll
 
 
 router = APIRouter(prefix="/ingredients", tags=["admin: ingredients"])
 crud = CrudOperations("ingredients")
 
 
-@router.post("", response_model=IngredientResponse, dependencies=[Depends(admin_only)])
+@router.post(
+    "", response_model=IngredientResponseAll, dependencies=[Depends(admin_only)]
+)
 async def create_ingredient(ingredient: IngredientCreate):
     return await crud.post_all(
         ingredient,
         related_attributes=["vitamins"],
-        nested_attributes=["ingredients_data"],
     )
 
 
 @router.put(
     "",
-    response_model=IngredientResponse,
+    response_model=IngredientResponseAll,
     dependencies=[Depends(admin_only)],
 )
 async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
@@ -30,7 +31,6 @@ async def update_ingredient(ingredient_id: int, ingredient: IngredientCreate):
         ingredient_id,
         ingredient,
         related_attributes=["vitamins"],
-        nested_attributes=["ingredients_data"],
     )
 
 
@@ -40,7 +40,7 @@ crud2 = CrudOperations("refrigerator")
 
 @router.delete(
     "",
-    response_model=IngredientResponse,
+    response_model=IngredientResponseAll,
     dependencies=[Depends(admin_only)],
 )
 async def delete_ingredient(ingredient_id: int):
@@ -52,5 +52,4 @@ async def delete_ingredient(ingredient_id: int):
             "user",
             "recipes",
         ],  # TODO: FIX misses refrigerator table TEMP FIX 25/08/2025
-        nested_attributes=["ingredients_data"],
     )

@@ -1,15 +1,18 @@
 from pydantic import BaseModel, EmailStr
 
-from api.schemas.user_data import UserDataCreate
-from api.schemas.enum_utils import Role
+from typing import Optional
 
-
-"""User Create models"""
+from api.schemas.enum_utils import ActivityLevel, Role, Silhouette
 
 
 class UserBaseModel(BaseModel):
     username: str
     email: EmailStr
+    weight: Optional[float] = None
+    height: Optional[float] = None
+    age: Optional[int] = None
+    activity_level: Optional[ActivityLevel] = None
+    silhouette: Optional[Silhouette] = None
 
 
 class UserCreate(UserBaseModel):
@@ -20,9 +23,6 @@ class UserUpdateAdmin(UserCreate):
     role: str
 
 
-"""User models"""
-
-
 class User(UserBaseModel):
     id: int
     role: Role = Role.user.value
@@ -30,10 +30,3 @@ class User(UserBaseModel):
 
 class UserOurAuth(User):
     hashed_password: str
-
-
-"""User with UserData models"""
-
-
-class UserCreateAll(User, UserDataCreate):
-    pass

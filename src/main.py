@@ -8,9 +8,7 @@ from datetime import datetime as dt
 from api.routers.admin_role import (
     diet_types_admin,
     ingredients_admin,
-    ingredients_data_admin,
     recipes_admin,
-    users_data_admin,
     users_admin,
     vitamins_admin,
 )
@@ -31,7 +29,6 @@ from api.routers.user_role import (
     recipes_user,
     refrigerator_user,
     token_data_user,
-    users_data_user,
     users_user,
 )
 from logger import logger
@@ -74,9 +71,7 @@ def root_handler():
 # admin routers
 app.include_router(diet_types_admin.router)
 app.include_router(ingredients_admin.router)
-app.include_router(ingredients_data_admin.router)
 app.include_router(recipes_admin.router)
-app.include_router(users_data_admin.router)
 app.include_router(users_admin.router)
 app.include_router(vitamins_admin.router)
 
@@ -97,7 +92,6 @@ app.include_router(recipe_favourite_user.router)
 app.include_router(recipes_user.router)
 app.include_router(refrigerator_user.router)
 app.include_router(token_data_user.router)
-app.include_router(users_data_user.router)
 app.include_router(users_user.router)
 
 

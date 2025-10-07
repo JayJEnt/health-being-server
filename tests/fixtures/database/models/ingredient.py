@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Float
 from sqlalchemy.orm import relationship
 
 from tests.fixtures.database.supabase_connection import Base
@@ -10,11 +10,13 @@ class Ingredient(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, nullable=False)
-
-    # 1:1
-    ingredient_data = relationship(
-        "IngredientData", back_populates="ingredient", uselist=False
-    )
+    calories_per_100 = Column(Float, default=0.0)
+    protein_per_100 = Column(Float, default=0.0)
+    fat_per_100 = Column(Float, default=0.0)
+    carbon_per_100 = Column(Float, default=0.0)
+    fiber_per_100 = Column(Float, default=0.0)
+    sugar_per_100 = Column(Float, default=0.0)
+    salt_per_100 = Column(Float, default=0.0)
 
     # N:M
     vitamins = relationship("VitaminsIncluded", back_populates="ingredient")

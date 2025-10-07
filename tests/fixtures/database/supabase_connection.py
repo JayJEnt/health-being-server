@@ -27,12 +27,6 @@ from api.crud.relation import (
     post_methods as post_relation,
     put_methods as put_relation,
 )
-from api.crud.nested import (
-    delete_methods as delete_nested,
-    get_methods as get_nested,
-    post_methods as post_nested,
-    put_methods as put_nested,
-)
 from api.crud.many_entities import get_methods as get_all_methods
 from api.handlers.http_exceptions import InternalServerError
 from api.handlers.http_exceptions import ResourceNotFound
@@ -203,10 +197,6 @@ def mock_supabase_connection(monkeypatch):
         get_relation,
         delete_relation,
         put_relation,
-        post_nested,
-        get_nested,
-        delete_nested,
-        put_nested,
         get_all_methods,
     ]
     for file in files_to_patch:
