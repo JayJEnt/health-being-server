@@ -148,22 +148,6 @@ ENTITY_MAPPING = {
         ],
         "restricted": [],
     },
-    "user_data": {
-        "table": settings.USER_DATA_TABLE,
-        "search_columns": [],
-        "column_name": "user_id",
-        "id": "user_id",
-        "relation": [],
-        "restricted": [],
-    },
-    "ingredients_data": {
-        "table": settings.INGREDIENT_DATA_TABLE,
-        "search_columns": [],
-        "column_name": "ingredient_id",
-        "id": "ingredient_id",
-        "relation": [],
-        "restricted": [],
-    },
     "refrigerator": {
         "table": settings.INGREDIENT_TABLE,
         "search_columns": [],
