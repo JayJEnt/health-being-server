@@ -60,15 +60,12 @@ class SupabaseConnection:
             return None
         return response.data[0]
 
-    # owilms start 06-10-2025: Create an insert for multiple rows of data
     @error_handler
     def bulk_insert(self, table: str, data: list[dict]) -> Optional[Dict[str, Any]]:
         response = self._client.table(table).insert(data).execute()
         if not response.data:
             return None
         return response.data
-
-    # owilms end
 
     @error_handler
     def find_by(
