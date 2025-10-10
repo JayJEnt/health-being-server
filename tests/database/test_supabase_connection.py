@@ -14,6 +14,7 @@ def test_supabase_connection_runtime_error(broken_supabase_connection):
 
 
 data = {"fake_data": "dummy_value"}
+bulk_data = [{"fake_data": "dummy_value"}, {"fake_data": "dummy_value"}]
 
 
 @pytest.mark.parametrize("input_data", [data])
@@ -40,6 +41,19 @@ def test_supabase_connection_insert(mocked_supabase_connection):
 def test_supabase_connection_insert_error(mocked_supabase_connection):
     with pytest.raises(ResourceNotFound):
         mocked_supabase_connection.insert("fake_table", data)
+
+
+@pytest.mark.parametrize("input_data", [bulk_data])
+def test_supabase_connection_bulk_insert(mocked_supabase_connection, input_data):
+    result = mocked_supabase_connection.bulk_insert("fake_table", input_data)
+
+    assert result == input_data
+
+
+@pytest.mark.parametrize("input_data", [None])
+def test_supabase_connection_bulk_insert_error(mocked_supabase_connection):
+    with pytest.raises(ResourceNotFound):
+        mocked_supabase_connection.bulk_insert("fake_table", data)
 
 
 @pytest.mark.parametrize("input_data", [data])
