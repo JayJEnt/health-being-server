@@ -31,9 +31,17 @@ async def test_auth_callback(
     dummy_request,
     google_oauth2_expected_token,
 ):
-    response = await auth_callback(dummy_request)
+    response = await auth_callback("google", dummy_request)
 
     assert response == google_oauth2_expected_token
+
+
+@pytest.mark.asyncio
+async def test_auth_callback_unknown(
+    dummy_request,
+):
+    with pytest.raises(UnknownProvider):
+        await auth_callback("unknown", dummy_request)
 
 
 @pytest.mark.asyncio

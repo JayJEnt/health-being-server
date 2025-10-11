@@ -12,28 +12,30 @@ from api.schemas.user import UserCreate, User
 from api.schemas.token import Token
 
 
-router = APIRouter(prefix="/oauth2_", tags=["public: oauth2"])
+router = APIRouter(prefix="/oauth2", tags=["public: oauth2"])
 
 
-# TODO: Change to query params and refactor in seperate task
-@router.get("")  # TODO CHANGE URL AFTER UPDATE
-async def login(external_provider: str):
-    if external_provider == "google":
+@router.post("/register", response_model=User)
+async def our_register(user: UserCreate):
+    return await register(user)
+
+
+@router.post("/login", response_model=Token)
+async def login_with_form(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
+    return await our_login(form_data)
+
+
+@router.get("/login")
+async def login(provider: str):
+    if provider == "google":
         return await google_login()
     else:
         raise UnknownProvider
 
 
-@router.get("google/callback", response_model=Token)  # TODO CHANGE URL AFTER UPDATE
-async def auth_callback(request: Request):
-    return await google_auth_callback(request)
-
-
-@router.post("our/login", response_model=Token)  # TODO CHANGE URL AFTER UPDATE
-async def login_with_form(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
-    return await our_login(form_data)
-
-
-@router.post("our/register", response_model=User)
-async def our_register(user: UserCreate):
-    return await register(user)
+@router.get("/{provider}/callback", response_model=Token)
+async def auth_callback(provider: str, request: Request):
+    if provider == "google":
+        return await google_auth_callback(request)
+    else:
+        raise UnknownProvider
