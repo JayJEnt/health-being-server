@@ -51,7 +51,7 @@ async def our_login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-async def register(user: UserCreate, other_provider: bool = False):
+async def our_register(user: UserCreate, other_provider: bool = False):
     try:
         user_response = await get_element_by_name(
             "user", user.email, alternative_name=True

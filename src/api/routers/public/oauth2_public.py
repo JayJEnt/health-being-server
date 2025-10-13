@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated
 
 from api.authentication.oauth2_google import google_login, google_auth_callback
-from api.authentication.oauth2_our import our_login, register
+from api.authentication.oauth2_our import our_login, our_register
 from api.handlers.http_exceptions import UnknownProvider
 from api.schemas.user import UserCreate, User
 from api.schemas.token import Token
@@ -16,13 +16,18 @@ router = APIRouter(prefix="/oauth2", tags=["public: oauth2"])
 
 
 @router.post("/register", response_model=User)
-async def our_register(user: UserCreate):
-    return await register(user)
+async def register(user: UserCreate):
+    return await our_register(user)
 
 
 @router.post("/login", response_model=Token)
 async def login_with_form(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     return await our_login(form_data)
+
+
+@router.post("/verify_email", response_model=Token)
+async def verify_email(email: str):
+    pass
 
 
 @router.get("/login")

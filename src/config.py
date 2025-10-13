@@ -7,6 +7,7 @@ import os
 class Settings(BaseSettings):
     """AWS"""
 
+    # AWS S3 BUCKET
     AWS_REGION: str = "eu-north-1"
     BUCKET_NAME: str = "health-being-server-api"
 
@@ -49,6 +50,18 @@ class Settings(BaseSettings):
     GOOGLE_AUTH_ENDPOINT: str = ""
     GOOGLE_TOKEN_ENDPOINT: str = ""
     GOOGLE_USERINFO_ENDPOINT: str = ""
+
+    # EMAIL AUTHENTICATION
+    MAIL_USERNAME: str = "health-being-app"
+    MAIL_PASSWORD: str = ""
+    MAIL_FROM: str = "jivonaypm"
+    MAIL_PORT: int = 587
+    MAIL_SERVER: str = "google"
+    MAIL_FROM_NAME: str = "health-being-app"
+    MAIL_STARTTLS: bool = True
+    MAIL_SSL_TLS: bool = False
+    USE_CREDENTIALS: bool = True
+    VALIDATE_CERTS: bool = True
 
     load_dotenv()
 
