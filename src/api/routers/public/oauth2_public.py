@@ -7,6 +7,10 @@ from typing import Annotated
 
 from api.authentication.oauth2_google import google_login, google_auth_callback
 from api.authentication.oauth2_our import our_login, our_register
+from api.authentication.email_authentication import (
+    send_email_verification,
+    email_authentication,
+)
 from api.handlers.http_exceptions import UnknownProvider
 from api.schemas.user import UserCreate, User
 from api.schemas.token import Token
@@ -25,9 +29,14 @@ async def login_with_form(form_data: Annotated[OAuth2PasswordRequestForm, Depend
     return await our_login(form_data)
 
 
-@router.post("/verify_email", response_model=Token)
+@router.post("/verify_email")
 async def verify_email(email: str):
-    pass
+    return await send_email_verification(email)
+
+
+@router.post("/verify_email/callback")
+async def authenticate_email(otp: str):
+    return await email_authentication(otp)
 
 
 @router.get("/login")

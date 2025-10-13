@@ -52,16 +52,12 @@ class Settings(BaseSettings):
     GOOGLE_USERINFO_ENDPOINT: str = ""
 
     # EMAIL AUTHENTICATION
-    MAIL_USERNAME: str = "health-being-app"
+    MAIL_USERNAME: str = ""
     MAIL_PASSWORD: str = ""
-    MAIL_FROM: str = "jivonaypm"
+    MAIL_FROM: str = "jivonaypm@gmail.com"
     MAIL_PORT: int = 587
-    MAIL_SERVER: str = "google"
+    MAIL_SERVER: str = "smtp.gmail.com"
     MAIL_FROM_NAME: str = "health-being-app"
-    MAIL_STARTTLS: bool = True
-    MAIL_SSL_TLS: bool = False
-    USE_CREDENTIALS: bool = True
-    VALIDATE_CERTS: bool = True
 
     load_dotenv()
 

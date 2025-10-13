@@ -1,29 +1,22 @@
-from fastapi_mail import FastMail, ConnectionConfig, MessageSchema, MessageType
-from config import settings
+import random
+
+from api.email_postman.email_postman import email_postman
+from api.email_postman.templates import VERIFICATION_TEMPLATE
 
 
-mail_config = ConnectionConfig(
-    MAIL_USERNAME=settings.MAIL_USERNAME,
-    MAIL_PASSWORD=settings.MAIL_PASSWORD,
-    MAIL_FROM=settings.MAIL_FROM,
-    MAIL_PORT=settings.MAIL_PORT,
-    MAIL_SERVER=settings.MAIL_SERVER,
-    MAIL_FROM_NAME=settings.MAIL_FROM_NAME,
-    MAIL_STARTTLS=settings.MAIL_STARTTLS,
-    MAIL_SSL_TLS=settings.MAIL_SSL_TLS,
-    USE_CREDENTIALS=settings.USE_CREDENTIALS,
-    VALIDATE_CERTS=settings.VALIDATE_CERTS,
-    TEMPLATE_FOLDER="./api/authentication/templates",
-)
-
-
-mail = FastMail(config=mail_config)
-
-
-def create_message(recipients: list[str], subject: str, body: str):
-
-    message = MessageSchema(
-        recipients=recipients, subject=subject, body=body, subtype=MessageType.html
+async def send_email_verification(email: str):
+    otp = "".join([str(random.randint(0, 9)) for i in range(6)])
+    expire_time = 10
+    subject = VERIFICATION_TEMPLATE.get("subject")
+    html_body = VERIFICATION_TEMPLATE.get("body").format(
+        otp=otp, expire_time=expire_time
     )
 
-    return message
+    message = email_postman.create_message(email, subject, html_body)
+    email_postman.send_message(message)
+
+    return {"message": f"Test email have been send properly with otp: {otp}"}
+
+
+async def email_authentication(otp: str):
+    pass
