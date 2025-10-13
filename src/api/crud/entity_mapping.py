@@ -56,7 +56,7 @@ ENTITY_MAPPING = {
     },
     "ingredients": {
         "table": settings.INGREDIENT_TABLE,
-        "search_columns": [],
+        "search_columns": ["name"],
         "column_name": "name",
         "id": "id",
         "relation": [

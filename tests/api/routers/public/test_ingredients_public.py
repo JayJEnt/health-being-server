@@ -50,3 +50,38 @@ async def test_get_ingredient_by_name(
     parsed = IngredientResponse(**response)
 
     assert isinstance(parsed, IngredientResponse)
+
+
+@pytest.mark.asyncio
+async def test_get_ingredient_by_search_phrase(
+    mock_supabase_connection,
+    example_ingredients_injection,
+    example_ingredients_response,
+):
+    response = await get_ingredients(search_phrase="MusHRoom")
+
+    assert response == [example_ingredients_response[2]]
+
+    parsed = IngredientResponse(**response[0])
+
+    assert isinstance(parsed, IngredientResponse)
+
+
+@pytest.mark.asyncio
+async def test_get_ingredients_by_search_phrase(
+    mock_supabase_connection,
+    example_ingredients_injection,
+    example_ingredients_response,
+):
+
+    response = await get_ingredients(search_phrase="o")
+
+    assert response == [
+        example_ingredients_response[1],
+        example_ingredients_response[2],
+    ]
+
+    parsed = [IngredientResponse(**item) for item in response]
+
+    for item in parsed:
+        assert isinstance(item, IngredientResponse)
