@@ -1,15 +1,15 @@
 """/oauth2 router"""
 
 from fastapi import APIRouter, Request, Depends
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 
 from typing import Annotated
 
 from api.authentication.oauth2_google import google_login, google_auth_callback
 from api.authentication.oauth2_our import our_login, our_register
 from api.authentication.email_authentication import (
-    send_email_verification,
-    email_authentication,
+    send_verification_email,
+    verify_email_token,
 )
 from api.handlers.http_exceptions import UnknownProvider
 from api.schemas.user import UserCreate, User
@@ -17,6 +17,7 @@ from api.schemas.token import Token
 
 
 router = APIRouter(prefix="/oauth2", tags=["public: oauth2"])
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 @router.post("/register", response_model=User)
@@ -29,14 +30,16 @@ async def login_with_form(form_data: Annotated[OAuth2PasswordRequestForm, Depend
     return await our_login(form_data)
 
 
-@router.post("/verify_email")
-async def verify_email(email: str):
-    return await send_email_verification(email)
+@router.post("/send_verification_email")
+async def send_email(email: str):
+    return await send_verification_email(email)
 
 
-@router.post("/verify_email/callback")
-async def authenticate_email(otp: str):
-    return await email_authentication(otp)
+@router.get("/verify_email")
+async def verify_email(token: str):  # TODO: Annotated[str, Depends(oauth2_scheme)]
+    if await verify_email_token(token):
+        return {"message": "TODO: update user_role to user from unknown"}
+    return False
 
 
 @router.get("/login")
