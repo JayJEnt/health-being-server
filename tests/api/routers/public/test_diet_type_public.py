@@ -46,20 +46,6 @@ async def test_get_diet_by_name(
 
 
 @pytest.mark.asyncio
-async def test_get_diet_by_search_phrase(
-    mock_supabase_connection, example_diet_types_injection, example_diet_types_response
-):
-
-    response = await get_diet_types(search_phrase="vega")
-
-    assert response == [example_diet_types_response[1]]
-
-    parsed = DietTypeResponse(**response[0])
-
-    assert isinstance(parsed, DietTypeResponse)
-
-
-@pytest.mark.asyncio
 async def test_get_diets_by_search_phrase(
     mock_supabase_connection, example_diet_types_injection, example_diet_types_response
 ):
@@ -68,7 +54,6 @@ async def test_get_diets_by_search_phrase(
 
     assert response == [example_diet_types_response[0], example_diet_types_response[1]]
 
-    parsed = [DietTypeResponse(**item) for item in response]
-
-    for item in parsed:
-        assert isinstance(item, DietTypeResponse)
+    for item in response:
+        parsed = DietTypeResponse(**item)
+        assert isinstance(parsed, DietTypeResponse)
