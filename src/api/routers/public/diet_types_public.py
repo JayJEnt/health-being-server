@@ -13,9 +13,13 @@ crud = CrudOperations("diet_type")
 
 
 @router.get("", response_model=Union[DietTypeResponse, List[DietTypeResponse]])
-async def get_diet_types(diet_type_id: int = None, diet_name: str = None):
+async def get_diet_types(
+    diet_type_id: int = None, diet_name: str = None, search_phrase: str = None
+):
     if diet_type_id:
         return await crud.get_by_id(diet_type_id)
     if diet_name:
         return await crud.get_by_name(diet_name)
+    if search_phrase:
+        return await crud.search(search_phrase)
     return await crud.get()
