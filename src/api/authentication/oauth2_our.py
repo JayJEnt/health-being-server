@@ -2,7 +2,7 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
 from datetime import timedelta
-from typing import Annotated
+from typing import Annotated, Union
 
 from api.authentication.hash_methods import verify_password, hash_password
 from api.authentication.token import create_access_token
@@ -11,7 +11,7 @@ from api.handlers.http_exceptions import (
     ResourceNotFound,
     InvalidCredentials,
 )
-from api.schemas.user import UserOurAuth, UserCreate, UserUpdateAdmin
+from api.schemas.user import UserOurAuth, UserCreate, UserUpdateAdmin, UserPatch
 from api.crud.single_entity.get_methods import get_element_by_name
 from api.crud.single_entity.post_methods import create_element
 from api.crud.utils import pop_attributes, add_attributes
@@ -80,7 +80,7 @@ async def register(user: UserCreate, other_provider: bool = False):
     return user_response
 
 
-async def hash_pass_for_user(user: UserCreate):
+async def hash_pass_for_user(user: Union[UserCreate, UserPatch]):
     user, password = pop_attributes(user, ["password"])
     hashed_password = hash_password(password[0].get("password", ""))
     return add_attributes(

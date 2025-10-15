@@ -25,8 +25,19 @@ class UserUpdateAdmin(UserCreate):
 
 class User(UserBaseModel):
     id: int
-    role: Role = Role.user.value
+    role: Role = None
 
 
 class UserOurAuth(User):
     hashed_password: str
+
+
+class UserPatch(BaseModel):
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None
+    weight: Optional[float] = None
+    height: Optional[float] = None
+    age: Optional[int] = None
+    activity_level: Optional[ActivityLevel] = None
+    silhouette: Optional[Silhouette] = None
