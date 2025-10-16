@@ -55,14 +55,14 @@ async def test_patch_owner(
     example_users_injection,
     example_users_patch,
     example_users_response,
-    example_users_response_patch,
+    example_users_response_update,
 ):
     requesting_user = User(**example_users_response[0])
     user = UserPatch(**example_users_patch[0])
 
     response = await patch_owner(requesting_user=requesting_user, user=user)
 
-    assert response == example_users_response_patch[0]
+    assert response == example_users_response_update[0]
 
     parsed = User(**response)
 

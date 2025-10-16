@@ -11,7 +11,7 @@ from api.handlers.http_exceptions import (
     ResourceNotFound,
     InvalidCredentials,
 )
-from api.schemas.user import UserOurAuth, UserCreate, UserUpdateAdmin, UserPatch
+from api.schemas.user import UserCreate, UserPatch
 from api.crud.single_entity.get_methods import get_element_by_name
 from api.crud.single_entity.post_methods import create_element
 from api.crud.utils import pop_attributes, add_attributes
@@ -21,14 +21,13 @@ from logger import logger
 
 async def authenticate_user(email: str, password: str):
     try:
-        user_dict = await get_element_by_name("user", email, alternative_name=True)
+        user = await get_element_by_name("user", email, alternative_name=True)
     except ResourceNotFound:
-        user_dict = None
-    if not user_dict:
         return False
-    user = UserOurAuth(**user_dict)
-    if not verify_password(password, user.hashed_password):
+
+    if not verify_password(password, user["hashed_password"]):
         return False
+
     return user
 
 
@@ -38,9 +37,9 @@ async def our_login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
         raise InvalidCredentials
 
     user_data = {
-        "id": user.id,
-        "username": user.username,
-        "sub": user.email,
+        "id": user["id"],
+        "username": user["username"],
+        "sub": user["email"],
         "provider": "health-being-server",
     }
 
@@ -68,8 +67,8 @@ async def register(user: UserCreate, other_provider: bool = False):
     except ResourceNotFound:
         if not other_provider:
             user = await hash_pass_for_user(user)
-        else:
-            user = add_attributes(user, [{"role": "user"}])
+
+        user = add_attributes(user, [{"role": "user"}])
 
         user_response = await create_element("user", user)
         logger.info(
@@ -81,14 +80,6 @@ async def register(user: UserCreate, other_provider: bool = False):
 
 
 async def hash_pass_for_user(user: Union[UserCreate, UserPatch]):
-    user, password = pop_attributes(user, ["password"])
-    hashed_password = hash_password(password[0].get("password", ""))
-    return add_attributes(
-        user, [{"hashed_password": hashed_password}, {"role": "user"}]
-    )
-
-
-async def hash_pass_for_admin(user: UserUpdateAdmin):
     user, password = pop_attributes(user, ["password"])
     hashed_password = hash_password(password[0].get("password", ""))
     return add_attributes(user, [{"hashed_password": hashed_password}])

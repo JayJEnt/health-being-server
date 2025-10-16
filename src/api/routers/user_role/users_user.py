@@ -28,10 +28,15 @@ async def update_owner(
 
 @router.patch("", response_model=User, dependencies=[Depends(logged_only)])
 async def patch_owner(user: UserPatch, requesting_user: User = Depends(validate_token)):
+    print(user)
     if user.password:
-        user = UserPatch(**await hash_pass_for_user(user))
+        user = await hash_pass_for_user(user)
+        user = {k: v for k, v in user.items() if v is not None}
+    else:
+        user = user.model_dump(exclude_none=True)
 
-    return await crud.put(requesting_user.id, user.model_dump(exclude_none=True))
+    print(user)
+    return await crud.put(requesting_user.id, user)
 
 
 @router.delete("", response_model=User, dependencies=[Depends(logged_only)])

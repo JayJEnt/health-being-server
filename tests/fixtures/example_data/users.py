@@ -161,21 +161,3 @@ def example_users_patch():
             "silhouette": None,
         }
     ]
-
-
-@pytest.fixture()
-def example_users_response_patch():
-    return [
-        {
-            "id": 1,
-            "username": "Changed",
-            "email": "test@example.com",
-            "hashed_password": "Password",
-            "role": "user",
-            "height": 180.0,
-            "weight": 75.0,
-            "age": 25,
-            "activity_level": "moderate",
-            "silhouette": "ectomorph",
-        }
-    ]
