@@ -145,3 +145,37 @@ def example_users_response_update():
             "silhouette": None,
         },
     ]
+
+
+@pytest.fixture()
+def example_users_patch():
+    return [
+        {
+            "username": "Changed",
+            "email": None,
+            "password": "Password",
+            "weight": None,
+            "height": None,
+            "age": None,
+            "activity_level": None,
+            "silhouette": None,
+        }
+    ]
+
+
+@pytest.fixture()
+def example_users_response_patch():
+    return [
+        {
+            "id": 1,
+            "username": "Changed",
+            "email": "test@example.com",
+            "hashed_password": "Password",
+            "role": "user",
+            "height": 180.0,
+            "weight": 75.0,
+            "age": 25,
+            "activity_level": "moderate",
+            "silhouette": "ectomorph",
+        }
+    ]

@@ -3,9 +3,10 @@ import pytest
 from api.routers.user_role.users_user import (
     get_owner,
     update_owner,
+    patch_owner,
     delete_owner,
 )
-from api.schemas.user import User
+from api.schemas.user import User, UserPatch
 
 
 @pytest.mark.asyncio
@@ -41,6 +42,27 @@ async def test_update_owner(
     )
 
     assert response == example_users_response_update[0]
+
+    parsed = User(**response)
+
+    assert isinstance(parsed, User)
+
+
+@pytest.mark.asyncio
+async def test_patch_owner(
+    mock_supabase_connection,
+    mock_bcrypt,
+    example_users_injection,
+    example_users_patch,
+    example_users_response,
+    example_users_response_patch,
+):
+    requesting_user = User(**example_users_response[0])
+    user = UserPatch(**example_users_patch[0])
+
+    response = await patch_owner(requesting_user=requesting_user, user=user)
+
+    assert response == example_users_response_patch[0]
 
     parsed = User(**response)
 
