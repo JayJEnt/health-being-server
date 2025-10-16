@@ -11,6 +11,7 @@ from api.handlers.http_exceptions import (
     ResourceNotFound,
     InvalidCredentials,
 )
+from api.schemas.enum_utils import Role
 from api.schemas.user import UserCreate, UserPatch
 from api.crud.single_entity.get_methods import get_element_by_name
 from api.crud.single_entity.post_methods import create_element
@@ -68,7 +69,7 @@ async def our_register(user: UserCreate, other_provider: bool = False):
         if not other_provider:
             user = await hash_pass_for_user(user)
 
-        user = add_attributes(user, [{"role": "user"}])
+        user = add_attributes(user, [{"role": Role.unconfirmed.value}])
 
         user_response = await create_element("user", user)
         logger.info(

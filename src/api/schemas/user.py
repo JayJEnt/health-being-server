@@ -23,7 +23,7 @@ class UserCreate(UserBaseModel):
 
 
 class UserUpdateAdmin(UserCreate):
-    role: str
+    role: str = Role.unconfirmed.value
 
 
 class User(UserBaseModel):

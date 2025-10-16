@@ -37,8 +37,6 @@ async def verify_email_token(token: str) -> bool:
         raise InvalidToken
 
     try:
-        await get_element_by_name("user", email, alternative_name=True)
+        return await get_element_by_name("user", email, alternative_name=True)
     except ResourceNotFound:
-        return False
-
-    return True
+        return InvalidToken
