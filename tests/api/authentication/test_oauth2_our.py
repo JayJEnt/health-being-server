@@ -2,7 +2,7 @@ import pytest
 
 from api.authentication.oauth2_our import authenticate_user, our_login, register
 from api.handlers.http_exceptions import InvalidCredentials
-from api.schemas.user import UserOurAuth, UserCreate
+from api.schemas.user import UserCreate
 
 
 @pytest.mark.asyncio
@@ -16,9 +16,7 @@ async def test_authenticate_user(
         example_users_create[0]["email"], example_users_create[0]["hashed_password"]
     )
 
-    assert response == UserOurAuth(**example_users_hashed_response[0])
-
-    assert isinstance(response, UserOurAuth)
+    assert response == example_users_hashed_response[0]
 
 
 @pytest.mark.asyncio

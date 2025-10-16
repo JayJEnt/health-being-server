@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from typing import List, Union
 
 from api.authentication.allowed_roles import admin_only
-from api.authentication.oauth2_our import hash_pass_for_admin
+from api.authentication.oauth2_our import hash_pass_for_user
 from api.crud.crud_operations import CrudOperations
 from api.schemas.user import User, UserUpdateAdmin
 
@@ -29,7 +29,7 @@ async def get_users(user_id: int = None, username: str = None, email: str = None
 
 @router.put("", response_model=User, dependencies=[Depends(admin_only)])
 async def update_user(user: UserUpdateAdmin, user_id: int):
-    user = await hash_pass_for_admin(user)
+    user = await hash_pass_for_user(user)
     return await crud.put(user_id, user)
 
 

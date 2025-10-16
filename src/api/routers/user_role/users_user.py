@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Depends
 
-from api.schemas.user import User, UserCreate
+from api.schemas.user import User, UserCreate, UserPatch
 from api.authentication.allowed_roles import logged_only
 from api.crud.crud_operations import CrudOperations
 from api.authentication.token import validate_token
@@ -24,6 +24,19 @@ async def update_owner(
 ):
     user = await hash_pass_for_user(user)
     return await crud.put_all(requesting_user.id, user)
+
+
+@router.patch("", response_model=User, dependencies=[Depends(logged_only)])
+async def patch_owner(user: UserPatch, requesting_user: User = Depends(validate_token)):
+    print(user)
+    if user.password:
+        user = await hash_pass_for_user(user)
+        user = {k: v for k, v in user.items() if v is not None}
+    else:
+        user = user.model_dump(exclude_none=True)
+
+    print(user)
+    return await crud.put(requesting_user.id, user)
 
 
 @router.delete("", response_model=User, dependencies=[Depends(logged_only)])
