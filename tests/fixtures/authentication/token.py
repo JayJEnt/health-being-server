@@ -81,3 +81,8 @@ def invalid_payload():
         "provider": "health-being-server",
         "username": "test_user",
     }
+
+
+@pytest.fixture
+def fake_email_verification_token():
+    return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0QGV4YW1wbGUuY29tIiwidHlwZSI6ImVtYWlsX3ZlcmlmaWNhdGlvbiIsImV4cCI6MTY3Mzc4NjEwMH0.VYWHeRwvXnW-zBLY30UsYaCpoNLraobsjW5ALzLXVD0"

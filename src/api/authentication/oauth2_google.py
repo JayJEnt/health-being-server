@@ -4,7 +4,7 @@ import httpx
 
 from datetime import timedelta
 
-from api.authentication.oauth2_our import register
+from api.authentication.oauth2_our import our_register
 from api.authentication.token import create_access_token
 from api.crud.single_entity.get_methods import get_element_by_name
 from api.handlers.http_exceptions import (
@@ -81,7 +81,7 @@ async def google_auth_callback(request: Request):
             )
             user_creat_dict = {"username": user["name"], "email": user["email"]}
             user_create = UserBaseModel(**user_creat_dict)
-            user = User(**await register(user_create, other_provider=True))
+            user = User(**await our_register(user_create, other_provider=True))
 
         user_data = {
             "id": user.id,

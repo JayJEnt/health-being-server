@@ -49,20 +49,41 @@ async def test_update_owner(
 
 
 @pytest.mark.asyncio
-async def test_patch_owner(
+async def test_patch_owner_with_pass(
     mock_supabase_connection,
     mock_bcrypt,
     example_users_injection,
     example_users_patch,
     example_users_response,
-    example_users_response_update,
+    example_users_response_patch,
 ):
     requesting_user = User(**example_users_response[0])
     user = UserPatch(**example_users_patch[0])
 
     response = await patch_owner(requesting_user=requesting_user, user=user)
 
-    assert response == example_users_response_update[0]
+    assert response == example_users_response_patch[0]
+
+    parsed = User(**response)
+
+    assert isinstance(parsed, User)
+
+
+@pytest.mark.asyncio
+async def test_patch_owner_without_pass(
+    mock_supabase_connection,
+    mock_bcrypt,
+    example_users_injection,
+    example_users_patch,
+    example_users_response,
+    example_users_response_patch,
+):
+    requesting_user = User(**example_users_response[0])
+    user = UserPatch(**example_users_patch[1])
+
+    response = await patch_owner(requesting_user=requesting_user, user=user)
+
+    assert response == example_users_response_patch[1]
 
     parsed = User(**response)
 

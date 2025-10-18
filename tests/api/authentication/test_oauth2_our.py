@@ -1,6 +1,6 @@
 import pytest
 
-from api.authentication.oauth2_our import authenticate_user, our_login, register
+from api.authentication.oauth2_our import authenticate_user, our_login, our_register
 from api.handlers.http_exceptions import InvalidCredentials
 from api.schemas.user import UserCreate
 
@@ -76,7 +76,7 @@ async def test_register(
 ):
     requesting_user = UserCreate(**example_users_register[0])
 
-    response = await register(requesting_user)
+    response = await our_register(requesting_user)
 
     assert response == example_users_hashed_response[0]
 
@@ -90,6 +90,6 @@ async def test_register_already_exists(
 ):
     requesting_user = UserCreate(**example_users_register[0])
 
-    response = await register(requesting_user)
+    response = await our_register(requesting_user)
 
     assert response == example_users_hashed_response[0]
