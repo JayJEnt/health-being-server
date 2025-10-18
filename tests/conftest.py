@@ -6,6 +6,7 @@ pytest_plugins = [
     "tests.fixtures.crud.utils",
     "tests.fixtures.database.supabase_connection",
     "tests.fixtures.database.s3_connection",
+    "tests.fixtures.email_postman.email_postman",
     "tests.fixtures.example_data.diet_types",
     "tests.fixtures.example_data.follows",
     "tests.fixtures.example_data.images",

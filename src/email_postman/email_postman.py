@@ -1,6 +1,6 @@
 from email.message import EmailMessage
 from functools import wraps
-import smtplib
+from smtplib import SMTP
 
 from api.handlers.http_exceptions import InternalServerError
 from config import settings
@@ -9,7 +9,7 @@ from logger import logger
 
 class EmailPostman:
     def __init__(self):
-        self._server = smtplib.SMTP(settings.MAIL_SERVER, settings.MAIL_PORT)
+        self._server = SMTP(settings.MAIL_SERVER, settings.MAIL_PORT)
         self._server.starttls()
         try:
             self._server.login(settings.MAIL_USERNAME, settings.MAIL_PASSWORD)
