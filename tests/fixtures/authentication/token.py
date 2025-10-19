@@ -84,5 +84,18 @@ def invalid_payload():
 
 
 @pytest.fixture
-def fake_email_verification_token():
+def email_verification_token():
     return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0QGV4YW1wbGUuY29tIiwidHlwZSI6ImVtYWlsX3ZlcmlmaWNhdGlvbiIsImV4cCI6MTY3Mzc4NjEwMH0.VYWHeRwvXnW-zBLY30UsYaCpoNLraobsjW5ALzLXVD0"
+
+
+@pytest.fixture
+def invalid_email_verification_token():
+    return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0QGV4YW1wbGUuY29tIiwidHlwZSI6Indyb25nX3R5cGUiLCJleHAiOjE2NzM3ODYxMDB9.rf9wP4jcQ_khik8vhkCyCHFwGk6v2mDZ0cI51agfCdw"
+
+
+@pytest.fixture
+def mock_payload_invalid_type(monkeypatch):
+    def fake_get_payload_from_token(token):
+        return {"sub": "test@example.com", "type": "wrong_type"}
+
+    monkeypatch.setattr(token, "get_payload_from_token", fake_get_payload_from_token)

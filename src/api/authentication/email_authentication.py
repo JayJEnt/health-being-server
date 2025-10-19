@@ -39,4 +39,4 @@ async def verify_email_token(token: str) -> bool:
     try:
         return await get_element_by_name("user", email, alternative_name=True)
     except ResourceNotFound:
-        return InvalidToken
+        raise InvalidToken

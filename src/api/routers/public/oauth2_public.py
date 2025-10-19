@@ -42,7 +42,7 @@ async def send_email(email: str):
 
 
 @router.get("/verify_email", response_model=User)
-async def verify_email(token: str):  # TODO: Annotated[str, Depends(oauth2_scheme)]
+async def verify_email(token: Annotated[str, Depends(oauth2_scheme)]):
     user = await verify_email_token(token)
     return await update_element_by_id("user", user["id"], {"role": Role.user.value})
 
