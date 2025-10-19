@@ -159,5 +159,45 @@ def example_users_patch():
             "age": None,
             "activity_level": None,
             "silhouette": None,
-        }
+        },
+        {
+            "username": "Changed",
+            "email": None,
+            "password": None,
+            "weight": None,
+            "height": None,
+            "age": None,
+            "activity_level": None,
+            "silhouette": None,
+        },
+    ]
+
+
+@pytest.fixture()
+def example_users_response_patch():
+    return [
+        {
+            "id": 1,
+            "username": "Changed",
+            "email": "test@example.com",
+            "hashed_password": "$2b$12$9VpQw6INCOS9B98cgHSVse8bqF7zx5x2z1BvOUVoRckisrVV7nFUu",
+            "role": "user",
+            "height": 180.0,
+            "weight": 75.0,
+            "age": 25,
+            "activity_level": "moderate",
+            "silhouette": "ectomorph",
+        },
+        {
+            "id": 1,
+            "username": "Changed",
+            "email": "test@example.com",
+            "hashed_password": "Password",
+            "role": "user",
+            "height": 180.0,
+            "weight": 75.0,
+            "age": 25,
+            "activity_level": "moderate",
+            "silhouette": "ectomorph",
+        },
     ]

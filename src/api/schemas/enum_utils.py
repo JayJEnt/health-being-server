@@ -15,6 +15,7 @@ class Silhouette(str, Enum):
 
 
 class Role(str, Enum):
+    unconfirmed = "unconfirmed"
     user = "user"
     admin = "admin"
 

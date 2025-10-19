@@ -9,15 +9,12 @@ from api.crud.single_entity.get_methods import get_element_by_name
 from api.handlers.http_exceptions import InvalidToken, ResourceNotFound
 from api.schemas.user import User
 from config import settings
-from logger import logger
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
-    logger.info("Creating a new token...")
-
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
@@ -31,8 +28,6 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 
 
 async def validate_token(token: Annotated[str, Depends(oauth2_scheme)]) -> User:
-    logger.info("Validating token...")
-
     payload = await get_payload_from_token(token)
     user = await get_user_from_payload(payload)
 
