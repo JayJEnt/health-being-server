@@ -56,7 +56,7 @@ ENTITY_MAPPING = {
     },
     "ingredients": {
         "table": settings.INGREDIENT_TABLE,
-        "search_columns": [],
+        "search_columns": ["name"],
         "column_name": "name",
         "id": "id",
         "relation": [
@@ -93,7 +93,7 @@ ENTITY_MAPPING = {
     },
     "diet_type": {
         "table": settings.DIET_TYPE_TABLE,
-        "search_columns": [],
+        "search_columns": ["diet_name"],
         "column_name": "diet_name",
         "id": "id",
         "relation": [
