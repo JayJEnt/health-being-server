@@ -1,7 +1,7 @@
 import pytest
 
 from api.routers.public.recipes_public import get_recipes
-from api.schemas.recipe import RecipeResponse, RecipeOverview
+from api.schemas.recipe import RecipeResponseGet, RecipeOverview
 
 
 @pytest.mark.asyncio
@@ -43,12 +43,12 @@ async def test_search_recipes(
 async def test_get_recipe(
     mock_supabase_connection,
     example_recipes_injection_all,
-    example_recipes_response_all,
+    example_recipes_response_all_get,
 ):
     response = await get_recipes(recipe_id=1)
 
-    assert response == example_recipes_response_all
+    assert response == example_recipes_response_all_get
 
-    parsed = RecipeResponse(**response)
+    parsed = RecipeResponseGet(**response)
 
-    assert isinstance(parsed, RecipeResponse)
+    assert isinstance(parsed, RecipeResponseGet)

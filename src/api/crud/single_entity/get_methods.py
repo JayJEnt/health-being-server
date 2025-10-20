@@ -34,7 +34,7 @@ async def get_element_by_name(
 
     Args:
         element_type (str): The type of the element (e.g., "recipes").
-        element_name (str): The name of the element (e.g., "Marchewka").
+        element_name (str): The name of the element (e.g., "Carrot").
         alternative_name (bool): The optional argument, that allows to search by diffrent column name.
 
     Returns:
@@ -47,14 +47,15 @@ async def get_element_by_name(
     else:
         column_name = config["column_name"]
 
-    elements = supabase_connection.find_ilike(
-        config["table"],
-        column_name,
-        element_name,
-    )
-    if not elements or elements[0][column_name].lower() != element_name.lower():
+    try:
+        elements = supabase_connection.find_by(
+            config["table"],
+            column_name,
+            element_name,
+        )
+    except ResourceNotFound:
         logger.error(f"{element_type} with name={element_name} not found")
-        raise ResourceNotFound
+        raise
     return elements[0]
 
 

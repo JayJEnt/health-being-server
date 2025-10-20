@@ -17,6 +17,8 @@ def example_ingredients_create():
             "fiber_per_100": 2.8,
             "sugar_per_100": 6.8,
             "salt_per_100": 0.1,
+            "default_weight": 40,
+            "rho": 0.37,
         },
         {
             "name": "Carrot",
@@ -27,6 +29,8 @@ def example_ingredients_create():
             "fiber_per_100": 2.8,
             "sugar_per_100": 6.8,
             "salt_per_100": 0.1,
+            "default_weight": 100,
+            "rho": 0.75,
         },
         {
             "name": "Mushroom",
@@ -58,6 +62,8 @@ def example_ingredients_response():
             "fiber_per_100": 2.8,
             "sugar_per_100": 6.8,
             "salt_per_100": 0.1,
+            "default_weight": 40,
+            "rho": 0.37,
         },
         {
             "id": 2,
@@ -69,6 +75,8 @@ def example_ingredients_response():
             "fiber_per_100": 2.8,
             "sugar_per_100": 6.8,
             "salt_per_100": 0.1,
+            "default_weight": 100,
+            "rho": 0.75,
         },
         {
             "id": 3,
@@ -80,6 +88,8 @@ def example_ingredients_response():
             "fiber_per_100": None,
             "sugar_per_100": None,
             "salt_per_100": None,
+            "default_weight": None,
+            "rho": None,
         },
         {
             "id": 4,
@@ -91,6 +101,8 @@ def example_ingredients_response():
             "fiber_per_100": None,
             "sugar_per_100": None,
             "salt_per_100": None,
+            "default_weight": None,
+            "rho": None,
         },
     ]
 
@@ -150,6 +162,8 @@ def example_ingredients_response_create_all():
         "fiber_per_100": 2.8,
         "sugar_per_100": 6.8,
         "salt_per_100": 0.1,
+        "default_weight": 40.0,
+        "rho": 0.37,
     }
 
 
@@ -185,4 +199,6 @@ def example_ingredients_response_update_all():
         "fiber_per_100": 2.8,
         "sugar_per_100": 6.8,
         "salt_per_100": 0.1,
+        "default_weight": 40.0,
+        "rho": 0.37,
     }

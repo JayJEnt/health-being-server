@@ -17,6 +17,8 @@ class Ingredient(Base):
     fiber_per_100 = Column(Float, default=0.0)
     sugar_per_100 = Column(Float, default=0.0)
     salt_per_100 = Column(Float, default=0.0)
+    default_weight = Column(Float, default=0.0)
+    rho = Column(Float, default=0.0)
 
     # N:M
     vitamins = relationship("VitaminsIncluded", back_populates="ingredient")

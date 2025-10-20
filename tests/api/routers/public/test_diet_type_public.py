@@ -36,7 +36,7 @@ async def test_get_diet_type(
 async def test_get_diet_by_name(
     mock_supabase_connection, example_diet_types_injection, example_diet_types_response
 ):
-    response = await get_diet_types(diet_name="VeGan")
+    response = await get_diet_types(diet_name="vegan")
 
     assert response == example_diet_types_response[1]
 
