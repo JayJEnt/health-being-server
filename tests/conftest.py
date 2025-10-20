@@ -20,4 +20,5 @@ pytest_plugins = [
     "tests.fixtures.example_data.users",
     "tests.fixtures.example_data.vitamins_included",
     "tests.fixtures.example_data.vitamins",
+    "tests.fixtures.recipe_metrics.micronutrients",
 ]

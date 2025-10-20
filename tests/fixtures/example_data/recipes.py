@@ -3,6 +3,7 @@ import pytest_asyncio
 
 from api.crud.many_entities.post_methods import create_all
 from api.crud.single_entity.post_methods import create_element
+from api.schemas.utils import MicronutrientsTotal
 
 
 @pytest.fixture()
@@ -90,6 +91,28 @@ def example_recipes_response_all():
 
 
 @pytest.fixture()
+def example_recipes_response_all_get():
+    return {
+        "id": 1,
+        "owner_id": 1,
+        "title": "Healthy Salad",
+        "description": "A fresh and healthy salad.",
+        "instructions": ["Mix all ingredients in a bowl and serve fresh."],
+        "ingredients": [{"id": 2, "name": "Carrot", "amount": 5.0, "measure_unit": ""}],
+        "diet_type": [{"id": 1, "diet_name": "vege"}],
+        "micronutrients": MicronutrientsTotal(
+            calories=208.0,
+            protein=4.5,
+            fat=106.0,
+            carbon=48.0,
+            fiber=14.0,
+            sugar=34.0,
+            salt=0.5,
+        ),
+    }
+
+
+@pytest.fixture()
 def example_recipes_response_create_all():
     return {
         "id": 1,
@@ -134,7 +157,7 @@ def example_recipes_update_all():
             "title": "Changed",
             "description": "A fresh and healthy salad.",
             "instructions": ["Also Changed"],
-            "diet_type": [{"diet_name": "Vege"}],
+            "diet_type": [{"diet_name": "vege"}],
             "ingredients": [{"name": "Carrot", "amount": 1, "measure_unit": ""}],
             "owner_id": 1,
         }

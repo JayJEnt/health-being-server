@@ -3,9 +3,7 @@ from typing import List, Optional
 
 from api.schemas.ingredient import IngredientQuantity
 from api.schemas.diet_type import DietTypeCreate
-
-
-"""Recipe models"""
+from api.schemas.utils import MicronutrientsTotal
 
 
 class RecipeCreate(BaseModel):
@@ -30,3 +28,9 @@ class Recipe(RecipeOverview):
 class RecipeResponse(Recipe):
     diet_type: Optional[List[DietTypeCreate]] = None
     ingredients: List[IngredientQuantity]
+
+
+class RecipeResponseGet(Recipe):
+    diet_type: Optional[List[DietTypeCreate]] = None
+    ingredients: List[IngredientQuantity]
+    micronutrients: Optional[MicronutrientsTotal] = None

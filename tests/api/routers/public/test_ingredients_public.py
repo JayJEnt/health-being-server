@@ -43,7 +43,7 @@ async def test_get_ingredient_by_name(
     example_ingredients_injection,
     example_ingredients_response,
 ):
-    response = await get_ingredients(ingredient_name="MusHRoom")
+    response = await get_ingredients(ingredient_name="Mushroom")
 
     assert response == example_ingredients_response[2]
 
