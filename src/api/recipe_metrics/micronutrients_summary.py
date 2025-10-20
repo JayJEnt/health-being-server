@@ -9,19 +9,17 @@ from logger import logger
 def micronutrients_summary(
     ingredients: List[MicronutrientsTotal],
 ) -> MicronutrientsTotal:
-    micronutrients = MicronutrientsTotal()
-    micronutrients_keys = MicronutrientsTotal.model_fields.keys()
+    summary = MicronutrientsTotal()
 
     for ingredient in ingredients:
         ingredient_data = ingredient.model_dump()
         for key, value in ingredient_data.items():
-            if key in micronutrients_keys:
-                current_value = getattr(micronutrients, key, 0.0)
-                setattr(micronutrients, key, current_value + (value or 0.0))
+            current_value = getattr(summary, key, 0.0)
+            setattr(summary, key, current_value + (value or 0.0))
 
-    logger.debug(f"Total micronutrients of all ingredients: {micronutrients}")
+    logger.debug(f"Total micronutrients of all ingredients: {summary}")
 
-    return micronutrients
+    return summary
 
 
 def scale_micronutrients(
