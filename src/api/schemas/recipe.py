@@ -12,6 +12,7 @@ class RecipeCreate(BaseModel):
     instructions: List[str]
     diet_type: Optional[List[DietTypeCreate]] = None
     ingredients: List[IngredientQuantity]
+    category: str
 
 
 class RecipeOverview(BaseModel):

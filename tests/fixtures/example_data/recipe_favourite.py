@@ -35,6 +35,7 @@ def example_recipe_favourite_create_response():
             ],
             "owner_id": 1,
             "title": "Healthy Salad",
+            "category": "Salad",
         },
     ]
 

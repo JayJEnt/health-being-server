@@ -13,7 +13,7 @@ class Recipe(Base):
     title = Column(String, nullable=False)
     description = Column(Text, nullable=False)
     instructions = Column(JSON, nullable=False)
-
+    category = Column(Text, nullable=False)
     # N:M
     diet_types = relationship("DietTypeIncluded", back_populates="recipe")
     ingredients = relationship("IngredientsIncluded", back_populates="recipe")
