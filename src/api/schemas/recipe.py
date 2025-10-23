@@ -24,6 +24,7 @@ class Recipe(RecipeOverview):
     owner_id: int
     description: str
     instructions: List[str]
+    category: str
 
 
 class RecipeResponse(Recipe):
