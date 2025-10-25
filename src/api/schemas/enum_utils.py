@@ -37,4 +37,4 @@ class Preference(str, Enum):
 class Category(str, Enum):
     Salad = "Salad"
     Soup = "Soup"
-    MainDish = "MainDish"
+    MainDish = "Main Dish"
