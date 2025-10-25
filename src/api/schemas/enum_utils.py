@@ -32,3 +32,7 @@ class Preference(str, Enum):
     like = "like"
     dislike = "dislike"
     alergic = "alergic to"
+
+
+class Category(str, Enum):
+    Salad = "Salad"

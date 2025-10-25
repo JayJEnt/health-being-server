@@ -1,3 +1,4 @@
+from api.schemas.enum_utils import Category
 import pytest
 import pytest_asyncio
 
@@ -14,7 +15,7 @@ def example_recipes_create():
             "description": "A fresh and healthy salad.",
             "instructions": ["Mix all ingredients in a bowl and serve fresh."],
             "owner_id": 1,
-            "category": "Salad",
+            "category": Category.Salad.value,
         }
     ]
 
@@ -34,7 +35,7 @@ def example_recipes_response():
             "description": "A fresh and healthy salad.",
             "instructions": ["Mix all ingredients in a bowl and serve fresh."],
             "owner_id": 1,
-            "category": "Salad",
+            "category": Category.Salad.value,
         }
     ]
 
@@ -46,7 +47,7 @@ def example_recipes_overview_response():
             "id": 1,
             "title": "Healthy Salad",
             "owner_id": 1,
-            "category": "Salad",
+            "category": Category.Salad.value,
         }
     ]
 
@@ -61,7 +62,7 @@ def example_recipes_create_all():
             "diet_type": [{"diet_name": "vege"}],
             "ingredients": [{"name": "Carrot", "amount": 5, "measure_unit": ""}],
             "owner_id": 1,
-            "category": "Salad",
+            "category": Category.Salad.value,
         }
     ]
 
@@ -89,7 +90,7 @@ def example_recipes_response_all():
         "title": "Healthy Salad",
         "description": "A fresh and healthy salad.",
         "instructions": ["Mix all ingredients in a bowl and serve fresh."],
-        "category": "Salad",
+        "category": Category.Salad.value,
         "ingredients": [{"id": 2, "name": "Carrot", "amount": 5.0, "measure_unit": ""}],
         "diet_type": [{"id": 1, "diet_name": "vege"}],
     }
@@ -103,7 +104,7 @@ def example_recipes_response_all_get():
         "title": "Healthy Salad",
         "description": "A fresh and healthy salad.",
         "instructions": ["Mix all ingredients in a bowl and serve fresh."],
-        "category": "Salad",
+        "category": Category.Salad.value,
         "ingredients": [{"id": 2, "name": "Carrot", "amount": 5.0, "measure_unit": ""}],
         "diet_type": [{"id": 1, "diet_name": "vege"}],
         "micronutrients": MicronutrientsTotal(
@@ -126,7 +127,7 @@ def example_recipes_response_create_all():
         "title": "Healthy Salad",
         "description": "A fresh and healthy salad.",
         "instructions": ["Mix all ingredients in a bowl and serve fresh."],
-        "category": "Salad",
+        "category": Category.Salad.value,
         "ingredients": [{"id": 2, "name": "Carrot", "amount": 5, "measure_unit": ""}],
         "diet_type": [{"id": 1, "diet_name": "vege"}],
     }
@@ -140,7 +141,7 @@ def example_recipes_update():
             "description": "A fresh and not healthy salad.",
             "instructions": ["Mix all ingredients in a bowl and serve fresh."],
             "owner_id": 1,
-            "category": "Salad",
+            "category": Category.Salad.value,
         }
     ]
 
@@ -154,7 +155,7 @@ def example_recipes_updated_response():
             "description": "A fresh and not healthy salad.",
             "instructions": ["Mix all ingredients in a bowl and serve fresh."],
             "owner_id": 1,
-            "category": "Salad",
+            "category": Category.Salad.value,
         }
     ]
 
@@ -169,7 +170,7 @@ def example_recipes_update_all():
             "diet_type": [{"diet_name": "vege"}],
             "ingredients": [{"name": "Carrot", "amount": 1, "measure_unit": ""}],
             "owner_id": 1,
-            "category": "Salad",
+            "category": Category.Salad.value,
         }
     ]
 
@@ -184,5 +185,5 @@ def example_recipes_response_update_all():
         "instructions": ["Also Changed"],
         "ingredients": [{"id": 2, "name": "Carrot", "amount": 1, "measure_unit": ""}],
         "diet_type": [{"id": 1, "diet_name": "vege"}],
-        "category": "Salad",
+        "category": Category.Salad.value,
     }
