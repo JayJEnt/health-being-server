@@ -1,3 +1,4 @@
+from api.schemas.enum_utils import Category
 import pytest
 import pytest_asyncio
 
@@ -35,6 +36,7 @@ def example_recipe_favourite_create_response():
             ],
             "owner_id": 1,
             "title": "Healthy Salad",
+            "category": Category.salad.value,
         },
     ]
 

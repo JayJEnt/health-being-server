@@ -1,3 +1,4 @@
+from api.schemas.enum_utils import Category
 from pydantic import BaseModel
 from typing import List, Optional
 
@@ -12,6 +13,7 @@ class RecipeCreate(BaseModel):
     instructions: List[str]
     diet_type: Optional[List[DietTypeCreate]] = None
     ingredients: List[IngredientQuantity]
+    category: Category
 
 
 class RecipeOverview(BaseModel):
@@ -23,6 +25,7 @@ class Recipe(RecipeOverview):
     owner_id: int
     description: str
     instructions: List[str]
+    category: Category
 
 
 class RecipeResponse(Recipe):
