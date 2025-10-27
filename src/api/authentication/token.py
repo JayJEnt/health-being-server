@@ -47,7 +47,7 @@ async def get_user_from_payload(payload: dict) -> dict:
         raise InvalidToken
 
     try:
-        user = await get_element_by_name("user", email, alternative_name=True)
+        user = await get_element_by_name("user", email, "email")
         return User(**user)
     except ResourceNotFound:
         raise InvalidToken

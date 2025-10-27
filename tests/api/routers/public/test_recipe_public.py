@@ -1,7 +1,7 @@
 import pytest
 
 from api.routers.public.recipes_public import get_recipes
-from api.schemas.recipe import RecipeResponseGet, RecipeOverview
+from api.schemas.recipe import RecipeResponseGet, RecipeOverview, Recipe
 
 
 @pytest.mark.asyncio
@@ -37,6 +37,21 @@ async def test_search_recipes(
         parsed = RecipeOverview(**item)
 
         assert isinstance(parsed, RecipeOverview)
+
+
+@pytest.mark.asyncio
+async def test_get_recipes_of_chosen_author(
+    mock_supabase_connection,
+    example_recipes_injection,
+    example_recipes_response,
+):
+    response = await get_recipes(owner_id=1)
+
+    assert response == example_recipes_response[0]
+
+    parsed = Recipe(**response)
+
+    assert isinstance(parsed, Recipe)
 
 
 @pytest.mark.asyncio

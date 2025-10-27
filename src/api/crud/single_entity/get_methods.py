@@ -1,12 +1,10 @@
-from typing import Any
-
 from api.crud.utils import restrict_data, get_main_config
 from api.handlers.http_exceptions import ResourceNotFound, ResourceAlreadyTaken
 from database.supabase_connection import supabase_connection
 from logger import logger
 
 
-async def get_elements(element_type: str, restrict: bool = False) -> list:
+async def get_elements(element_type: str, restrict: bool = False) -> list[dict]:
     """
     Get all records in element table.
 
@@ -27,24 +25,22 @@ async def get_elements(element_type: str, restrict: bool = False) -> list:
 
 
 async def get_element_by_name(
-    element_type: str, element_name: str, alternative_name: bool = False
-) -> dict:
+    element_type: str, element_name: str | int, column_name: str = None
+) -> dict | list[dict]:
     """
     Get a record in element table by element's name.
 
     Args:
         element_type (str): The type of the element (e.g., "recipes").
-        element_name (str): The name of the element (e.g., "Carrot").
-        alternative_name (bool): The optional argument, that allows to search by diffrent column name.
+        element_name (str | int): The name of the element (e.g., "Carrot").
+        column_name (str): The optional argument, that allows to search by diffrent column name.
 
     Returns:
         dict: Element item response data from database.
     """
     config = get_main_config(element_type)
 
-    if alternative_name:
-        column_name = config["alternative_column_name"]
-    else:
+    if not column_name:
         column_name = config["column_name"]
 
     try:
@@ -56,7 +52,7 @@ async def get_element_by_name(
     except ResourceNotFound:
         logger.error(f"{element_type} with name={element_name} not found")
         raise
-    return elements[0]
+    return elements[0] if len(elements) == 1 else elements
 
 
 async def get_element_by_id(element_type: str, element_id: int) -> dict:
@@ -85,13 +81,13 @@ async def get_element_by_id(element_type: str, element_id: int) -> dict:
     return element_data[0]
 
 
-async def is_duplicated(element_type: str, element: Any) -> None:
+async def is_duplicated(element_type: str, element: int | str) -> None:
     """
     Raise an error if rescource already exists in selected table
 
     Args:
         element_type (str): The type of the main element (e.g., "recipes").
-        element_id (int): The ID of the main element.
+        element (int | str): The value of the main element checked column.
 
     Return:
         None

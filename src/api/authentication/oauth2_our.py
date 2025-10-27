@@ -22,7 +22,7 @@ from logger import logger
 
 async def authenticate_user(email: str, password: str):
     try:
-        user = await get_element_by_name("user", email, alternative_name=True)
+        user = await get_element_by_name("user", email, "email")
     except ResourceNotFound:
         return False
 
@@ -54,9 +54,7 @@ async def our_login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
 
 async def our_register(user: UserCreate, other_provider: bool = False):
     try:
-        user_response = await get_element_by_name(
-            "user", user.email, alternative_name=True
-        )
+        user_response = await get_element_by_name("user", user.email, "email")
         raise ResourceAlreadyTaken
 
     except ResourceAlreadyTaken:
