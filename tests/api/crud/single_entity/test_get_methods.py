@@ -42,9 +42,7 @@ async def test_get_element_by_name(
 async def test_get_element_by_alternative_name(
     mock_supabase_connection, example_users_injection, example_users_response
 ):
-    response = await get_element_by_name(
-        "user", "newuser@example.com", alternative_name=True
-    )
+    response = await get_element_by_name("user", "newuser@example.com", "email")
 
     assert response == example_users_response[1]
 

@@ -141,11 +141,11 @@ class CrudOperations:
         """
         return get_elements(self.element_type, restrict)
 
-    def get_by_name(self, element_name: str, alternative_name: bool = False) -> dict:
+    def get_by_name(self, element_name: str | int, column_name: str = None) -> dict:
         """
         Get an element by its name.
         """
-        return get_element_by_name(self.element_type, element_name, alternative_name)
+        return get_element_by_name(self.element_type, element_name, column_name)
 
     def get_by_id(
         self,

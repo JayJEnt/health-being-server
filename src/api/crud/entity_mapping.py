@@ -8,7 +8,6 @@ entity_name: {
     entity search columns (used in search endpoints)
     entity column name (used in search by name)
     entity id column name (used in get, put, delete by id)
-    entity alternative column name (used in search by name, e.g. email for user)
     relation (N:M) entities: [
         {
             relation_entity_name (the one from other entity)
@@ -111,7 +110,6 @@ ENTITY_MAPPING = {
         "search_columns": [],
         "column_name": "username",
         "id": "id",
-        "alternative_column_name": "email",
         "relation": [
             {
                 "name": "recipes",

@@ -23,7 +23,7 @@ async def get_users(user_id: int = None, username: str = None, email: str = None
     if username:
         return await crud.get_by_name(username)
     if email:
-        return await crud.get_by_name(email, alternative_name=True)
+        return await crud.get_by_name(email, "email")
     return await crud.get()
 
 
