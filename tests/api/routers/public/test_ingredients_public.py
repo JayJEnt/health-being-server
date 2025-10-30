@@ -59,7 +59,7 @@ async def test_get_ingredients_by_search_phrase(
     example_ingredients_response,
 ):
 
-    response = await get_ingredients(search_phrase="o")
+    response = await get_ingredients(phrase="o")
 
     assert response == [
         example_ingredients_response[1],

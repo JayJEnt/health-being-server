@@ -2,11 +2,14 @@
 
 from fastapi import APIRouter, Depends
 
+from typing import List
+
 from api.authentication.allowed_roles import logged_only, owner_only
 from api.authentication.token import validate_token
 from api.crud.crud_operations import CrudOperations
 from api.crud.utils import add_attributes
-from api.schemas.recipe import RecipeCreate, Recipe, RecipeResponse
+from api.schemas.recipe import RecipeCreate, Recipe, RecipeResponse, RecipeOverview
+from api.schemas.filters import RecipeFilter
 from api.schemas.user import User
 
 
@@ -43,4 +46,17 @@ async def delete_recipe(
 
     return await crud.delete_all(
         recipe_id, related_attributes=["ingredients", "diet_type"]
+    )
+
+
+@router.post(
+    "/deep_search",
+    response_model=List[RecipeOverview],
+    dependencies=[Depends(logged_only)],
+)
+async def get_recipes(
+    filters: RecipeFilter, phrase: str, requesting_user: User = Depends(validate_token)
+):
+    return await crud.search(
+        phrase, filters.model_dump(), requesting_user.id, restrict=True
     )

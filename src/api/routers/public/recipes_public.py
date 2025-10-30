@@ -5,7 +5,7 @@ from fastapi import APIRouter
 from typing import List, Union
 
 from api.crud.crud_operations import CrudOperations
-from api.recipe_metrics.micronutrients_summary import update_recipe_with_micronutrients
+from api.metrics.micronutrients_summary import update_recipe_with_micronutrients
 from api.schemas.recipe import RecipeOverview, RecipeResponseGet, Recipe
 
 

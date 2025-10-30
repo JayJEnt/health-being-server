@@ -1,6 +1,6 @@
 import pytest
 
-from api.recipe_metrics.micronutrients_summary import (
+from api.metrics.micronutrients_summary import (
     micronutrients_summary,
     scale_micronutrients,
 )

@@ -184,9 +184,13 @@ class CrudOperations:
     def search(
         self,
         phrase: str,
+        filters: dict = {},
+        requesting_user_id: int = None,
         restrict: bool = False,
     ) -> list:
         """
         Search for elements by a phrase.
         """
-        return search_elements(self.element_type, phrase, restrict)
+        return search_elements(
+            self.element_type, phrase, filters, requesting_user_id, restrict
+        )

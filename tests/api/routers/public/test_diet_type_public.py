@@ -50,7 +50,7 @@ async def test_get_diets_by_search_phrase(
     mock_supabase_connection, example_diet_types_injection, example_diet_types_response
 ):
 
-    response = await get_diet_types(search_phrase="veg")
+    response = await get_diet_types(phrase="veg")
 
     assert response == [example_diet_types_response[0], example_diet_types_response[1]]
 
