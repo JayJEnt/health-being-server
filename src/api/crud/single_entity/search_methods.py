@@ -2,7 +2,12 @@ from logger import logger
 from database.supabase_connection import supabase_connection
 from api.handlers.http_exceptions import ResourceNotFound
 from api.crud.utils import restrict_data, get_main_config
-from api.filters.base_filter import filter_followed_authors, filter_ingredients
+from api.filters.recipe_filters import (
+    filter_by_followed_authors,
+    filter_by_prefered_ingredients,
+    filter_by_prefered_diets,
+    filter_by_owned_ingredients,
+)
 
 
 async def search_elements(
@@ -19,10 +24,11 @@ async def search_elements(
         element_type (str): The type of the element (e.g., "recipes").
         phrase (str): The searching phrase.
         filters (dict): Filters which are used while searching phrase.
+        requesting_user_id (int): Requesting user id needed for checking preferences
         restrict (bool): The optional argument, that allows to drop some of the attributes.
 
     Returns:
-        dict: List of found element item responses data from database.
+        List of found element item responses data from database.
     """
     config = get_main_config(element_type)
     found_elements = []
@@ -66,16 +72,27 @@ async def filter_out_recipes(
     recipes: list[dict], filters: dict, requesting_user_id: int
 ) -> list[dict]:
     if filters.get("allergies_off"):
-        recipes = await filter_ingredients(recipes, requesting_user_id)
-    if filters.get("liked_and_favourite_ingredients"):
-        pass
+        recipes = await filter_by_prefered_ingredients(
+            recipes, requesting_user_id, target_preference="alergic to", filter_in=False
+        )
+
+    if filters.get("dislike_off"):
+        recipes = await filter_by_prefered_ingredients(
+            recipes, requesting_user_id, target_preference="dislike", filter_in=False
+        )
+
     if filters.get("only_favourite_ingredients"):
-        pass
+        recipes = await filter_by_prefered_ingredients(
+            recipes, requesting_user_id, target_preference="like"
+        )
+
     if filters.get("only_favourite_diets"):
-        pass
+        recipes = await filter_by_prefered_diets(recipes, requesting_user_id)
+
     if filters.get("only_followed_authors"):
-        recipes = await filter_followed_authors(recipes, requesting_user_id)
+        recipes = await filter_by_followed_authors(recipes, requesting_user_id)
+
     if filters.get("only_owned_ingredients"):
-        pass
+        recipes = await filter_by_owned_ingredients(recipes, requesting_user_id)
 
     return recipes
